@@ -157,6 +157,11 @@
             margin: 1rem auto 2rem;
             color: var(--color-text-secondary);
         }
+        .hero-glyph {
+            width: 120px;
+            margin: 2rem auto 0;
+        }
+
 
         /* --- 4. Carousel Section --- */
         .carousel-container {
@@ -407,6 +412,7 @@
                 <h1>Intelligence<span class="highlight">.</span> Reimagined<span class="highlight">.</span></h1>
                 <p>We don’t build chatbots. We build systems that negotiate, reflect, and adapt. Shadow Dynamic Systems is not just R&D—it’s a call to reimagine intelligence itself.</p>
                 <a href="#services" class="login-btn">Explore Our Research</a>
+                <img src="assets/sds-shield-glyph.svg" alt="SDS shield glyph" class="hero-glyph">
             </div>
         </section>
 
@@ -511,6 +517,7 @@
                  <div class="services-grid" id="blog-posts">
                     <!-- Blog posts will be loaded here -->
                 </div>
+                <p style="margin-top:1rem;"><a href="blog.html" style="color:var(--color-accent-yellow);">View all posts</a></p>
             </div>
         </section>
     </main>
@@ -680,7 +687,7 @@
                     postElement.innerHTML = `
                         <h3>${post.title}</h3>
                         <p>By ${post.author} on ${post.date}</p>
-                        <a href="${post.file}" style="color:var(--color-accent-yellow);">Read More</a>
+                        <a href="post.html?file=${encodeURIComponent(post.file)}" style="color:var(--color-accent-yellow);">Read More</a>
                     `;
                     blogContainer.appendChild(postElement);
                 });
