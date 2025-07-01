@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            background-color: #111;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 { margin-bottom: 1rem; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1 id="post-title"></h1>
+    <p id="post-meta"></p>
+    <div id="blog-content"></div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const file = params.get('file');
+if (file) {
+    fetch(file)
+        .then(res => res.text())
+        .then(raw => {
+            const fmMatch = raw.match(/^---\n([\s\S]*?)\n---\n/);
+            let meta = {};
+            if (fmMatch) {
+                fmMatch[1].split('\n').forEach(line => {
+                    const [key, ...rest] = line.split(':');
+                    meta[key.trim()] = rest.join(':').trim();
+                });
+                raw = raw.slice(fmMatch[0].length);
+            }
+            document.getElementById('post-title').textContent = meta.title || 'Untitled';
+            document.getElementById('post-meta').textContent = meta.date ? `Published ${meta.date}` : '';
+
+            const renderer = new marked.Renderer();
+            renderer.image = function(href, title, text) {
+                if (!href.startsWith('http')) {
+                    href = href.replace(/^\.\/?/, 'assets/');
+                }
+                return `<img src="${href}" alt="${text}">`;
+            };
+            document.getElementById('blog-content').innerHTML = marked.parse(raw, { renderer });
+        })
+        .catch(err => {
+            document.getElementById('blog-content').textContent = 'Error loading post.';
+            console.error('Error fetching post', err);
+        });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Dynamic Systems Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #111;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        a { color: #ffd700; }
+        h1 { font-size: 2.5rem; margin-bottom: 2rem; }
+        .post-link { margin-bottom: 1.5rem; display: block; }
+    </style>
+</head>
+<body>
+    <h1>Shadow Dynamic Systems Blog</h1>
+    <div id="posts-list"></div>
+
+    <script>
+    fetch('blog_posts.json')
+        .then(res => res.json())
+        .then(posts => {
+            const list = document.getElementById('posts-list');
+            posts.forEach(p => {
+                const link = document.createElement('a');
+                link.href = `post.html?file=${encodeURIComponent(p.file)}`;
+                link.className = 'post-link';
+                link.textContent = `${p.title} - ${p.date}`;
+                list.appendChild(link);
+            });
+        })
+        .catch(err => {
+            console.error('Error loading posts', err);
+        });
+    </script>
+</body>
+</html>
