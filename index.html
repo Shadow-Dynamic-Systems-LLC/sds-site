@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shadow Dynamic Systems - Agentic Orchestration & AI R&D</title>
+    <link rel="icon" href="assets/sds-favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -78,11 +79,23 @@
         }
 
         .navbar-logo {
-            font-family: var(--font-secondary);
-            font-size: 1.5rem;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
             color: var(--color-text-primary);
+        }
+
+        .navbar-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .navbar-logo .logo-text {
+            font-family: var(--font-secondary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1;
         }
 
         .navbar-logo .logo-accent {
@@ -253,22 +266,51 @@
             gap: 2rem;
         }
 
-        .service-card {
-            background: var(--color-medium-bg);
-            padding: 2rem;
-            border-radius: 10px;
+        .blog-card {
+            background-color: var(--color-medium-bg);
             border: 1px solid var(--color-light-bg);
+            border-radius: 8px;
+            overflow: hidden; /* Ensures the image corners are rounded */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        
-        .service-card .icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover; /* Ensures the image covers the area */
+            background-color: var(--color-light-bg); /* Placeholder color */
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .blog-card h3 {
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        .blog-card p {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            flex-grow: 1; /* Pushes the link to the bottom */
+        }
+
+        .blog-card a {
+            color: var(--color-accent-yellow);
+            text-decoration: none;
+            font-weight: 700;
+            align-self: flex-start;
         }
         
         .badge {
@@ -377,6 +419,49 @@
                 margin: 20% auto;
             }
         }
+
+        /* --- 9. Glitch Effect --- */
+        #glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(17, 17, 17, 0.1); /* Subtle dark background */
+            background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.05), rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); /* Very faint scanlines */
+            z-index: 9999;
+            pointer-events: none;
+            display: none;
+            overflow: hidden;
+            animation: glitch-flicker 0.1s infinite;
+        }
+
+        #glitch-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 18px; /* Larger font size */
+            color: rgba(0, 255, 136, 0.2); /* Very low opacity text */
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.2), 0 0 10px rgba(0, 255, 136, 0.1); /* Faint glow */
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            animation: glitch-text-flicker 0.05s infinite;
+        }
+
+        @keyframes glitch-flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glitch-text-flicker {
+            0% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.01); }
+            100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -385,7 +470,10 @@
          NAVIGATION BAR
     ======================== -->
     <header class="navbar">
-        <a href="#hero" class="navbar-logo">Shadow<span class="logo-accent">.</span>Dynamic<span class="logo-accent">.</span>Systems</a>
+                <a href="#hero" class="navbar-logo">
+            <img src="assets/sds-dark-trans-shadow.png" alt="Shadow Dynamic Systems Logo">
+            <span class="logo-text">Shadow<span class="logo-accent">.</span>Dynamic<span class="logo-accent">.</span>Systems<span class="logo-accent">.</span>LLC</span>
+        </a>
         <nav>
             <ul class="nav-links">
                 <li><a href="#services">Services</a></li>
@@ -454,45 +542,13 @@
         <!-- =======================
              CAROUSEL / USE CASES
         ======================== -->
-        <section id="use-cases" class="page-section">
+        <section id="projects" class="page-section">
             <div class="container">
-                <h2>Projects in Action</h2>
-                <div class="carousel-container">
-                    <!-- Slides -->
-                    <div id="slide1" class="carousel-slide active" data-modal-target="#modal1">
-                        <img src="1000026153.jpg" alt="Abstract network visualization">
-                        <div class="carousel-caption">
-                            <h3>The Assembly: A Dialectical Approach</h3>
-                            <p>AI agents engage in structured debate to solve complex problems.</p>
-                            <p class="details-prompt">Click for details</p>
-                        </div>
-                    </div>
-                    <div id="slide2" class="carousel-slide" data-modal-target="#modal2">
-                        <img src="1000026154.jpg" alt="Minimalist glyph avatar">
-                        <div class="carousel-caption">
-                            <h3>CARETAKER: Interactive AI Host</h3>
-                            <p>An emotionally reactive AI for engaging user experiences.</p>
-                            <p class="details-prompt">Click for details</p>
-                        </div>
-                    </div>
-                    <div id="slide3" class="carousel-slide" data-modal-target="#modal3">
-                        <img src="https://images.unsplash.com/photo-1563206223-943640F05232?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1804&q=80" alt="Secure data visualization">
-                        <div class="carousel-caption">
-                            <h3>Verifiable HITL: Trust in Automation</h3>
-                            <p>Ensuring human authority in critical AI-driven decisions.</p>
-                            <p class="details-prompt">Click for details</p>
-                        </div>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="carousel-nav">
-                        <button id="prevBtn"><</button>
-                        <button id="nextBtn">></button>
-                    </div>
-                </div>
+                <h2>Our Research & Development</h2>
+                <div id="projects-grid" class="services-grid"></div>
             </div>
         </section>
-        
+
         <!-- =======================
              ABOUT & BLOG SECTIONS
         ======================== -->
@@ -508,9 +564,7 @@
         <section id="blog" class="page-section">
             <div class="container">
                 <h2>From The Lab</h2>
-                 <div class="services-grid" id="blog-posts">
-                    <!-- Blog posts will be loaded here -->
-                </div>
+                 <div id="blog-posts-container" class="services-grid"></div>
             </div>
         </section>
     </main>
@@ -525,7 +579,7 @@
                 <li><a href="#">Terms of Service</a></li>
                 <li><a href="mailto:jason@shadowdynamicsystems.com">Contact</a></li>
             </ul>
-            <p>© 2025 Shadow Dynamic Systems. All Rights Reserved.</p>
+            <p> 2025 Shadow Dynamic Systems. All Rights Reserved.</p>
         </div>
     </footer>
     
@@ -545,29 +599,7 @@
         </div>
     </div>
 
-    <!-- Carousel Modals -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">×</span>
-            <h3>The Assembly: A Dialectical Approach</h3>
-            <p>A deliberative system where AI agents with conflicting roles (Architect, Analyst, Orator, etc.) argue and refine beliefs via dialectical methods. This approach, based on the “Pact of Doubt,” treats uncertainty as a feature, forcing a more robust and well-reasoned outcome.</p>
-        </div>
-    </div>
-    <div id="modal2" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">×</span>
-            <h3>CARETAKER: Interactive AI Host</h3>
-            <p>An emotionally reactive AI host for user-facing interactions, currently implemented as a minimalist glyph/light-based avatar. CARETAKER is used in interactive experiences like a disaster-movie-style trivia game and a cinematic voiceover demo, showcasing its ability to adapt its personality and tone.</p>
-        </div>
-    </div>
-    <div id="modal3" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">×</span>
-            <h3>Verifiable HITL: Trust in Automation</h3>
-            <p>A cryptographically signed, multi-signature Human-in-the-Loop API for high-stakes decisions. This system ensures that all critical actions taken by an AI are auditable, traceable, and explicitly authorized by a human, providing a crucial layer of safety and accountability.</p>
-        </div>
-    </div>
-
+    <div id="glitch-overlay"><pre id="glitch-text"></pre></div>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -580,115 +612,131 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, {
-            threshold: 0.1 // Trigger when 10% of the element is visible
-        });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
 
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-
-        // --- 2. Carousel Logic ---
-        const slides = document.querySelectorAll('.carousel-slide');
-        const nextBtn = document.getElementById('nextBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        let currentSlide = 0;
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === index) {
-                    slide.classList.add('active');
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-        }
-        
-        // Auto-play
-        let slideInterval = setInterval(nextSlide, 6000);
-
-        nextBtn.addEventListener('click', () => {
-            nextSlide();
-            clearInterval(slideInterval); // Stop auto-play on manual interaction
-        });
-        
-        prevBtn.addEventListener('click', () => {
-            prevSlide();
-            clearInterval(slideInterval); // Stop auto-play on manual interaction
-        });
-        
-        showSlide(currentSlide);
-
-        // --- 3. Modal Logic ---
-        const modalTriggers = document.querySelectorAll('[data-modal-target]');
-        const closeModalButtons = document.querySelectorAll('.close-modal');
-
-        modalTriggers.forEach(trigger => {
-            trigger.addEventListener('click', () => {
-                const modal = document.querySelector(trigger.dataset.modalTarget);
-                if (modal) {
-                    openModal(modal);
-                }
-            });
-        });
-
-        closeModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const modal = button.closest('.modal');
-                if (modal) {
-                    closeModal(modal);
-                }
-            });
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target.classList.contains('modal')) {
-                closeModal(event.target);
-            }
-        });
-
+        // --- 2. Modal Helper Functions ---
         function openModal(modal) {
-            modal.style.display = 'block';
+            if (modal) modal.style.display = 'block';
         }
 
         function closeModal(modal) {
-            // Add a class to trigger fade-out animation
+            if (!modal) return;
             modal.style.animation = 'fadeOut 0.5s ease forwards';
             setTimeout(() => {
                 modal.style.display = 'none';
-                modal.style.animation = 'fadeIn 0.5s ease'; // Reset for next open
+                modal.style.animation = 'fadeIn 0.5s ease';
             }, 500);
         }
 
-        // --- 4. Blog Post Loader ---
-        const blogContainer = document.getElementById('blog-posts');
-        fetch('blog_posts.json')
-            .then(response => response.json())
-            .then(posts => {
-                posts.forEach(post => {
-                    const postElement = document.createElement('div');
-                    postElement.classList.add('service-card');
-                    postElement.innerHTML = `
-                        <h3>${post.title}</h3>
-                        <p>By ${post.author} on ${post.date}</p>
-                        <a href="${post.file}" style="color:var(--color-accent-yellow);">Read More</a>
-                    `;
-                    blogContainer.appendChild(postElement);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching blog posts:', error);
-                blogContainer.innerHTML = '<p>Could not load blog posts.</p>';
+        // --- 3. Glitch Link Handler ---
+        const glitchLinks = document.querySelectorAll('a[href^="#"]');
+        const glitchOverlay = document.getElementById('glitch-overlay');
+        const glitchText = document.getElementById('glitch-text');
+        let glitchInterval;
+        const glitchChars = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ0123456789_+-*/=[]{}|';
+        const mathSnippets = [
+            '∇J(θ) = Σ(hθ(x)-y)x', 'L = -Σ y log(p) + (1-y)log(1-p)', '∂L/∂w_j = (ŷ - y) * x_j',
+            '∇f(x,y) = [∂f/∂x, ∂f/∂y]', '∫[a,b] f(x) dx = F(b) - F(a)', 'H(X) = -Σ p(x) log p(x)',
+            'p(A|B) = p(B|A)p(A) / p(B)', '// Grad Descent:', 'x_new = x_old - η * ∇f(x_old)', 'det(A - λI) = 0'
+        ];
+
+        function generateGlitchText() {
+            const cols = Math.floor(window.innerWidth / 10);
+            const rows = Math.floor(window.innerHeight / 24);
+            let text = '';
+            for (let i = 0; i < rows; i++) {
+                if (Math.random() < 0.2) {
+                    const snippet = mathSnippets[Math.floor(Math.random() * mathSnippets.length)];
+                    const padding = ' '.repeat(Math.floor(Math.random() * (cols - snippet.length > 0 ? cols - snippet.length : 1)));
+                    text += padding + snippet + '\n';
+                } else {
+                    let line = '';
+                    for (let j = 0; j < cols; j++) {
+                        line += Math.random() < 0.2 ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : ' ';
+                    }
+                    text += line + '\n';
+                }
+            }
+            glitchText.textContent = text;
+        }
+
+        glitchLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView();
+                    glitchOverlay.style.display = 'block';
+                    glitchInterval = setInterval(generateGlitchText, 100);
+                    setTimeout(() => {
+                        clearInterval(glitchInterval);
+                        glitchOverlay.style.display = 'none';
+                    }, 1000);
+                }
             });
+        });
+
+        // --- 4. Dynamic Content & Modal Loading ---
+        const createModal = (item) => {
+            const modalId = `modal-${item.file.replace(/[^a-zA-Z0-9]/g, '-')}`;
+            const modal = document.createElement('div');
+            modal.id = modalId;
+            modal.classList.add('modal');
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>${item.title}</h2>
+                    ${item.content}
+                </div>`;
+            document.body.appendChild(modal);
+        };
+
+        const createCard = (item, type) => {
+            const card = document.createElement('div');
+            card.classList.add('blog-card');
+            const imageUrl = item.image ? item.image : 'https://placehold.co/600x400/1a1a1a/333333?text=...';
+            const linkText = type === 'blog' ? 'Read More &rarr;' : 'Learn More &rarr;';
+            const summary = type === 'blog' ? item.summary : (item.description || '');
+            const modalId = `modal-${item.file.replace(/[^a-zA-Z0-9]/g, '-')}`;
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${item.title}" class="blog-card-image">
+                <div class="blog-card-content">
+                    <h3>${item.title}</h3>
+                    <p>${summary}</p>
+                    <a href="#" class="read-more-link" data-modal-target="#${modalId}">${linkText}</a>
+                </div>`;
+            return card;
+        };
+
+        const loadContent = (jsonFile, container, type) => {
+            if (!container) return;
+            fetch(jsonFile)
+                .then(response => response.ok ? response.json() : Promise.reject(response.status))
+                .then(items => {
+                    items.forEach(item => {
+                        container.appendChild(createCard(item, type));
+                        createModal(item);
+                    });
+                })
+                .catch(error => console.error(`Error loading ${jsonFile}:`, error));
+        };
+
+        loadContent('blog_posts.json', document.getElementById('blog-posts-container'), 'blog');
+        loadContent('projects.json', document.getElementById('projects-grid'), 'project');
+
+        // --- 5. Global Event Listener for Modals ---
+        document.body.addEventListener('click', e => {
+            if (e.target.matches('.read-more-link')) {
+                e.preventDefault();
+                const modal = document.querySelector(e.target.dataset.modalTarget);
+                openModal(modal);
+            }
+            if (e.target.matches('.close-modal')) {
+                const modal = e.target.closest('.modal');
+                closeModal(modal);
+            }
+        });
     });
     </script>
 </body>

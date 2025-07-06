@@ -134,5 +134,13 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
 # Windows Sillyness
 *:Zone.Identifier
+
+#Unprocessed image files
+unprocessed/
+
+# Python
+.venv
+requirements.txt

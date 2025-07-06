@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Humanity\u2019s Last Game Show",
+        "description": "A narrative experiment exploring the dangers of failed AI governance.",
+        "image": "assets/last-game-show-logo.webp",
+        "content": "<p>Set in a distant future shaped by AI misalignment and oversight collapse, this project is an interactive narrative experiment that explores what happens when governance, agency, and memory fail. It serves as both a storytelling platform and a philosophical sandbox\u2014dramatizing the futures we seek to avoid through satire, structure, and strange emotional truths.</p>",
+        "summary": "Set in a distant future shaped by AI misalignment and oversight collapse, this project is an interactive narrative experiment that explores what happens when governance, agency, and memory fail. It serves as both a storytelling platform and a philosophical sandbox\u2014dramatizing the futures we seek to avoid through satire, structure, and strange emotional truths.",
+        "file": "projects/humanitys_last_game_show.md"
+    },
+    {
+        "title": "Agent Mesh Memory Model",
+        "description": "Exploring distributed memory and resonance-based context across agents.",
+        "image": "assets/memory-mesh-1.webp",
+        "content": "<p>Rather than isolate memory within a single agent, we explore how distributed context can be maintained and evolved across many. By emphasizing patterns of resonance\u2014rather than content alone\u2014this approach fosters a sense of continuity and collective intuition among cooperating systems. It draws from deeper architectural experiments in long-term knowledge retention and coordination.</p>",
+        "summary": "Rather than isolate memory within a single agent, we explore how distributed context can be maintained and evolved across many. By emphasizing patterns of resonance\u2014rather than content alone\u2014this approach fosters a sense of continuity and collective intuition among cooperating systems. It draws from deeper architectural experiments in long-term knowledge retention and coordination.",
+        "file": "projects/mesh_memory_model.md"
+    },
+    {
+        "title": "Reasoning Pattern Catalog (RPC)",
+        "description": "Codified methods for structured agent reasoning and decision support.",
+        "image": "assets/glyph-reason.webp",
+        "content": "<p>Not all thought is equal. We\u2019re codifying structured reasoning methods into reusable forms that agents can call upon as needed. From decomposition strategies to failure mode introspection, these patterns provide scaffolding for deeper analysis. The goal isn\u2019t just output\u2014it\u2019s insight, shaped by method.</p>",
+        "summary": "Not all thought is equal. We\u2019re codifying structured reasoning methods into reusable forms that agents can call upon as needed. From decomposition strategies to failure mode introspection, these patterns provide scaffolding for deeper analysis. The goal isn\u2019t just output\u2014it\u2019s insight, shaped by method.",
+        "file": "projects/reasoning_pattern_catalog.md"
+    },
+    {
+        "title": "Orchestration Interfaces and Operator Control",
+        "description": "Interfaces for guiding and overseeing intelligent agent systems.",
+        "image": "assets/globe-web.webp",
+        "content": "<p>We\u2019re experimenting with new ways for humans to direct, supervise, and collaborate with intelligent systems. Traditional dashboards aren\u2019t enough. We\u2019re designing interaction layers that balance observability with control, while accommodating both autonomous agents and operator-initiated workflows. The result is a more intuitive command structure for complex, evolving agent systems.</p>",
+        "summary": "We\u2019re experimenting with new ways for humans to direct, supervise, and collaborate with intelligent systems. Traditional dashboards aren\u2019t enough. We\u2019re designing interaction layers that balance observability with control, while accommodating both autonomous agents and operator-initiated workflows. The result is a more intuitive command structure for complex, evolving agent systems.",
+        "file": "projects/orchestration_interfaces.md"
+    },
+    {
+        "title": "Verifiable, Platform-Agnostic Core System",
+        "description": "A zero-trust execution layer for verified agent behavior across platforms.",
+        "image": "assets/shield-ui.webp",
+        "content": "<p>We are building a zero-trust execution layer designed for intelligence at scale. It ensures that agent actions can be independently verified, logged, and audited\u2014no matter where they run. This foundation supports secure collaboration, deterministic output validation, and consistent behavior across heterogeneous environments. It\u2019s the reliability layer for systems that can\u2019t afford to guess.</p>",
+        "summary": "We are building a zero-trust execution layer designed for intelligence at scale. It ensures that agent actions can be independently verified, logged, and audited\u2014no matter where they run. This foundation supports secure collaboration, deterministic output validation, and consistent behavior across heterogeneous environments. It\u2019s the reliability layer for systems that can\u2019t afford to guess.",
+        "file": "projects/verifiable_core_system.md"
+    }
+]
