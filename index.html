@@ -352,6 +352,11 @@
             backdrop-filter: blur(5px);
             animation: fadeIn 0.5s ease;
         }
+
+        /* Show modal when active */
+        .modal.active {
+            display: block;
+        }
         
         .modal-content {
             background-color: var(--color-dark-bg);
@@ -714,6 +719,15 @@
         // --- 2. Modal Open/Close Functions ---
         const openModal = (modal) => {
             if (modal == null) return;
+            // Trigger short glitch animation
+            if (glitchOverlay) {
+                glitchOverlay.style.display = 'block';
+                glitchInterval = setInterval(generateGlitchText, 100);
+                setTimeout(() => {
+                    clearInterval(glitchInterval);
+                    glitchOverlay.style.display = 'none';
+                }, 500);
+            }
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         };
