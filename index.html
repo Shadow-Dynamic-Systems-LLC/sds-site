@@ -718,7 +718,11 @@
 
         // --- 2. Modal Open/Close Functions ---
         const openModal = (modal) => {
-            if (modal == null) return;
+            if (modal == null) {
+                console.error('openModal called with null');
+                return;
+            }
+            console.log('Opening modal:', modal);
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         };
@@ -851,11 +855,14 @@
             if (openTrigger) {
                 e.preventDefault();
                 const modalId = openTrigger.dataset.modalTarget;
+                console.log(`Modal trigger clicked. Target ID: ${modalId}`);
                 // Ensure we have a valid selector
                 if (modalId && modalId !== '#') {
                     const modal = document.querySelector(modalId);
                     if (modal) {
                         openModal(modal);
+                    } else {
+                        console.error(`Modal element not found for selector: ${modalId}`);
                     }
                 }
             }
