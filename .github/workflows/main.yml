@@ -11,25 +11,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # 1) Get your code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug TCP reachability
+      # 2) Write the SSH private key to a file
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s\n" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      # 3) Quick network check from the runner itself
+      - name: Test SSH port reachability
         run: |
           sudo apt-get update -qq
           sudo apt-get install -qq -y netcat-openbsd
           echo "→ Testing TCP connect to ${{ secrets.SSH_HOST }}:22…"
           nc -vz "${{ secrets.SSH_HOST }}" 22 || exit 1
-          echo "→ TCP port 22 reachable!"
+          echo "→ SSH port is reachable!"
 
+      # 4) Deploy only non-dotfiles via SCP
       - name: Deploy via SCP
         uses: appleboy/scp-action@v0.1.4
         with:
-          host:     ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key:      ${{ secrets.SSH_PRIVATE_KEY }}
-          # include everything at top level, then exclude any dotfiles/folders
-          source:   "*,!.*"
-          target:   "/srv/www/shadowdynamicsystems"
-          timeout:  30s           # give SSH a bit longer if network is slow
-          strict:   false         # skip interactive host-key checking
+          host:            ${{ secrets.SSH_HOST }}
+          port:            22
+          username:        ${{ secrets.SSH_USER }}
+          key_path:        ~/.ssh/id_rsa
+          source:          "*,!.*"                 # include all top-level items but drop dotfiles
+          target:          "/srv/www/shadowdynamicsystems"
+          timeout:         30s
+          command_timeout: 2m
+          debug:           true
+
+      # 5) Optional: verify the live site responds 200 OK
+      - name: Smoke-test site
+        run: |
+          STATUS=$(curl -s -o /dev/null -w '%{http_code}' https://shadowdynamicsystems.com)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "❌ Health check failed: HTTP $STATUS"
+            exit 1
+          fi
+          echo "✅ Deployment successful, site is live."
