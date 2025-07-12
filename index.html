@@ -817,7 +817,7 @@
             if (window.location.hash && window.location.hash.length > 1) {
                 const hash = window.location.hash.substring(1);
                 if (hash.startsWith('post=') || hash.startsWith('project=')) {
-                    const filePath = hash.split('=')[1];
+                    const filePath = decodeURIComponent(hash.split('=')[1]);
                     if (filePath) {
                         // Use a short timeout to ensure modal elements from the fetch have been created
                         setTimeout(() => openModalWithContent(filePath), 200);
