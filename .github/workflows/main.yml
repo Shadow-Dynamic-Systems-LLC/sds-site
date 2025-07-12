@@ -17,5 +17,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./*"      # or 'dist/*' for built sites
-          target: "/srv/www/shadowdynamicsystems"
+          # match everything in the working directory…
+          # then exclude any path beginning with a dot
+          source:   "*,!.*"
+          target:   "/srv/www/shadowdynamicsystems"
