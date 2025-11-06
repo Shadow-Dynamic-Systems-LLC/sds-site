@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Tomorrow, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import FallbackNav from "@/components/FallbackNav";
 import Console from "@/components/Console";
+import TransitionLayout from "@/components/TransitionLayout";
 import "./globals.css";
 
 const tomorrow = Tomorrow({
@@ -39,7 +40,7 @@ export default function RootLayout({
       >
         <FallbackNav />
         <Console />
-        {children}
+        <TransitionLayout>{children}</TransitionLayout>
       </body>
     </html>
   );
