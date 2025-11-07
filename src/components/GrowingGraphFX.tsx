@@ -19,7 +19,7 @@ const GrowingGraphFX = () => {
 
   useTick((delta) => {
     // Add new particles
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.9) {
       const newParticle = {
         x: window.innerWidth / 2,
         y: window.innerHeight / 2,
