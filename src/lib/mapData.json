@@ -1,25 +1,56 @@
 [
   {
-    "id": "center",
-    "label": "SDS",
-    "x": 50,
-    "y": 50,
-    "linksTo": ["framework", "lighthouse"]
+    "id": "node1",
+    "label": "Adaptive Agents",
+    "path": "/agents",
+    "summary": "Autonomous systems that learn and evolve"
   },
   {
-    "id": "framework",
-    "label": "Systems Theory",
-    "x": 30,
-    "y": 30,
-    "path": "/framework",
-    "summary": "Exploring the interconnectedness of complex systems."
+    "id": "node2",
+    "label": "Dynamic Modeling",
+    "path": "/modeling",
+    "summary": "Simulating complex adaptive systems"
   },
   {
-    "id": "lighthouse",
+    "id": "node3",
     "label": "AI Orchestration",
-    "x": 70,
-    "y": 70,
-    "path": "/lighthouse",
-    "summary": "Guiding intelligent agents toward a common goal."
+    "path": "/orchestration",
+    "summary": "Coordinating intelligent agent collaboration"
+  },
+  {
+    "id": "node4",
+    "label": "Systems Theory",
+    "path": "/framework",
+    "summary": "Exploring the interconnectedness of complex systems"
+  },
+  {
+    "id": "node5",
+    "label": "Cognitive Architecture",
+    "path": "/cognitive",
+    "summary": "Building intelligent reasoning systems"
+  },
+  {
+    "id": "node6",
+    "label": "Data Synthesis",
+    "path": "/data",
+    "summary": "Transforming raw data into actionable insights"
+  },
+  {
+    "id": "node7",
+    "label": "Emergent Dynamics",
+    "path": "/emergent",
+    "summary": "Understanding self-organizing system behaviors"
+  },
+  {
+    "id": "node8",
+    "label": "Integrity Systems",
+    "path": "/integrity",
+    "summary": "Ensuring robustness and reliability"
+  },
+  {
+    "id": "node9",
+    "label": "Substrate / Memory",
+    "path": "/substrate",
+    "summary": "Foundational infrastructure and knowledge persistence"
   }
 ]

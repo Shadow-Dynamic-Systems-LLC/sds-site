@@ -1,5 +1,5 @@
-import NeuralMap from "@/components/NeuralMap";
+import Singularity from "@/components/Singularity";
 
 export default function Home() {
-  return <NeuralMap />;
+  return <Singularity />;
 }
