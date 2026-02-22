@@ -1,0 +1,19 @@
+---
+title: "Fine Tuning - Afterburners on a Paper Airplane"
+date: "2025-07-19"
+author: "Jason Crittenden; Founder, Shadow Dynamic Systems LLC"
+image: "assets/spellbook.webp"
+---
+Fine‑tuning feels like the messiah of AI: pour in domain data, and your model mirrors your world flawlessly—until it forgets everything else and collapses under its own overfit weight.
+
+Fine-tuning feels magical - you can provide instant domain expertise, you don't need to train your own model on the intricacies of language and there is an illusion of deep-control. After all, you are tweaking weights, not prompts, and it doesn't feel as ancillary as strapping RAG to an unrelated and untrained model.
+
+But, it is still a mask. Yes, the mask is made of gold. But gold makes for terrible masks, it's heavy, it's soft, and it's gaudy as hell. 
+
+Similarly, fine-tuning a model increases brittleness of the original model. Your fine-tuning data acts as a straight-jacket. Your model won't generalize as well as it used to. Not so great when you expect "problem-solving" to be in the job description. Need to add new data? Time for another expensive, time-consuming training run.
+
+Most insidiously, it gives a false sense of having fixed the model to behave the way you want. But the straight-jacket has only created a facade of fixed behavior. The dysfunction is still there, it's just been hidden behind the new weights.
+
+So, if not fine-tuning - what? Meta‑learning and continual adaptation are the blueprint for systems that grow smarter with each small update, sidestepping the brittleness of wholesale retrains. When paired with a truly modular cognitive design—where you can hot‑swap reasoning or safety modules at runtime—and infused with causal world models that function like internal physics engines rather than superficial pattern matchers, your agents begin to understand and act upon the world in a fundamentally richer way.
+
+Self‑refactoring agents are the next frontier: code‑writing AIs that spot their own flaws and seamlessly inject new sub‑modules or rewire their architectures without human intervention. Let the world chase fine‑tuning as salvation; you’ll be forging systems that continuously learn, adapt, and evolve far beyond the limitations of any mask.

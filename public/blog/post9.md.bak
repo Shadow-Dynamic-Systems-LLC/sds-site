@@ -1,0 +1,120 @@
+---
+title: "The Next Frontier Isn't Better Text. It's Better Problems."
+date: "2025-12-27"
+author: "Jason Crittenden; Founder, Shadow Dynamic Systems LLC"
+image: "assets/assembly-hall.webp"
+---
+
+**Asankhaya Sharma** just pulled off something that deserves some celebratory remarks — published on his Hugging Face blog:
+
+> **The 1 Billion Token Challenge: Finding the Perfect Pre-Training Mix**
+> [https://huggingface.co/blog/codelion/optimal-dataset-mixing](https://huggingface.co/blog/codelion/optimal-dataset-mixing)
+
+Using a 70M-parameter GPT-2 variant and only **1 billion tokens**—about one-tenth the GPT-2 training data—he ran more than fifty controlled experiments to isolate the *actual* effects of dataset composition.
+
+The result? A deceptively simple static mixture:
+
+* **50%** finePDFs (high-quality textbook PDFs)
+* **30%** DCLM-baseline (filtered web text)
+* **20%** FineWeb-Edu (curated educational sources)
+
+That mix trained a small model to within a rounding error of GPT-2 while using dramatically less data and compute. It’s one of the few recent results that’s both **accessible** *and* **substantial**.
+
+At Shadow Dynamic Systems, this is exactly the kind of work we celebrate:
+**thoughtful, empirical, replicable experimentation over hype.**
+
+But it also brings a deeper truth into sharp focus:
+
+---
+
+## **Understanding Prose ≠ Solving Problems**
+
+Perfecting dataset mixes is essential for building **prose-understanding** models.
+
+But as these results demonstrate, understanding prose is not the same as **reasoning**, **planning**, or **problem-solving**. 
+
+A textbook can teach terminology.
+A web crawl can teach token patterns.
+
+But **problem-solving emerges outside language.**
+
+It arises from:
+
+* uncertainty
+* ambiguity
+* constraints
+* failed attempts
+* corrections
+* replanning
+* sensory variation
+* adversarial noise
+* physical reality
+* consequences
+
+None of these forces exist in a PDF.
+
+You don’t learn navigation from reading maps.
+You learn navigation from getting lost—and finding your way back.
+
+You don’t learn triage from reading medical manuals.
+You learn triage when seconds matter, information is incomplete, and consequence clamps around your chest like an iron vise.
+
+And no model—no matter how beautifully trained—will ever learn **true reasoning** from text alone.
+
+**Blobs of text will never be enough.**
+
+---
+
+## **What the Field Needs Next**
+
+Sharma’s work shows how far we can push models by giving them the *right words*.
+The next step is giving them the **right problems**.
+
+### **1. Problem-Space Training**
+
+Models must interact with iterative, consequence-bearing tasks where failure drives adaptation.
+
+### **2. Realistic State Transitions**
+
+Training must reflect the entropy of reality: noise, partial data, conflicting signals, evolving scenes.
+
+### **3. Agentic Feedback Loops**
+
+Models need to plan, test, repair, revise, and evaluate their own actions—rather than emit the “most likely next token.”
+
+### **4. Purposeful Memory**
+
+Not just long context, but memory organized around relevance, attention, and goals.
+
+### **5. A Curriculum of Real Challenges**
+
+Benchmarks are static puzzles.
+Real intelligence emerges in environments where actions reshape the world.
+
+---
+
+## **Where This Leaves Us**
+
+The dataset-mix breakthrough is genuinely worth celebrating.
+It proves that smart curation can multiply the capability of small models far beyond expectations.
+
+But the next leap—the one that matters for *actual intelligence*—requires something text cannot provide:
+
+**experience.**
+
+Experience with failure.
+Experience with ambiguity.
+Experience with problems that cannot be memorized.
+Experience where each attempt updates the internal algorithm.
+
+Only problem-solving can teach problem-solving.
+
+And when training moves beyond static corpora and into structured, interactive cognitive development, models will stop being language engines and start becoming **agents**.
+
+Sharma’s work gives us better ingredients.
+Now comes the part where models learn to *cook.*
+
+— Jason
+Founder, Shadow Dynamic Systems
+
+**P.S. We currently anticipate some interesting news on this front soon. Stay tuned.**

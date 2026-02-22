@@ -1,0 +1,143 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('SDS Homepage', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173');
+    // Wait for the page to load and animations to settle
+    await page.waitForTimeout(1000);
+  });
+
+  test('should display the homepage correctly', async ({ page }) => {
+    // Check title
+    await expect(page).toHaveTitle(/Shadow Dynamic Systems/);
+
+    // Take full page screenshot
+    await page.screenshot({ path: 'screenshots/01-homepage-full.png', fullPage: true });
+
+    // Check navbar elements
+    await expect(page.locator('.navbar-logo')).toBeVisible();
+    await expect(page.locator('.nav-links a', { hasText: 'Services' })).toBeVisible();
+    await expect(page.locator('.nav-links a', { hasText: 'Projects' })).toBeVisible();
+    await expect(page.locator('.nav-links a', { hasText: 'About' })).toBeVisible();
+    await expect(page.locator('.nav-links a', { hasText: 'Blog' })).toBeVisible();
+  });
+
+  test('should display hero section', async ({ page }) => {
+    // Check hero content
+    await expect(page.locator('#hero h1')).toContainText('Intelligence');
+    await expect(page.locator('#hero h1')).toContainText('Reimagined');
+
+    // Take screenshot of hero section
+    await page.locator('#hero').screenshot({ path: 'screenshots/02-hero-section.png' });
+  });
+
+  test('should navigate to Services section', async ({ page }) => {
+    // Click Services link
+    await page.locator('.nav-links a', { hasText: 'Services' }).click();
+    await page.waitForTimeout(1000);
+
+    // Check if Services section is visible
+    await expect(page.locator('#services h2')).toContainText('Current Research & Focus Areas');
+
+    // Take screenshot
+    await page.locator('#services').screenshot({ path: 'screenshots/03-services-section.png' });
+
+    // Check service cards
+    await expect(page.locator('.service-card')).toHaveCount(6);
+  });
+
+  test('should navigate to Projects section', async ({ page }) => {
+    // Click Projects link
+    await page.locator('.nav-links a', { hasText: 'Projects' }).click();
+    await page.waitForTimeout(1000);
+
+    // Check if Projects section is visible
+    await expect(page.locator('#projects h2')).toContainText('Our Research & Development');
+
+    // Take screenshot
+    await page.locator('#projects').screenshot({ path: 'screenshots/04-projects-section.png' });
+  });
+
+  test('should navigate to About section', async ({ page }) => {
+    // Click About link
+    await page.locator('.nav-links a', { hasText: 'About' }).click();
+    await page.waitForTimeout(1000);
+
+    // Check if About section is visible
+    await expect(page.locator('#about h2')).toContainText('Our Philosophy');
+
+    // Take screenshot
+    await page.locator('#about').screenshot({ path: 'screenshots/05-about-section.png' });
+  });
+
+  test('should navigate to Blog section', async ({ page }) => {
+    // Click Blog link
+    await page.locator('.nav-links a', { hasText: 'Blog' }).click();
+    await page.waitForTimeout(1000);
+
+    // Check if Blog section is visible
+    await expect(page.locator('#blog h2')).toContainText('From The Lab');
+
+    // Take screenshot
+    await page.locator('#blog').screenshot({ path: 'screenshots/06-blog-section.png' });
+  });
+
+  test('should open and close Privacy Policy modal', async ({ page }) => {
+    // Scroll to footer
+    await page.locator('footer').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+
+    // Click Privacy Policy link
+    await page.locator('.footer-links a', { hasText: 'Privacy Policy' }).click();
+    await page.waitForTimeout(500);
+
+    // Check modal is visible
+    await expect(page.locator('.modal.active')).toBeVisible();
+    await expect(page.locator('.modal-content h3')).toContainText('Privacy Policy');
+
+    // Take screenshot
+    await page.screenshot({ path: 'screenshots/07-privacy-modal.png' });
+
+    // Close modal
+    await page.locator('.close-modal').click();
+    await page.waitForTimeout(500);
+
+    // Check modal is hidden
+    await expect(page.locator('.modal.active')).not.toBeVisible();
+  });
+
+  test('should open and close Terms of Service modal', async ({ page }) => {
+    // Scroll to footer
+    await page.locator('footer').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+
+    // Click Terms of Service link
+    await page.locator('.footer-links a', { hasText: 'Terms of Service' }).click();
+    await page.waitForTimeout(500);
+
+    // Check modal is visible
+    await expect(page.locator('.modal.active')).toBeVisible();
+    await expect(page.locator('.modal-content h3')).toContainText('Terms of Service');
+
+    // Take screenshot
+    await page.screenshot({ path: 'screenshots/08-terms-modal.png' });
+
+    // Close modal by clicking backdrop
+    await page.locator('.modal.active').click({ position: { x: 10, y: 10 } });
+    await page.waitForTimeout(500);
+
+    // Check modal is hidden
+    await expect(page.locator('.modal.active')).not.toBeVisible();
+  });
+
+  test('should display shader background', async ({ page }) => {
+    // Check canvas container exists
+    await expect(page.locator('#canvas-container')).toBeVisible();
+
+    // Check canvas element exists
+    await expect(page.locator('#canvas-container canvas')).toBeVisible();
+
+    // Take viewport screenshot to show background
+    await page.screenshot({ path: 'screenshots/09-shader-background.png' });
+  });
+});

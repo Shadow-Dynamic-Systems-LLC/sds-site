@@ -1,0 +1,294 @@
+import { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
+
+interface Node extends d3.SimulationNodeDatum {
+    id: number;
+    generation?: number; // Track which "era" this node belongs to
+}
+
+interface Link extends d3.SimulationLinkDatum<Node> {
+    source: Node;
+    target: Node;
+}
+
+export interface MemoryGraphProps {
+    maxNodes?: number;
+    addInterval?: number;
+    nodeColor?: string;
+    linkColor?: string;
+    opacity?: number;
+    collapseDuration?: number; // ms for collapse animation
+}
+
+export function MemoryGraph({
+    maxNodes = 35,
+    addInterval = 3000,
+    nodeColor = 'rgba(255, 215, 0, 0.9)',
+    linkColor = 'rgba(255, 215, 0, 0.4)',
+    opacity = 0.5,
+    collapseDuration = 1500,
+}: MemoryGraphProps) {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const stateRef = useRef({
+        nodes: [] as Node[],
+        links: [] as Link[],
+        scale: 1,
+        collapsing: false,
+        collapseStart: 0,
+        generation: 0,
+        nextId: 0,
+        paused: false,
+    });
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const context = canvas.getContext('2d');
+        if (!context) return;
+
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        const state = stateRef.current;
+        const nodes = state.nodes;
+        const links = state.links;
+
+        // Graph center - bottom portion of screen to avoid hero text
+        const graphCenterY = height * 0.72;
+
+        // Initialize with some nodes
+        function initializeGraph() {
+            const numInitialNodes = 4;
+            state.nextId = 0;
+            for (let i = 0; i < numInitialNodes; i++) {
+                nodes.push({
+                    id: state.nextId++,
+                    generation: state.generation,
+                    x: width / 2 + (Math.random() - 0.5) * 200,
+                    y: graphCenterY + (Math.random() - 0.5) * 200,
+                });
+            }
+
+            for (let i = 1; i < numInitialNodes; i++) {
+                const targetIdx = Math.floor(Math.random() * i);
+                links.push({ source: nodes[i], target: nodes[targetIdx] });
+            }
+        }
+
+        initializeGraph();
+
+        // Create simulation
+        const simulation = d3.forceSimulation<Node>(nodes)
+            .force('link', d3.forceLink<Node, Link>(links).id(d => d.id).distance(70).strength(0.1))
+            .force('charge', d3.forceManyBody().strength(-50))
+            .force('x', d3.forceX(width / 2).strength(0.02))
+            .force('y', d3.forceY(graphCenterY).strength(0.02))
+            .on('tick', tick);
+
+        function tick() {
+            if (!context) return;
+            context.clearRect(0, 0, width, height);
+
+            // Calculate center of mass for scaling origin
+            let cx = width / 2;
+            let cy = height / 2;
+            if (nodes.length > 0) {
+                cx = nodes.reduce((sum, n) => sum + (n.x || 0), 0) / nodes.length;
+                cy = nodes.reduce((sum, n) => sum + (n.y || 0), 0) / nodes.length;
+            }
+
+            const scale = state.scale;
+
+            // Draw links
+            context.beginPath();
+            context.strokeStyle = linkColor;
+            context.lineWidth = 1;
+            for (const link of links) {
+                if (link.source.x != null && link.source.y != null &&
+                    link.target.x != null && link.target.y != null) {
+                    // Scale from center
+                    const sx = cx + (link.source.x - cx) * scale;
+                    const sy = cy + (link.source.y - cy) * scale;
+                    const tx = cx + (link.target.x - cx) * scale;
+                    const ty = cy + (link.target.y - cy) * scale;
+                    context.moveTo(sx, sy);
+                    context.lineTo(tx, ty);
+                }
+            }
+            context.stroke();
+
+            // Draw nodes
+            context.beginPath();
+            context.fillStyle = nodeColor;
+            const nodeRadius = 2.5 * Math.max(scale, 0.3); // Don't shrink too small
+            for (const node of nodes) {
+                if (node.x != null && node.y != null) {
+                    const nx = cx + (node.x - cx) * scale;
+                    const ny = cy + (node.y - cy) * scale;
+                    context.moveTo(nx + nodeRadius, ny);
+                    context.arc(nx, ny, nodeRadius, 0, 2 * Math.PI);
+                }
+            }
+            context.fill();
+        }
+
+        // Collapse animation loop
+        let animationId: number;
+        function animateCollapse() {
+            if (!state.collapsing) return;
+
+            const elapsed = Date.now() - state.collapseStart;
+            const progress = Math.min(elapsed / collapseDuration, 1);
+
+            // Ease out cubic for smooth deceleration
+            state.scale = 1 - (progress * progress * progress);
+
+            if (progress >= 1) {
+                // Collapse complete - reset to single node
+                state.collapsing = false;
+                state.scale = 1;
+                state.generation++;
+
+                // Clear everything
+                nodes.length = 0;
+                links.length = 0;
+
+                // Create single "hypergraph" node representing collapsed structure
+                const singularityNode: Node = {
+                    id: state.nextId++,
+                    generation: state.generation,
+                    x: width / 2,
+                    y: graphCenterY,
+                };
+                nodes.push(singularityNode);
+
+                // Update simulation
+                simulation.nodes(nodes);
+                (simulation.force('link') as d3.ForceLink<Node, Link>).links(links);
+                simulation.alpha(0.3).restart();
+
+                state.paused = false;
+                return;
+            }
+
+            simulation.alpha(0.5).restart(); // Keep simulation active during collapse
+            animationId = requestAnimationFrame(animateCollapse);
+        }
+
+        // Helper functions
+        function getNodeDegree(nodeId: number): number {
+            return links.filter(l => l.source.id === nodeId || l.target.id === nodeId).length;
+        }
+
+        function findLeafNodes(): Node[] {
+            return nodes.filter(n => getNodeDegree(n.id) === 1);
+        }
+
+        function triggerCollapse() {
+            state.collapsing = true;
+            state.collapseStart = Date.now();
+            state.paused = true;
+            animateCollapse();
+        }
+
+        // Add new nodes or connect leaves periodically
+        const intervalId = setInterval(() => {
+            if (state.paused || state.collapsing) return;
+
+            // Check if we've hit max - trigger collapse
+            if (nodes.length >= maxNodes) {
+                triggerCollapse();
+                return;
+            }
+
+            const leaves = findLeafNodes();
+
+            // 20% chance to connect two leaves if we have at least 2
+            if (leaves.length >= 2 && Math.random() < 0.2) {
+                const idx1 = Math.floor(Math.random() * leaves.length);
+                let idx2 = Math.floor(Math.random() * (leaves.length - 1));
+                if (idx2 >= idx1) idx2++;
+
+                const leaf1 = leaves[idx1];
+                const leaf2 = leaves[idx2];
+
+                const alreadyConnected = links.some(
+                    l => (l.source.id === leaf1.id && l.target.id === leaf2.id) ||
+                         (l.source.id === leaf2.id && l.target.id === leaf1.id)
+                );
+
+                if (!alreadyConnected) {
+                    links.push({ source: leaf1, target: leaf2 });
+                    (simulation.force('link') as d3.ForceLink<Node, Link>).links(links);
+                    simulation.alpha(0.3).restart();
+                    return;
+                }
+            }
+
+            // Add a new node
+            const newNode: Node = {
+                id: state.nextId++,
+                generation: state.generation,
+                x: width / 2 + (Math.random() - 0.5) * 100,
+                y: graphCenterY + (Math.random() - 0.5) * 100,
+            };
+            nodes.push(newNode);
+
+            if (nodes.length > 1) {
+                const targetIdx = Math.floor(Math.random() * (nodes.length - 1));
+                links.push({ source: newNode, target: nodes[targetIdx] });
+            }
+
+            simulation.nodes(nodes);
+            (simulation.force('link') as d3.ForceLink<Node, Link>).links(links);
+            simulation.alpha(0.3).restart();
+        }, addInterval);
+
+        // Handle resize
+        function handleResize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            const newGraphCenterY = height * 0.72;
+
+            simulation
+                .force('x', d3.forceX(width / 2).strength(0.02))
+                .force('y', d3.forceY(newGraphCenterY).strength(0.02))
+                .alpha(0.3)
+                .restart();
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            clearInterval(intervalId);
+            cancelAnimationFrame(animationId);
+            window.removeEventListener('resize', handleResize);
+            simulation.stop();
+            stateRef.current.nodes = [];
+            stateRef.current.links = [];
+            stateRef.current.scale = 1;
+            stateRef.current.collapsing = false;
+        };
+    }, [maxNodes, addInterval, nodeColor, linkColor, collapseDuration]);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+                opacity,
+                zIndex: 1,
+            }}
+        />
+    );
+}
