@@ -262,6 +262,7 @@ export function MemoryGraph({
 
         // Handle resize
         function handleResize() {
+            if (!canvas) return;
             width = window.innerWidth;
             height = window.innerHeight;
             canvas.width = width;

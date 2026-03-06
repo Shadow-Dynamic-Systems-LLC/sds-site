@@ -58,7 +58,8 @@ export function Notifications() {
 function NotificationItem({ notification }: { notification: Notification }) {
   const [visible, setVisible] = useState(true);
   const [flash, setFlash] = useState(true);
-  const elapsed = Date.now() - notification.startTime;
+  // Initial elapsed time calculated but not stored (notification timing handled by intervals)
+  void (Date.now() - notification.startTime);
 
   useEffect(() => {
     // Flash effect - toggle every 500ms for first 5 seconds

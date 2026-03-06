@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Modal } from './Modal';
 import { SectionHeader } from './SectionHeader';
 import { artifacts, artifactTypeDefs, parseContentToSections, identifierToSlug, type Artifact } from '../data/artifacts';
+import { ArtifactCard } from './ArtifactCard';
+import './ArchitecturalSystem.css';
 
 type ArtifactType = Artifact['type'];
 
@@ -22,9 +24,9 @@ export function Publications() {
     );
   };
 
-  const filteredArtifacts = activeFilters.length === 0
-    ? artifacts
-    : artifacts.filter(a => activeFilters.includes(a.type));
+  const filteredArtifacts = artifacts
+    .filter(a => activeFilters.length === 0 || activeFilters.includes(a.type))
+    .sort((a, b) => a.identifier.localeCompare(b.identifier));
 
   return (
     <section id="publications" className="page-section">
@@ -106,66 +108,23 @@ export function Publications() {
         {viewMode === 'cards' ? (
           <div className="services-grid">
             {filteredArtifacts.map((artifact, index) => (
-              <div
+              <ArtifactCard
                 key={index}
-                className="blog-card"
-              >
-                <Link to={`/dx/${identifierToSlug(artifact.identifier)}`} className="blog-card-link">
-                  <div className="artifact-type-badge">{artifactTypeDefs[artifact.type].label}</div>
-                  {artifact.status && <div className="artifact-status-badge">{artifact.status}</div>}
-                  <div className="artifact-identifier">{artifact.identifier}</div>
-                  <img
-                    src={artifact.image}
-                    alt={artifact.title}
-                    className="blog-card-image"
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://placehold.co/600x400/1a1a1a/ffd700?text=Artifact';
-                    }}
-                  />
-                  <div className="blog-card-content">
-                    <h3>{artifact.title}</h3>
-                    <p className="blog-meta">{artifact.date} · {artifact.author}</p>
-                    <p>{artifact.summary}</p>
-                  </div>
-                </Link>
-                <button
-                  className="card-modal-trigger"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedArtifact(artifact);
-                  }}
-                  title="Quick view"
-                >
-                  ⤢
-                </button>
-              </div>
+                artifact={artifact}
+                viewMode={viewMode}
+                onQuickView={() => setSelectedArtifact(artifact)}
+              />
             ))}
           </div>
         ) : (
           <div className="artifacts-list">
             {filteredArtifacts.map((artifact, index) => (
-              <div key={index} className="artifact-list-item">
-                <div className="artifact-list-meta">
-                  <span className="artifact-list-type">{artifactTypeDefs[artifact.type].label}</span>
-                  <span className="artifact-list-id">{artifact.identifier}</span>
-                  {artifact.status && <span className="artifact-list-status">{artifact.status}</span>}
-                </div>
-                <Link to={`/dx/${identifierToSlug(artifact.identifier)}`} className="artifact-list-link">
-                  <h3 className="artifact-list-title">{artifact.title}</h3>
-                </Link>
-                <p className="artifact-list-summary">{artifact.summary}</p>
-                <div className="artifact-list-footer">
-                  <span className="artifact-list-date">{artifact.date}</span>
-                  <span className="artifact-list-author">{artifact.author}</span>
-                  <button
-                    className="artifact-list-quickview"
-                    onClick={() => setSelectedArtifact(artifact)}
-                    title="Quick view"
-                  >
-                    ⤢ Quick View
-                  </button>
-                </div>
-              </div>
+              <ArtifactCard
+                key={index}
+                artifact={artifact}
+                viewMode={viewMode}
+                onQuickView={() => setSelectedArtifact(artifact)}
+              />
             ))}
           </div>
         )}

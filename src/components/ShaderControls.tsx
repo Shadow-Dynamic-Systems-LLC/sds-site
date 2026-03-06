@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import type { SdsMode } from './SdsBackground';
+
+export type SdsMode = 'fracture' | 'flow';
 
 interface ShaderControlsProps {
   mode: SdsMode;

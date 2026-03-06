@@ -1,0 +1,946 @@
+/**
+ * Architectural Designation System — Styles
+ *
+ * Visual language: Industrial Archaeological
+ * - Geological strata / cross-section diagrams
+ * - Blueprint precision with depth cues
+ * - Frozen/stasis states for governance artifacts
+ */
+
+/* ============================================================================
+   LAYER INDICATOR
+   ============================================================================ */
+
+.layer-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.layer-indicator__bar {
+  width: 3px;
+  height: 1.25rem;
+  border-radius: 1px;
+}
+
+.layer-indicator__label {
+  font-family: var(--font-secondary);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.layer-indicator__depth-marks {
+  display: flex;
+  gap: 2px;
+  margin-left: 0.25rem;
+}
+
+.layer-indicator__depth-mark {
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+}
+
+.layer-indicator--compact {
+  gap: 0.25rem;
+}
+
+.layer-indicator--compact .layer-indicator__bar {
+  width: 2px;
+  height: 0.75rem;
+}
+
+.layer-indicator--compact .layer-indicator__label {
+  display: none;
+}
+
+.layer-indicator--compact .layer-indicator__depth-marks {
+  display: none;
+}
+
+/* ============================================================================
+   DEPTH CARD
+   ============================================================================ */
+
+.depth-card {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px) brightness(0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+
+  /* Shadow scales with depth */
+  box-shadow:
+    0 calc(4px * var(--shadow-intensity)) calc(8px * var(--shadow-intensity)) rgba(0, 0, 0, 0.3),
+    0 calc(8px * var(--shadow-intensity)) calc(24px * var(--shadow-intensity)) rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Layer edge indicator */
+.depth-card__layer-edge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--layer-color);
+  opacity: 0.8;
+}
+
+/* Depth notches - visual indicator of how deep this card is */
+.depth-card::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: calc(var(--depth-level) * 12px);
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--layer-color) 0px,
+    var(--layer-color) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.depth-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+/* INVARIANT layer - deepest */
+.depth-card--invariant {
+  border-color: rgba(255, 107, 53, 0.2);
+  transform: translateY(4px);
+}
+
+.depth-card--invariant:hover {
+  border-color: rgba(255, 107, 53, 0.4);
+  transform: translateY(2px);
+}
+
+/* ENVELOPE layer - middle */
+.depth-card--envelope {
+  border-color: rgba(255, 215, 0, 0.15);
+  transform: translateY(2px);
+}
+
+.depth-card--envelope:hover {
+  border-color: rgba(255, 215, 0, 0.3);
+  transform: translateY(0);
+}
+
+/* SURFACE layer - closest */
+.depth-card--surface {
+  border-color: rgba(125, 211, 252, 0.12);
+  transform: translateY(0);
+}
+
+.depth-card--surface:hover {
+  border-color: rgba(125, 211, 252, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Frozen state (DX and RX only) */
+.depth-card--frozen {
+  filter: saturate(0.3) brightness(0.85);
+  animation: frozen-flicker 4s infinite;
+}
+
+.depth-card--frozen .depth-card__layer-edge {
+  animation: stasis-pulse 2s infinite ease-in-out;
+}
+
+.depth-card__frost-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(100, 150, 200, 0.03) 0%,
+      transparent 50%,
+      rgba(100, 150, 200, 0.02) 100%
+    );
+  z-index: 10;
+}
+
+.frost-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(100, 200, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: scanline-move 3s infinite linear;
+}
+
+@keyframes frozen-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+  52% { opacity: 0.9; }
+  54% { opacity: 1; }
+}
+
+@keyframes stasis-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes scanline-move {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* ============================================================================
+   REFERENCE CHIP
+   ============================================================================ */
+
+.reference-chip-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.reference-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 2px solid var(--chip-color);
+  border-radius: 2px;
+  font-family: var(--font-secondary);
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.reference-chip:hover {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: var(--chip-color);
+  color: var(--color-text-primary);
+}
+
+.reference-chip--expanded {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: var(--chip-color);
+}
+
+.reference-chip__code {
+  font-weight: 700;
+  color: var(--chip-color);
+  letter-spacing: 0.05em;
+}
+
+.reference-chip__label {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.reference-chip__tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1000;
+  width: 280px;
+  padding: 1rem;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 3px solid var(--chip-color);
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  animation: tooltip-enter 0.15s ease;
+}
+
+.reference-chip__tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  font-family: var(--font-secondary);
+  font-size: 0.7rem;
+  color: var(--chip-color);
+  font-weight: 700;
+}
+
+.reference-chip__tooltip-definition {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+@keyframes tooltip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.parsed-references {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* ============================================================================
+   CROSS-SECTION SCHEMATIC
+   ============================================================================ */
+
+.cross-section {
+  position: relative;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+.cross-section__diagram {
+  position: relative;
+  height: 240px;
+}
+
+/* Section cut line (architectural A-A' notation) */
+.cross-section__cut-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.cross-section__cut-label {
+  font-family: var(--font-secondary);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.15rem 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.cross-section__cut-dash {
+  flex: 1;
+  width: 1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.4) 0px,
+    rgba(255, 255, 255, 0.4) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+/* Strata layers */
+.cross-section__strata {
+  position: relative;
+  height: 100%;
+  padding: 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cross-section__layer {
+  position: relative;
+  flex: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cross-section__layer-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--layer-color);
+  opacity: 0.08;
+  transition: opacity 0.2s ease;
+}
+
+.cross-section__layer:hover .cross-section__layer-fill,
+.cross-section__layer--active .cross-section__layer-fill {
+  opacity: 0.2;
+}
+
+.cross-section__layer-edge-top,
+.cross-section__layer-edge-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.cross-section__layer-edge-top {
+  top: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--layer-color) 20%,
+    var(--layer-color) 80%,
+    transparent
+  );
+  opacity: 0.4;
+}
+
+.cross-section__layer-edge-bottom {
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 0, 0, 0.5) 20%,
+    rgba(0, 0, 0, 0.5) 80%,
+    transparent
+  );
+}
+
+.cross-section__layer-label {
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.cross-section__layer:hover .cross-section__layer-label,
+.cross-section__layer--active .cross-section__layer-label {
+  opacity: 1;
+}
+
+.cross-section__layer-code {
+  font-family: var(--font-secondary);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--layer-color);
+  letter-spacing: 0.1em;
+}
+
+.cross-section__layer-name {
+  font-family: var(--font-secondary);
+  font-size: 0.5rem;
+  color: var(--color-text-secondary);
+}
+
+/* Depth markers (like geological core sample marks) */
+.cross-section__depth-markers {
+  position: absolute;
+  right: -40px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 4px 0;
+}
+
+.cross-section__depth-marker {
+  width: 12px;
+  height: 1px;
+  background: var(--layer-color);
+  opacity: 0.3;
+}
+
+/* Callout annotations */
+.cross-section__callouts {
+  position: absolute;
+  right: 20px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 0;
+  pointer-events: none;
+}
+
+.cross-section__callout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-secondary);
+  font-size: 0.55rem;
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}
+
+.cross-section__callout-line {
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* Detail panel */
+.cross-section__detail {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 2px solid var(--color-accent-yellow);
+  animation: detail-enter 0.2s ease;
+}
+
+.cross-section__detail p {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+@keyframes detail-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================================
+   DEPENDENCY GRAPH
+   ============================================================================ */
+
+.dependency-graph {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+}
+
+.dependency-graph__svg {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+}
+
+.dependency-graph__edge line {
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 1;
+  transition: stroke 0.2s ease;
+}
+
+.dependency-graph__edge line.highlighted {
+  stroke: var(--color-accent-yellow);
+  stroke-width: 1.5;
+}
+
+.dependency-graph__edge--references line {
+  stroke-dasharray: none;
+}
+
+.dependency-graph__edge--derived line {
+  stroke-dasharray: 4 2;
+}
+
+.dependency-graph__edge--addresses line {
+  stroke-dasharray: 2 2;
+}
+
+.dependency-graph__node {
+  cursor: pointer;
+}
+
+.dependency-graph__node-circle {
+  fill: rgba(0, 0, 0, 0.8);
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1.5;
+  transition: all 0.2s ease;
+}
+
+.dependency-graph__node--invariant .dependency-graph__node-circle {
+  stroke: #ff6b35;
+}
+
+.dependency-graph__node--artifact .dependency-graph__node-circle {
+  stroke: #ffd700;
+}
+
+.dependency-graph__node--failure .dependency-graph__node-circle {
+  stroke: #ff4136;
+}
+
+.dependency-graph__node.center .dependency-graph__node-circle {
+  fill: rgba(255, 215, 0, 0.2);
+  stroke-width: 2;
+}
+
+.dependency-graph__node.hovered .dependency-graph__node-circle {
+  fill: rgba(255, 215, 0, 0.3);
+  stroke-width: 2;
+}
+
+.dependency-graph__node-label {
+  font-family: var(--font-secondary);
+  font-size: 8px;
+  fill: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.dependency-graph__node.hovered .dependency-graph__node-label {
+  fill: var(--color-text-primary);
+}
+
+/* ============================================================================
+   DERIVATION CHAIN
+   ============================================================================ */
+
+.derivation-chain {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.derivation-chain__label {
+  font-family: var(--font-secondary);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.derivation-chain__timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.derivation-chain__step {
+  display: flex;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.derivation-chain__connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 12px;
+}
+
+.derivation-chain__line {
+  width: 1px;
+  flex: 1;
+  min-height: 12px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.derivation-chain__node {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.derivation-chain__step--observation .derivation-chain__node {
+  border-color: var(--color-text-secondary);
+}
+
+.derivation-chain__step--artifact .derivation-chain__node {
+  border-color: var(--color-accent-yellow);
+}
+
+.derivation-chain__step--invariant .derivation-chain__node {
+  border-color: #ff6b35;
+}
+
+.derivation-chain__step--current .derivation-chain__node {
+  background: var(--color-accent-yellow);
+  border-color: var(--color-accent-yellow);
+}
+
+.derivation-chain__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 1rem;
+}
+
+.derivation-chain__id {
+  font-family: var(--font-secondary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-accent-yellow);
+  letter-spacing: 0.05em;
+}
+
+.derivation-chain__title {
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+}
+
+.derivation-chain__date {
+  font-family: var(--font-secondary);
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+/* ============================================================================
+   VERSION HISTORY
+   ============================================================================ */
+
+.version-history {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.version-history__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.version-history__header:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.version-history__current {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.version-history__label {
+  font-family: var(--font-secondary);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.version-history__code {
+  font-family: var(--font-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent-yellow);
+}
+
+.version-history__toggle {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.version-history__changelog {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  animation: changelog-expand 0.2s ease;
+}
+
+@keyframes changelog-expand {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.version-history__entry {
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.version-history__entry:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.version-history__entry--current {
+  background: rgba(255, 215, 0, 0.03);
+  margin: 0 -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-left: 2px solid var(--color-accent-yellow);
+}
+
+.version-history__entry-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.version-history__entry-version {
+  font-family: var(--font-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.version-history__entry-date {
+  font-family: var(--font-secondary);
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.version-history__entry-changes {
+  margin: 0;
+  padding-left: 1rem;
+  list-style: none;
+}
+
+.version-history__entry-changes li {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  position: relative;
+}
+
+.version-history__entry-changes li::before {
+  content: '·';
+  position: absolute;
+  left: -0.75rem;
+  color: var(--color-accent-yellow);
+}
+
+/* ============================================================================
+   TIMESTAMP
+   ============================================================================ */
+
+.timestamp {
+  font-family: var(--font-secondary);
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+
+/* ============================================================================
+   CALLOUT ANNOTATION
+   ============================================================================ */
+
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.callout--right {
+  flex-direction: row;
+}
+
+.callout--left {
+  flex-direction: row-reverse;
+}
+
+.callout__line {
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  margin-top: 0.5em;
+  flex-shrink: 0;
+}
+
+.callout__marker {
+  position: absolute;
+  left: -8px;
+  top: -2px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-yellow);
+  border-radius: 50%;
+  font-family: var(--font-secondary);
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.callout--left .callout__marker {
+  left: auto;
+  right: -8px;
+}
+
+.callout__content {
+  font-family: var(--font-secondary);
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  max-width: 200px;
+}
+
+/* ============================================================================
+   SECTION CUT
+   ============================================================================ */
+
+.section-cut {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.section-cut__label {
+  font-family: var(--font-secondary);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-text-secondary);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.section-cut__line {
+  flex: 1;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.2) 0px,
+    rgba(255, 255, 255, 0.2) 8px,
+    transparent 8px,
+    transparent 12px,
+    rgba(255, 255, 255, 0.1) 12px,
+    rgba(255, 255, 255, 0.1) 14px,
+    transparent 14px,
+    transparent 18px
+  );
+}
