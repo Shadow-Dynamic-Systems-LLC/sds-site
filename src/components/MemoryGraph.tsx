@@ -38,6 +38,7 @@ export function MemoryGraph({
         generation: 0,
         nextId: 0,
         paused: false,
+        rotation: 0, // radians
     });
 
     useEffect(() => {
@@ -92,7 +93,10 @@ export function MemoryGraph({
             if (!context) return;
             context.clearRect(0, 0, width, height);
 
-            // Calculate center of mass for scaling origin
+            // Increment rotation (~1.5 degrees per second at 60fps)
+            state.rotation += 0.00044;
+
+            // Calculate center of mass for scaling/rotation origin
             let cx = width / 2;
             let cy = height / 2;
             if (nodes.length > 0) {
@@ -101,6 +105,19 @@ export function MemoryGraph({
             }
 
             const scale = state.scale;
+            const cos = Math.cos(state.rotation);
+            const sin = Math.sin(state.rotation);
+
+            // Helper to apply scale and rotation around center
+            function transform(x: number, y: number): [number, number] {
+                // Scale from center
+                const sx = (x - cx) * scale;
+                const sy = (y - cy) * scale;
+                // Rotate around center
+                const rx = sx * cos - sy * sin;
+                const ry = sx * sin + sy * cos;
+                return [cx + rx, cy + ry];
+            }
 
             // Draw links
             context.beginPath();
@@ -109,11 +126,8 @@ export function MemoryGraph({
             for (const link of links) {
                 if (link.source.x != null && link.source.y != null &&
                     link.target.x != null && link.target.y != null) {
-                    // Scale from center
-                    const sx = cx + (link.source.x - cx) * scale;
-                    const sy = cy + (link.source.y - cy) * scale;
-                    const tx = cx + (link.target.x - cx) * scale;
-                    const ty = cy + (link.target.y - cy) * scale;
+                    const [sx, sy] = transform(link.source.x, link.source.y);
+                    const [tx, ty] = transform(link.target.x, link.target.y);
                     context.moveTo(sx, sy);
                     context.lineTo(tx, ty);
                 }
@@ -123,11 +137,10 @@ export function MemoryGraph({
             // Draw nodes
             context.beginPath();
             context.fillStyle = nodeColor;
-            const nodeRadius = 2.5 * Math.max(scale, 0.3); // Don't shrink too small
+            const nodeRadius = 2.5 * Math.max(scale, 0.3);
             for (const node of nodes) {
                 if (node.x != null && node.y != null) {
-                    const nx = cx + (node.x - cx) * scale;
-                    const ny = cy + (node.y - cy) * scale;
+                    const [nx, ny] = transform(node.x, node.y);
                     context.moveTo(nx + nodeRadius, ny);
                     context.arc(nx, ny, nodeRadius, 0, 2 * Math.PI);
                 }
@@ -273,6 +286,7 @@ export function MemoryGraph({
             stateRef.current.links = [];
             stateRef.current.scale = 1;
             stateRef.current.collapsing = false;
+            stateRef.current.rotation = 0;
         };
     }, [maxNodes, addInterval, nodeColor, linkColor, collapseDuration]);
 

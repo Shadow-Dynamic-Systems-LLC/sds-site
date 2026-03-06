@@ -1,41 +1,43 @@
+import { SectionHeader } from './SectionHeader';
+
 export function Services() {
   const services = [
     {
       icon: '易',
-      title: 'Agentic Orchestration Platform',
-      description: 'A fully modular, platform-agnostic system for coordinating multi-agent LLM workflows, featuring a semantic memory mesh and a reasoning framework rooted in structured doubt.'
+      title: 'Execution Boundary Enforcement',
+      description: 'All irreversible actions pass through a mechanistic governance gate prior to execution. Boundaries are code-enforced, not intent-interpreted. Post-execution detection does not constitute governance.'
     },
     {
       icon: '🧠',
-      title: 'Advanced Memory Systems',
-      description: 'Hybrid memory mesh combining vector, symbolic, and episodic storage, inspired by human cognition to support long-term task tracking and reusable reasoning.'
+      title: 'Deterministic Policy Evaluation',
+      description: 'Authorization logic is rule-bound and reproducible. Given identical initial state and identical inputs, the governance system produces identical decisions. Governance evaluation nondeterminism is not permitted.'
     },
     {
       icon: '🛡️',
-      title: 'AI Governance & HITL API',
-      description: 'A cryptographically signed, multi-signature Human-in-the-Loop API for high-stakes decisions, emphasizing verifiability, traceability, and human authority.'
+      title: 'Authority Attribution',
+      description: 'Execution rights resolve to identifiable, accountable actors. When governance state is uncertain, the system halts rather than proceeding under degraded authority. Resumed execution requires explicit human authorization.'
     },
     {
       icon: '🤔',
-      title: 'Deliberative Reasoning Frameworks',
-      description: 'Development of "The Assembly," a system where AI agents with conflicting roles argue and refine beliefs via dialectical methods, based on the "Pact of Doubt."'
+      title: 'Evidence-Coupled Execution',
+      description: 'No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is not documentation of the effect — it is a constitutive part of it.'
     },
     {
       icon: '🤖',
-      title: 'CARETAKER Host & Multimedia Interfaces',
-      description: 'An emotionally reactive AI host for user-facing interactions, implemented as a minimalist glyph/light-based avatar for interactive experiences.'
+      title: 'Governed Effect Surfaces',
+      description: 'All agent-generated external effects occur exclusively through registered, governance-addressable surfaces. Each surface formally classifies actions by effect type, reversibility, and rollback cost prior to execution.'
     },
     {
       icon: '⚙️',
-      title: 'Model Efficiency & Deployment',
-      description: 'Sparse LLM experimentation, dynamic API routing, and price/latency-aware model selection, with local-first systems using vLLM, OpenWebUI, and Docker.'
+      title: 'Graduated Containment',
+      description: 'Component-level freeze mechanisms halt execution at targeted scope without requiring system-wide halt. Escalation is mechanistic: surface freeze, subsystem freeze, system-wide stasis. Containment is proportional to failure.'
     }
   ];
 
   return (
     <section id="services" className="page-section">
       <div className="container">
-        <h2>Current Research & Focus Areas</h2>
+        <SectionHeader path="SYS.CORE //" title="Zero Trust Governance" />
         <div className="services-grid">
           {services.map((service, index) => (
             <div key={index} className="service-card">

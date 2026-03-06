@@ -1,14 +1,21 @@
 export function Hero() {
+  const buildDate = new Date().toISOString().split('T')[0].replace(/-/g, '.');
+
   return (
     <section id="hero" className="page-section visible">
       <div className="container">
         <h1>
-          Intelligence<span className="highlight">.</span> Reimagined<span className="highlight">.</span>
+          Governed Execution<span className="highlight">.</span>
         </h1>
         <p>
-          We don't build chatbots. We build systems that negotiate, reflect, and adapt.
-          Shadow Dynamic Systems is not just R&D—it's a call to reimagine intelligence itself.
+          We build the control plane for autonomous systems — deterministic
+          governance that makes AI execution auditable, bounded, and insurable.
         </p>
+        <div className="hero-metadata">
+          <span>ENV: PUBLIC-NODE</span>
+          <span>BUILD: SDS-{buildDate}</span>
+          <span>STATUS: OPERATIONAL</span>
+        </div>
       </div>
     </section>
   );

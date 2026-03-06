@@ -1,35 +1,37 @@
+import { SectionHeader } from './SectionHeader';
+
 export function Projects() {
   const projects = [
     {
-      title: 'Agent Mesh Memory Model',
-      description: 'Exploring distributed memory and resonance-based context across agents.',
-      image: '/assets/memory-mesh-1.webp',
-      summary: 'Rather than isolate memory within a single agent, we explore how distributed context can be maintained and evolved across many. By emphasizing patterns of resonance—rather than content alone—this approach fosters continuity and collective intuition among cooperating systems.'
-    },
-    {
-      title: 'Reasoning Pattern Catalog (RPC)',
-      description: 'Codified methods for structured agent reasoning and decision support.',
-      image: '/assets/glyph-reason.webp',
-      summary: 'We\'re codifying structured reasoning methods into reusable forms that agents can call upon as needed. From decomposition strategies to failure mode introspection, these patterns provide scaffolding for deeper analysis.'
-    },
-    {
-      title: 'Orchestration Interfaces',
-      description: 'Interfaces for guiding and overseeing intelligent agent systems.',
-      image: '/assets/globe-web.webp',
-      summary: 'We\'re experimenting with new ways for humans to direct, supervise, and collaborate with intelligent systems. The result is a more intuitive command structure for complex, evolving agent systems.'
-    },
-    {
-      title: 'Verifiable Core System',
-      description: 'A zero-trust execution layer for verified agent behavior across platforms.',
+      title: 'Zero Trust Governance Specification',
+      description: 'Public invariant specification defining the structural conditions for governed execution in AI systems.',
       image: '/assets/phoenix-logo.jpg',
-      summary: 'We are building a zero-trust execution layer designed for intelligence at scale. It ensures that agent actions can be independently verified, logged, and audited—no matter where they run.'
+      summary: 'ZTG defines ten invariants across five preconditions (Observability, Replayability, Temporal Integrity, Identity Integrity, Governance Consistency) and five operational guarantees (Mechanistic Boundary, Stasis, Governed Effect Surface, Evidence-Coupled Execution, Graduated Freeze). The specification is published for collaborative review.'
+    },
+    {
+      title: 'AI Insurability Framework',
+      description: 'Executive framework examining minimum architectural conditions for AI insurability, grounded in ZTG.',
+      image: '/assets/industrial-integrity.webp',
+      summary: 'Maps Zero Trust Governance invariants to five underwriting-relevant primitives: execution boundary enforcement, deterministic policy evaluation, authority attribution, replayable authorization record, and commit verification. Published for underwriter and risk architect review.'
+    },
+    {
+      title: 'SDS.SYS.FAIL — Modern Systems Archaeology and Pathology',
+      description: 'Formal taxonomy of execution-layer governance failures mapped to missing ZTG primitives.',
+      image: '/assets/failure-analysis.webp',
+      summary: 'Each entry identifies a recurring structural failure pattern, maps it to a missing governance invariant, and provides diagnostic vocabulary for insurers and builders. Failure modes demonstrate what happens when governance is absent — not as warning, but as structural analysis.'
+    },
+    {
+      title: 'Lighthouse',
+      description: 'Reference implementation of Zero Trust Governance for high-assurance environments.',
+      image: '/assets/lighthouse.webp',
+      summary: 'Lighthouse targets environments where failure carries systemic, financial, or safety consequences. It implements the full ZTG invariant set with layered deterministic governance, cryptographic provenance, full replayability, and invariant enforcement under adversarial conditions. Others may build ZTG-compatible implementations. Lighthouse is the certification reference.'
     }
   ];
 
   return (
     <section id="projects" className="page-section">
       <div className="container">
-        <h2>Our Research & Development</h2>
+        <SectionHeader path="SYS.EXT //" title="Research" />
         <div className="services-grid">
           {projects.map((project, index) => (
             <div key={index} className="blog-card">

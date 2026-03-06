@@ -1,4 +1,30 @@
+import { useState, useEffect } from 'react';
+
+const sections = ['services', 'projects', 'about', 'publications'];
+
 export function Navbar() {
+  const [activeSection, setActiveSection] = useState('');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: [0.3, 0.5] }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <header className="navbar">
       <a href="#hero" className="navbar-logo">
@@ -12,10 +38,10 @@ export function Navbar() {
       </a>
       <nav>
         <ul className="nav-links">
-          <li><a href="#services">Services</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#blog">Blog</a></li>
+          <li><a href="#services" className={activeSection === 'services' ? 'active' : ''}>Governance</a></li>
+          <li><a href="#projects" className={activeSection === 'projects' ? 'active' : ''}>Research</a></li>
+          <li><a href="#about" className={activeSection === 'about' ? 'active' : ''}>About</a></li>
+          <li><a href="#publications" className={activeSection === 'publications' ? 'active' : ''}>Publications</a></li>
         </ul>
       </nav>
     </header>
