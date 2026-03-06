@@ -11,6 +11,7 @@ import { Projects } from './components/Projects';
 import { About } from './components/About';
 import { Publications } from './components/Publications';
 import { ArtifactPage } from './components/ArtifactPage';
+import { ResearchPage } from './components/ResearchPage';
 import { Footer } from './components/Footer';
 import './index.css';
 
@@ -62,8 +63,8 @@ function HomePage() {
       <main>
         <Hero />
         <Services />
-        <Projects />
         <About />
+        <Projects />
         <Publications />
       </main>
       <Footer />
@@ -96,6 +97,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dx/:slug" element={<ArtifactPage />} />
+        <Route path="/research/:slug" element={<ResearchPage />} />
       </Routes>
     </>
   );
