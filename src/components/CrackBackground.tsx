@@ -5,9 +5,10 @@ import * as THREE from 'three';
 
 import { crackTextureVert, crackTextureFrag } from './shaders/crackTexture';
 
-// Import all crack images from assets folder at build time
+// Import all crack images from public assets folder at build time
+// Glob uses filesystem path (/public/...) but URLs are served at root, so we strip the prefix
 const crackImages = import.meta.glob('/public/assets/cracks/*.png', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
-const crackPaths = Object.values(crackImages).map(url => url.replace('/public', ''));
+const crackPaths = Object.values(crackImages).map(url => url.replace(/^\/public/, ''));
 
 export interface CrackBackgroundProps {
     paused?: boolean;

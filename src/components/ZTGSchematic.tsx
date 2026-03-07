@@ -25,7 +25,7 @@ const LAYER_INVARIANTS: InvariantMapping[] = [
   },
   {
     layer: 'INVARIANT',
-    invariants: ['ZTG-0a', 'ZTG-0b', 'ZTG-1', 'ZTG-2', 'ZTG-4', 'ZTG-5']
+    invariants: ['ZTG-0a', 'ZTG-0b', 'ZTG-0c', 'ZTG-0d', 'ZTG-0e', 'ZTG-1', 'ZTG-2', 'ZTG-4']
   }
 ];
 
@@ -111,7 +111,7 @@ export function ZTGSchematic() {
 
       {/* Cut notation */}
       <div className="ztg-schematic__notation">
-        <span>Section A-A' · ZTG v0.3-draft</span>
+        <span>Section A-A' · ZTG v0.4</span>
       </div>
     </div>
   );

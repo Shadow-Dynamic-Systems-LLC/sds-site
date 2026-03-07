@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SectionHeader } from './SectionHeader';
-import { ZTGSchematic } from './ZTGSchematic';
 import { SectionCut } from './ArchitecturalSystem';
 import { researchProjects } from '../data/research';
 import './ArchitecturalSystem.css';
-import './ZTGSchematic.css';
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -16,12 +14,6 @@ export function Projects() {
     <section id="projects" className="page-section">
       <div className="container">
         <SectionHeader path="SYS.EXT //" title="Research" />
-
-        {/* ZTG Cross-Section Schematic - Always visible */}
-        <div className="research-schematic-panel research-schematic-panel--permanent">
-          <SectionCut label="ARCHITECTURAL CROSS-SECTION" />
-          <ZTGSchematic />
-        </div>
 
         <SectionCut label="RESEARCH DOCUMENTS" />
 

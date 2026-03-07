@@ -48,10 +48,14 @@ export function Publications() {
             {allTypes.map((type) => {
               const isActive = activeFilters.includes(type);
               const count = artifacts.filter(a => a.type === type).length;
+              // Map type to layer class for consistent coloring
+              const layerClass = type === 'DIAGNOSIS' || type === 'PRESCRIPTION' ? 'filter-chip--invariant' :
+                                 type === 'CASE STUDY' || type === 'RESEARCH PAPER' ? 'filter-chip--envelope' :
+                                 'filter-chip--surface';
               return (
                 <button
                   key={type}
-                  className={`filter-chip ${isActive ? 'active' : ''}`}
+                  className={`filter-chip ${layerClass} ${isActive ? 'active' : ''}`}
                   onClick={() => toggleFilter(type)}
                   onMouseEnter={() => setHoveredType(type)}
                   onMouseLeave={() => setHoveredType(null)}

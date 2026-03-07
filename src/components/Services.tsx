@@ -1,5 +1,9 @@
 import { SectionHeader } from './SectionHeader';
+import { ZTGSchematic } from './ZTGSchematic';
+import { SectionCut } from './ArchitecturalSystem';
 import { CORE_GOVERNANCE } from '../data/glyphs';
+import './ArchitecturalSystem.css';
+import './ZTGSchematic.css';
 
 export function Services() {
   const services = [
@@ -47,6 +51,12 @@ export function Services() {
               <p>{service.description}</p>
             </div>
           ))}
+        </div>
+
+        {/* ZTG Architectural Layers Cross-Section */}
+        <div className="ztg-schematic-panel">
+          <SectionCut label="ARCHITECTURAL CROSS-SECTION" />
+          <ZTGSchematic />
         </div>
       </div>
     </section>

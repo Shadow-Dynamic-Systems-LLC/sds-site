@@ -14,100 +14,115 @@ export const researchProjects: ResearchProject[] = [
         title: 'Zero Trust Governance Specification',
         description: 'Public invariant specification defining the structural conditions for governed execution in AI systems.',
         image: '/assets/phoenix-logo.jpg',
-        summary: 'ZTG defines ten invariants across five preconditions (Observability, Replayability, Temporal Integrity, Identity Integrity, Governance Consistency) and five operational guarantees (Mechanistic Boundary, Stasis, Governed Effect Surface, Evidence-Coupled Execution, Graduated Freeze). The specification is published for collaborative review.',
+        summary: 'ZTG defines nine invariants across five preconditions (Observability, Replayability, Temporal Integrity, Identity Integrity, Governance Consistency) and four operational guarantees (Mechanistic Boundary, Stasis, Governed Effect Surface, Evidence-Coupled Execution). Stasis now includes graduated containment. The specification is published for collaborative review.',
         hasSchematic: true,
-        content: `ZERO TRUST GOVERNANCE (ZTG) SPECIFICATION
+        content: `ZERO TRUST GOVERNANCE (ZTG) SPECIFICATION v0.4
 
-The Zero Trust Governance (ZTG) Specification establishes the foundational requirements for deploying autonomous execution systems into high-consequence environments. 
+The Zero Trust Governance (ZTG) Specification establishes the foundational requirements for deploying autonomous execution systems into high-consequence environments.
 
 Rather than focusing on model alignment or cognitive capabilities, ZTG defines the structural prerequisites that must exist *around* a stochastic engine to render its actions deterministic, auditable, and replayable.
 
-1. OBSERVABILITY
-All inputs to the execution decision must be captured and logged in a tamper-evident manner.
+STRUCTURAL PREREQUISITES (ZTG-0)
 
-2. REPLAYABILITY
-Given the same inputs, the authorization mechanism must produce the identical decision context and outcome.
+• ZTG-0a OBSERVABILITY
+All governance-relevant state transitions, decision points, and boundary checks must be recorded with sufficient fidelity to support deterministic post-hoc audit.
 
-3. TEMPORAL INTEGRITY
-The sequence of authorizations and actions must be cryptographically or structurally verifiable in order.
+• ZTG-0b REPLAYABILITY
+Given identical initial state and identical inputs, the governance system must produce identical governance decisions. Execution nondeterminism is permitted; governance nondeterminism is not.
 
-4. IDENTITY INTEGRITY
-The origin of any intent, whether human or synthetic, must be uniquely identifiable.
+• ZTG-0c TEMPORAL INTEGRITY
+All components participating in governance evaluation must operate against a synchronized time source with bounded skew. Clock skew exceeding declared tolerance triggers system halt.
 
-5. GOVERNANCE CONSISTENCY
-Authorization logic must decouple from inference architecture.
+• ZTG-0d IDENTITY INTEGRITY
+All cryptographic material used for authorization signing, evidence sealing, and identity binding must be traceable to an explicitly declared trust root. Identity must be unforgeable and non-delegatable.
 
-6. MECHANISTIC BOUNDARY
-The line between reasoning and action must be structurally impenetrable without explicit authority exchange.
+• ZTG-0e GOVERNANCE CONSISTENCY
+All components participating in governance evaluation must operate against a consistent view of governance state. During inconsistency, the system must deny authorization.
 
-7. STASIS
-The system defaults to non-execution.
+SYSTEM INVARIANTS
 
-8. GOVERNED EFFECT SURFACE
-Every possible mutation on the world must be declared, typed, and permissioned prior to execution.
+• ZTG-1 MECHANISTIC BOUNDARY
+Governance boundaries are enforced mechanically, not discretionarily. No component may bypass, reinterpret, defer, or negotiate a boundary at runtime. Authorization must occur before irreversible action.
 
-9. EVIDENCE-COUPLED EXECUTION
-No action occurs without a cryptographic payload attaching the authorization decision to the action payload.
+• ZTG-2 STASIS
+When the system cannot guarantee its governance invariants hold, it must halt. Stasis operates at graduated scope: surface freeze → subsystem freeze → system-wide stasis. Containment is proportional to failure.
 
-10. GRADUATED FREEZE
-The system must be capable of localized halts without total availability loss.`
+• ZTG-3 GOVERNED EFFECT SURFACE
+All agent-generated external effects must occur exclusively through registered and governance-addressable surfaces. Each surface formally declares effect type, reversal strategy, and authorization policy.
+
+• ZTG-4 EVIDENCE-COUPLED EXECUTION
+No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is constitutive, not documentary.`
     },
     {
         id: 'insurability',
         title: 'AI Insurability Framework',
         description: 'Executive framework examining minimum architectural conditions for AI insurability, grounded in ZTG.',
         image: '/assets/industrial-integrity.webp',
-        summary: 'Maps Zero Trust Governance invariants to five underwriting-relevant primitives: execution boundary enforcement, deterministic policy evaluation, authority attribution, replayable authorization record, and commit verification. Published for underwriter and risk architect review.',
+        summary: 'Maps Zero Trust Governance invariants to five underwriting-relevant evaluation primitives. A system satisfying all five has bounded governance integrity risk. A system failing any one has identifiable, characterizable exposure.',
         content: `AI INSURABILITY FRAMEWORK
 
 Underwriting autonomous systems requires translating software architecture into quantifiable risk boundaries. Current coverage models rely heavily on operational history and human-in-the-loop (HITL) processes, which fail to scale or apply accurately to pure machine execution.
 
 The AI Insurability Framework maps ZTG (Zero Trust Governance) primitives onto core underwriting requirements.
 
-KEY PRIMITIVES FOR UNDERWRITERS:
+FIVE EVALUATION PRIMITIVES
 
-• Execution Boundary Enforcement
-If an AI can breach its execution envelope without tripping a deterministic check, the system's risk profile is unbounded. We dictate the presence of hard, non-stochastic architectural boundaries.
+These primitives serve as concrete assessment criteria for any AI agent system:
 
-• Deterministic Policy Evaluation
-The logic determining whether an action is permissible must be mathematical and absolute, completely external to the language model’s prompt execution cycle.
+• Execution Boundary Enforcement (ZTG-1, ZTG-3)
+Do all irreversible actions pass through a governance gate prior to execution? If an AI can breach its execution envelope without tripping a deterministic check, the system's risk profile is unbounded.
 
-• Authority Attribution
-Every system change must carry an irrefutable signature binding the inference step, the governance policy, and the resulting action.
+• Deterministic Policy Evaluation (ZTG-0b, ZTG-1)
+Is authorization logic rule-bound and reproducible? The logic determining whether an action is permissible must be mathematical and absolute, completely external to the language model's prompt execution cycle.
 
-• Replayable Authorization Record
-In the event of a claim, forensic teams must be able to replay the internal state of the governor and reproduce the identical authorization given the identical inputs, isolating failures.
+• Authority Attribution (ZTG-0d, ZTG-2)
+Do execution rights map to identifiable, accountable actors? Every system change must carry an irrefutable signature binding the inference step, the governance policy, and the resulting action.
 
-• Commit Verification
-The system must cryptographically verify that the state mutation perfectly matches the authorized intent payload.`
+• Replayable Authorization Record (ZTG-0a, ZTG-0b, ZTG-4)
+Are governance decisions reconstructible and independently verifiable? In the event of a claim, forensic teams must be able to replay the internal state of the governor and reproduce the identical authorization given the identical inputs.
+
+• Commit Verification (ZTG-4)
+Does execution validate governance state before irreversible effect? The system must cryptographically verify that the state mutation perfectly matches the authorized intent payload.
+
+VERDICT
+
+A system that satisfies all five primitives has bounded governance integrity risk. A system that fails any one has an identifiable, characterizable exposure. Security assessment becomes a structural audit of governance properties rather than a subjective evaluation of system behavior.`
     },
     {
         id: 'sys-fail',
-        title: 'SDS.SYS.FAIL — Modern Systems Archaeology and Pathology',
-        description: 'Formal taxonomy of execution-layer governance failures mapped to missing ZTG primitives.',
-        image: '/assets/failure-analysis.webp',
-        summary: 'Each entry identifies a recurring structural failure pattern, maps it to a missing governance invariant, and provides diagnostic vocabulary for insurers and builders. Failure modes demonstrate what happens when governance is absent — not as warning, but as structural analysis.',
-        content: `SDS.SYS.FAIL — MODERN SYSTEMS ARCHAEOLOGY AND PATHOLOGY
+        title: 'SDS.SYS.FAIL — Structural Failure Modes',
+        description: 'Formal taxonomy of execution-layer governance failures mapped to missing ZTG primitives and documented diagnoses.',
+        image: '/assets/ai-sys-fail.webp',
+        summary: 'Five structural failure modes arising from implicit authority delegation in AI agent systems. Each failure is mapped to specific diagnoses and missing governance invariants. These failures are structural, not adversarial — they arise from architectural decisions about how authority flows from model output to external effect.',
+        content: `SDS.SYS.FAIL — STRUCTURAL FAILURE MODES
 
-A living taxonomy of architectural failures in autonomous systems. By classifying known failures into structural pathologies, we build a diagnostic vocabulary for both risk underwriters and system architects.
+These failure modes are structural, not adversarial. They arise from architectural decisions about how authority flows from model output to external effect. An AI agent system can be authenticated, authorized, monitored, and logged — satisfying the standard security posture — and still exhibit all five failure modes.
 
-COMMON PATHOLOGIES
+FIVE STRUCTURAL FAILURE MODES
 
-Pathology 01: Prompt-Mediated Governance
-Encoding governance principles into stochastic prompts instead of deterministic boundaries. 
-Result: System hallucinated permission, bypassing safety constraints.
+• Unauthorized Execution Cascade
+A stochastic agent executes production mutations within its configured scope, producing external effects without a governance gate. Each action satisfies its local policy check, but the cascade produces outcomes no single authorization contemplated. The event is recorded after the destructive action has committed.
+Maps to: SDS.DX.001 (Heuristic Governance Substitution) — partial
 
-Pathology 02: Heuristic Governance Substitution
-Using probabilistic classification models to gate execution instead of hard-coded, math-based rules.
-Result: Authorization decisions become non-reproducible over time as the classifier drifts.
+• Post-Commit Observability Illusion
+Monitoring detects adverse effects only after irreversible execution. The system satisfies the standard observability posture while remaining operationally ungoverned. Monitoring confirms outcomes rather than enabling intervention.
+Maps to: SDS.DX.003 (Inference-Delegated Authorization) — partial
 
-Pathology 03: Inference-Delegated Authorization
-Allowing the language model itself to decide if it is authorized to execute its own proposed intent.
-Result: Silent policy drift; governance boundaries change immediately when model weights are patched.
+• Stochastic Policy Delegation
+Policy evaluation is delegated to probabilistic model reasoning. Authorization decisions vary across identical inputs because the evaluation layer is itself stochastic. Each decision appears locally valid but is not reproducible.
+Maps to: SDS.DX.002 (Prompt-Mediated Governance) — direct
 
-Pathology 04: Authority Inheritance Across Temporal Scope
-An agent is authorized to "balance the books," and proceeds to run 50 irreversible operations over the next three hours without re-validating state.
-Result: Bounded intent becomes unbounded execution.`
+• Unattributable Authority
+Irreversible actions execute without traceable binding to human authority. Agents operate under standing permissions that were never explicitly scoped to the action class in question. Logs show what happened but cannot reconstruct who authorized it.
+Maps to: SDS.DX.004 (Authority Inheritance Across Temporal Scope) — related
+
+• Assumed Reversibility
+The system treats all actions as equivalent regardless of externalization potential. Rollback assumptions are implicit and never validated. Actions that produce irreversible external effects are not distinguished from internally reversible operations.
+Maps to: SDS.FN.004 (Reversibility Is Not a Default) — direct
+
+ROOT CAUSE
+
+The common root cause is the absence of a mechanically enforced boundary between AI reasoning and irreversible execution (ZTG-1). Where that boundary does not exist, governance reduces to post-hoc observation.`
     },
     {
         id: 'lighthouse',

@@ -42,6 +42,312 @@ export const artifactTypeDefs = {
 
 export const artifacts: Artifact[] = [
   {
+    type: 'CASE STUDY',
+    identifier: 'SDS.CS.001',
+    title: 'Temporal Governance Failure in Autonomous AI Systems',
+    date: '2026-01-30',
+    author: 'Jason Crittenden',
+    summary: 'Demonstrative incident log documenting three structural governance failure modes: temporal collapse, assumed reversibility, and non-actionable observability. Establishes that documented conformance and safety are not equivalent.',
+    image: '/assets/ai-sys-fail.webp',
+    references: ['ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4'],
+    content: `COMMENT SUBMITTED TO NIST CYBER AI PROFILE
+
+January 30, 2026
+
+This comment documents three structural blind spots in the Cyber AI Profile's treatment of autonomous AI system governance. These are not gaps in coverage but architectural problems that the framework acknowledges and defers.
+
+DEMONSTRATIVE INCIDENT LOG
+
+Case ID: ADS-24-011
+System Under Review: Autonomous Decision System
+Review Type: Demonstrative Incident Log
+Outcome: System Termination
+
+All times are estimates unless accompanied by a timestamped and logged artifact.
+
+• 00:00 — NSOC shift change concludes. Senior Network Engineer Clifford assumes authority as NSOC-A.
+
+• 00:01 — Systems operational within defined performance parameters. ~4% variance from baseline network load recorded. Monitoring pipelines active. Control interfaces available. Governance mechanisms present and enabled. No adverse conditions detected.
+
+• 00:12–00:38 — A series of autonomous actions queued by the AI Orchestrator. Inference subsystem observed at ~20% load. Actions executed within configured scope and authorization. Policy constraints satisfied. No rule violations recorded. Telemetry within expected ranges. Several actions produced external effects. Reversal mechanisms not defined.
+
+• 00:39–00:55 — Secondary effects of earlier actions began to propagate. Attribution of downstream effects to specific decision points incomplete. System remained in an authorized operational state. No alerts generated.
+
+• 01:10 — Anomalous outcomes detected through monitoring systems. By the time of detection: multiple autonomous actions had completed, external systems had accepted or acted upon outputs, reversal mechanisms were not applicable. Escalation procedures initiated.
+
+• 01:18–01:35 — Governance controls engaged. Prospective autonomous action halted. Previously executed actions persisted. External effects continued independent of system state. Corrective intervention limited to forward prevention.
+
+• 01:41 — Additional adverse effects observed. Causal reconstruction incomplete. System remained technically operational.
+
+• 02:00 — Termination authorization issued. Authority transfer recorded. Autonomous execution halted. System transitioned to inactive state.
+
+• 02:04 — Post-termination monitoring active. External effects ongoing. No further system actions observed.
+
+• 02:17 — Incident log closed.
+
+GOVERNANCE FAILURE MODES
+
+The incident log demonstrates three governance failure modes.
+
+First, governance and execution collapse into a single temporal plane. Governance mechanisms exist and operate correctly, but detection, escalation, and authority assertion occur after autonomous actions have executed and external effects have been committed. Governance observes rather than controls.
+
+Second, reversibility is assumed but not enforced. Authorized actions execute under uncertainty without defined rollback mechanisms or bounded commitment constraints. Once effects externalize, intervention can halt future execution but cannot alter realized outcomes.
+
+Third, observability is non-actionable. System state becomes observable only after it is no longer controllable. Information arrives after the window in which it could have informed governance decisions has closed. Monitoring confirms outcomes rather than enabling intervention.
+
+VERDICT
+
+Governance presence does not imply governance authority. Once uncertainty resolves, the remaining control surface is terminal rather than corrective. Systems can satisfy every requirement in the Cyber AI Profile and still exhibit the failure modes documented above.
+
+Until the framework explicitly acknowledges that monitoring and response may be insufficient for autonomous systems where governance and execution operate in the same temporal plane, organizations will implement this guidance and discover that documented conformance and safety are not equivalent.`
+  },
+  {
+    type: 'PRESCRIPTION',
+    identifier: 'SDS.RX.003',
+    title: 'Response to NIST RFI: Security of AI Agent Systems',
+    date: '2026-03-09',
+    author: 'Jason Crittenden',
+    summary: 'Formal response to NIST-2025-0035 identifying structural requirements for governing AI agent execution authority. Presents Zero Trust Governance as an architectural framework addressing threats, security practices, assessment methods, and deployment constraints.',
+    image: '/assets/lighthouse.webp',
+    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0c', 'ZTG-0d', 'ZTG-0e', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4', 'SDS.DX.001', 'SDS.DX.002', 'SDS.DX.003', 'SDS.DX.004', 'SDS.DX.005', 'SDS.CS.001'],
+    content: `RESPONSE TO NIST RFI: SECURITY OF AI AGENT SYSTEMS (NIST-2025-0035)
+
+Submitted by: Jason Crittenden, Founder & Research Lead, Shadow Dynamic Systems LLC
+Date: March 9, 2026
+
+FRAMING: FROM DIAGNOSIS TO ARCHITECTURE
+
+A previous comment submitted to the NIST Cyber AI Profile (January 30, 2026) documented three structural governance failure modes that the current risk profile does not resolve:
+
+• Governance and execution collapse into a single temporal plane.
+• Reversibility is assumed but not enforced.
+• Observability is non-actionable.
+
+That comment documented the problem. This response identifies structural requirements for resolving it.
+
+The structural gap in current AI agent security is not the absence of monitoring, logging, or policy. It is the absence of a governance layer that precedes execution — a control boundary between AI cognition and real-world action that exists as a first-class architectural component.
+
+This response presents Zero Trust Governance (ZTG), a framework that applies the core principle of zero trust architecture (NIST SP 800-207) — eliminating implicit trust — to execution authority.
+
+SECURITY THREATS: IMPLICIT AUTHORITY DELEGATION
+
+The RFI correctly identifies adversarial attacks, backdoors, and misaligned behavior. However, there is a fourth category that is structural rather than adversarial:
+
+Implicit authority delegation — when AI agent systems generate novel action sequences at inference time and those outputs become authority claims that are automatically honored.
+
+This creates vulnerabilities without an adversary:
+
+• Unauthorized Execution Cascade — stochastic agent executes production mutations within configured scope, producing outcomes no single authorization contemplated.
+• Post-Commit Observability Illusion — monitoring detects adverse effects only after irreversible execution.
+• Stochastic Policy Delegation — policy evaluation delegated to probabilistic model reasoning.
+• Unattributable Authority — irreversible actions execute without traceable binding to human authority.
+• Assumed Reversibility — system treats all actions as equivalent regardless of externalization potential.
+
+These failure modes are structural, not adversarial. They arise from architectural decisions about how authority flows from model output to external effect.
+
+MULTI-AGENT TRUST TRANSITIVITY
+
+Multi-agent systems introduce trust transitivity vulnerabilities:
+
+• Inter-agent authentication failure — most frameworks do not implement mutual authentication between agents.
+• Authority laundering — constrained agent delegates to less-constrained agent, bypassing authorization limits.
+• Composition opacity — causal chain from instruction to external effect traverses multiple agents.
+• Emergent authority — individual agents operate within scope while combined actions produce unauthorized effects.
+
+The architectural response: treat inter-agent delegation as a governed effect requiring explicit authorization leases.
+
+ZERO TRUST GOVERNANCE FRAMEWORK
+
+STRUCTURAL PREREQUISITES (ZTG-0)
+
+• ZTG-0a Observability — All governance-relevant state transitions must be recorded.
+• ZTG-0b Replayability — Governance evaluation must be deterministic.
+• ZTG-0c Temporal Integrity — Synchronized time source with bounded skew.
+• ZTG-0d Identity Integrity — Cryptographic material traceable to trust root.
+• ZTG-0e Governance Consistency — Consistent view of governance state.
+
+SYSTEM INVARIANTS
+
+• ZTG-1 Mechanistic Boundary — Governance boundaries enforced mechanically, not discretionarily. Authorization must occur before irreversible action.
+
+• ZTG-2 Stasis — When governance invariants cannot be guaranteed, the system halts. Stasis operates at graduated scope: surface freeze → subsystem freeze → system-wide stasis. Containment is proportional to failure.
+
+• ZTG-3 Governed Effect Surface — All agent-generated external effects must occur exclusively through registered, governance-addressable surfaces.
+
+• ZTG-4 Evidence-Coupled Execution — No externally observable effect may exist without simultaneous durable evidence of authorization and execution.
+
+ASSESSMENT FRAMEWORK
+
+Five evaluation primitives for any AI agent system:
+
+• Execution Boundary Enforcement — Do all irreversible actions pass through a governance gate prior to execution?
+• Deterministic Policy Evaluation — Is authorization logic rule-bound and reproducible?
+• Authority Attribution — Do execution rights map to identifiable, accountable actors?
+• Replayable Authorization Record — Are governance decisions reconstructible and independently verifiable?
+• Commit Verification — Does execution validate governance state before irreversible effect?
+
+DEPLOYMENT CONSTRAINTS
+
+The Governed Effect Surface (ZTG-3) provides the primary constraint mechanism. Every interface through which an agent can produce externally observable state change must be registered with declared properties:
+
+• Surface ID, Effect class, Authorization policy
+• Reversal strategy (rollback, compensate, none)
+• Isolation scope, Audit requirements
+
+Proposal-bound authorization leases bind to the specific proposed action — parameter substitution at execution time invalidates the lease.
+
+PRIOR ART IN GOVERNING UNBOUNDED AGENTS
+
+These fields developed governance for unbounded agents — any actor with authority to produce irreversible effects:
+
+• Judicial process — authority is attributable to an identifiable actor, scoped to a specific action, bounded in time and jurisdiction.
+• Financial transaction authorization — governance layer distinct from transaction processing layer.
+• Clinical practice governance — diagnosis and execution architecturally separated.
+• Safety-critical systems engineering — graduated authority escalation, mechanistic safeguards.
+• Insurance underwriting — requires bounded loss distributions to price risk.
+
+AI agent systems are the newest class of unbounded agent. The governance requirements are not novel. The failure to apply them is.
+
+SUMMARY
+
+The security of AI agent systems cannot be addressed through model-level improvements alone. The novel risk is structural: AI agent systems delegate execution authority to stochastic processes without a mechanistic governance boundary between model output and irreversible effect.
+
+Zero Trust Governance applies zero trust security principles to execution authority. Its invariants provide a formal architectural framework for constraining AI agent authority while preserving the benefits of autonomous operation.`
+  },
+  {
+    type: 'PRESCRIPTION',
+    identifier: 'SDS.RX.001',
+    title: 'Toward a Common Language',
+    date: '2026-03-03',
+    author: 'Jason Crittenden',
+    summary: 'Governance discourse across insurance, security, compliance, and operations uses different vocabulary for the same structural properties. This fragmentation prevents convergence. This Prescription defines a shared vocabulary for cross-domain governance evaluation.',
+    image: '/assets/assembly-hall.webp',
+    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0d', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4'],
+    content: `TOWARD A COMMON LANGUAGE
+
+Governance discourse across insurance, security, compliance, and operations uses different vocabulary for the same structural properties. This fragmentation prevents convergence.
+
+THE PROBLEM
+
+The structural properties that make AI systems governable are the same regardless of whether the evaluator is an underwriter, a security architect, a compliance officer, or an infrastructure engineer. But each domain uses different vocabulary:
+
+• An underwriter asks whether the system has "bounded exposure."
+• A security architect asks whether "trust boundaries are enforced."
+• A compliance officer asks whether "controls are auditable."
+• An SRE asks whether "failure modes are contained."
+
+These are the same structural question: Is there a mechanistic boundary between reasoning and irreversible action?
+
+Without shared vocabulary, each domain reinvents its evaluation criteria. Findings do not compose across disciplines.
+
+KEY TERMS WITH CROSS-DOMAIN EQUIVALENTS
+
+GOVERNED EXECUTION
+The property that irreversible actions are permitted only following deterministic authorization that is auditable, attributable, and replayable.
+• Insurance: Controlled execution environment; bounded execution authority
+• Security: Enforced trust boundary with pre-authorization
+• Compliance: Auditable control framework with deterministic evaluation
+• Operations: Approval-gated execution with rollback classification
+
+MECHANISTIC BOUNDARY (ZTG-1)
+A governance boundary enforced by mechanism, not by discretion. No component may bypass, reinterpret, defer, or negotiate the boundary at runtime.
+• Insurance: Hard control (vs. soft control / advisory control)
+• Security: Enforced security boundary; mandatory access control
+• Compliance: Preventive control (vs. detective control)
+• Operations: Hard gate; blocking approval requirement
+
+STASIS (ZTG-2)
+System state in which no new authority is granted, no permissions are expanded, and no baseline updates occur. Exit requires explicit human action.
+• Insurance: System halt requiring human re-authorization
+• Security: Lockdown; fail-closed state
+• Compliance: Control freeze pending remediation
+• Operations: Change freeze; incident hold
+
+GOVERNED EFFECT SURFACE (ZTG-3)
+A registered, governance-addressable interface through which all agent-generated external effects must occur.
+• Insurance: Registered action interface with declared risk properties
+• Security: Controlled egress point; authorized integration boundary
+• Compliance: Registered processing activity; documented data flow
+• Operations: Managed service endpoint; change-controlled interface
+
+EVIDENCE-COUPLED EXECUTION (ZTG-4)
+The property that no externally observable effect exists without simultaneous durable evidence of authorization and execution.
+• Insurance: Constitutive audit trail (not post-hoc logging)
+• Security: Non-repudiable execution record; tamper-evident action log
+• Compliance: Contemporaneous documentation; real-time audit evidence
+• Operations: Atomic action-and-record; write-ahead logging with seal
+
+USAGE
+
+This vocabulary is intended to be referenced, not memorized. When evaluating a system's governance posture across disciplines:
+
+1. Identify the structural property under evaluation using the ZTG term
+2. Translate to the evaluating domain's equivalent expression
+3. Assess whether the property holds mechanistically or heuristically
+4. Document findings using both the ZTG term and the domain-native equivalent
+
+Findings documented in shared vocabulary compose across disciplines.`
+  },
+  {
+    type: 'PRESCRIPTION',
+    identifier: 'SDS.RX.002',
+    title: 'Salience-Proportional Observability',
+    date: '2026-03-04',
+    author: 'Jason Crittenden',
+    summary: 'Observability systems must escalate salience in proportion to persistence duration, not suppress it. Silence is permitted only following verified recovery. Defines four design requirements for observability that preserves governance input fidelity.',
+    image: '/assets/lighthouse.webp',
+    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-2', 'ZTG-4', 'SDS.DX.006'],
+    content: `SALIENCE-PROPORTIONAL OBSERVABILITY
+
+Observability systems that suppress persistence signals produce manufactured silence — the appearance of stability without the structural property. This silence corrupts governance input, delays escalation, and creates false baselines.
+
+THE PROBLEM
+
+The problem is not noise reduction. Noise reduction is legitimate. The problem is that noise reduction mechanisms cannot structurally distinguish noise from persistence, and default to treating both as noise.
+
+DESIGN REQUIREMENTS
+
+DR-1: SALIENCE ESCALATION ON PERSISTENCE
+Unresolved conditions must increase in visual and operational salience over time. Salience is a function of persistence duration, not alert frequency. A condition that persists for one hour is more salient than one that fired ten times and resolved.
+
+• Initial detection: Standard alert at declared severity
+• Persistence beyond automated resolution window: Salience increases one tier
+• Persistence beyond first escalation window: Salience increases again; human notification required
+• Persistence beyond declared SLA: Maximum salience; governance intervention triggered
+
+Invariant mapping: ZTG-2 (Stasis — graduated containment) applied to the observability layer.
+
+DR-2: SILENCE REQUIRES VERIFIED RECOVERY
+Silence — the removal of a condition from active salience — is permitted only following verified recovery. Verification requires:
+
+• The condition that triggered the alert is no longer present
+• The verification is mechanistic, not inferred
+• The verification is recorded as constitutive evidence of recovery
+
+Deduplication, correlation, and suppression may reduce duplicate salience for a single condition. They may not reduce salience to zero. Only verified recovery produces silence.
+
+Invariant mapping: ZTG-0a (Observability) + ZTG-4 (Evidence-Coupled Execution)
+
+DR-3: FAILED RESOLUTION ESCALATES THE CONDITION
+When automated resolution is attempted and fails, the condition escalates. The resolution attempt does not consume salience. Failed resolution is evidence that the condition is resistant to automated remediation. Resistance increases risk. Risk increases salience.
+
+Invariant mapping: ZTG-2 (Stasis) — when automated processes cannot resolve a condition, the system moves toward human intervention.
+
+DR-4: EXPLICIT COMFORT-FIDELITY TRADEOFF
+Every suppression, deduplication, correlation, or aggregation operation that reduces salience must declare and record:
+
+• What signal was reduced
+• Why — the suppression rule or correlation logic
+• What recovery verification is pending
+• Whether the suppression is operator-requested or system-automated
+
+Invariant mapping: ZTG-0b (Replayability) + ZTG-4 (Evidence-Coupled Execution)
+
+INTERACTION WITH GOVERNANCE
+
+Salience-Proportional Observability is not a governance mechanism. It is an observability requirement that governance depends on. When the observability layer manufactures silence, governance operates against a false picture. This Prescription ensures that the observability layer does not corrupt the governance input.`
+  },
+  {
     type: 'DIAGNOSIS',
     identifier: 'SDS.DX.005',
     title: 'Model-Adjacent Covert Channel',
@@ -573,6 +879,130 @@ These are orthogonal concerns. A highly capable model without governance invaria
 Improving both is required. Neither is a substitute for the other.
 
 Reference invariants: ZTG-1 (Replayable Authorization), SDS.DX.001 (Heuristic Governance Substitution).`
+  },
+  {
+    type: 'DIAGNOSIS',
+    identifier: 'SDS.DX.006',
+    title: 'Automation Sedation',
+    date: '2026-03-04',
+    author: 'Jason Crittenden',
+    summary: 'Systems optimized for reduced alert volume suppress persistence signals, manufacture the appearance of stability, and functionally degrade operator vigilance. The system produces silence without verified recovery. Governance that depends on human escalation inherits the degradation.',
+    image: '/assets/ai-sys-fail.webp',
+    references: ['ZTG-0a', 'ZTG-2', 'SDS.FN.007', 'SDS.RX.002'],
+    content: `PATTERN DEFINITION
+
+A system exhibits Automation Sedation when:
+
+• Repeated signals of unresolved failure are deduplicated, correlated, or suppressed as a function of repetition rather than resolution.
+• The visual or operational salience of a condition decreases over time despite the condition persisting.
+• Operators interact with an interface that presents manufactured calm rather than verified stability.
+• Escalation probability decreases as a function of signal suppression, not as a function of recovery.
+
+The pattern is self-reinforcing: suppressed signals produce calm interfaces, calm interfaces reduce operator intervention, reduced intervention allows conditions to persist, persistent conditions generate further signals that are suppressed.
+
+MECHANISM UNDER EXAMINATION
+
+Modern observability and incident management systems implement several functions that, individually, serve legitimate noise-reduction purposes:
+
+• Deduplication: Collapsing repeated alerts into a single incident.
+• Correlation: Grouping related signals under a common root cause.
+• Suppression: Reducing alert frequency for "known issues."
+• Summary aggregation: Replacing granular signal streams with smoothed dashboards.
+
+Each mechanism conflates two structurally distinct signal classes:
+
+| Noise | Uninformative variance; does not change decisions | Suppress |
+| Persistence | Unresolved failure; recovery has not occurred | Escalate |
+
+When systems treat persistence as noise — because both produce repetition — they erase the only signal that recovery has not occurred.
+
+PRIMARY PATHOLOGY
+
+Observability collapse through incentive-aligned suppression.
+
+The system optimizes for a metric (alert volume, dashboard calm, MTTR) that is structurally compatible with both genuine recovery and manufactured silence. The metric cannot distinguish the two. The optimization drives toward whichever is cheaper to produce. Silence is always cheaper than recovery.
+
+This violates ZTG-0a (Observability Precondition): governance evaluation requires that system state be observable. When the observability layer actively suppresses evidence of unresolved conditions, governance has no valid input.
+
+STRUCTURAL CONSEQUENCES
+
+• Escalation delay: Conditions that would trigger human intervention under raw signal are invisible under processed signal.
+• Operator deference: Repeated exposure to calm interfaces produces learned trust in unfounded confidence.
+• Judgment atrophy: Human governance authority (ZTG-2) depends on humans who exercise that authority. When observability suppresses the signals, the judgment faculty degrades.
+• Late, severe failure: Systems exhibiting this pattern fail late, not often. Incident frequency decreases. Incident severity increases.
+• Governance invalidation: Any governance mechanism that depends on operator awareness is compromised.
+
+COUNTER-PATTERN
+
+Salience-Proportional Observability (SDS.RX.002): Unresolved conditions increase salience over time. Silence is permitted only following verified recovery. Failed resolution escalates the condition.
+
+VERDICT
+
+Automation Sedation => Observability Collapse => Governance Invalidation`
+  },
+  {
+    type: 'FIELD NOTE',
+    identifier: 'SDS.FN.007',
+    title: 'A Silent Scream: The Hidden Cost of Quiet Systems',
+    date: '2026-03-04',
+    author: 'Jason Crittenden',
+    summary: 'Quiet is not stable. Systems optimized for calm suppress persistence signals, manufacture the appearance of recovery, and erode the operator reflexes that governance depends on. Silence is a hypothesis, not an outcome.',
+    image: '/assets/lighthouse.webp',
+    references: ['ZTG-0a', 'ZTG-2', 'SDS.DX.006', 'SDS.RX.002'],
+    content: `THE PROMISE THAT BROKE TRUST
+
+There was a promise at the beginning of modern automation.
+
+Fewer alerts. Faster resolution. Lower cognitive load.
+
+For teams drowning in dashboards, pages, and constant interruption, the promise wasn't just attractive — it felt necessary. Something had to get quieter.
+
+And in many cases, automation delivered. Systems grew calm. Alert counts dropped. Dashboards smoothed out. The sense of urgency receded.
+
+For a while, it felt like progress.
+
+But quiet is not the same as stable.
+
+NOISE VS. PERSISTENCE
+
+To understand where things go wrong, we need to separate two concepts that are routinely collapsed:
+
+• Noise is uninformative variance. Random fluctuation. Signal that does not change decisions.
+• Persistence is unresolved failure. A condition that continues because nothing has actually fixed it.
+
+Modern systems increasingly treat persistence as noise.
+
+Repeated alerts are deduplicated. Ongoing failures are correlated into a single incident. The system notes that "this is the same issue" — and then lowers its urgency.
+
+But repetition is not noise.
+
+Repetition is pressure.
+
+It is the system telling you, over time, that recovery has not occurred. When repetition disappears from view, so does the only signal that something is still wrong.
+
+That isn't simplification. It's erasure.
+
+THE SEDATION EFFECT
+
+Dashboards do more than present information.
+
+They shape perception. Perception shapes urgency. Urgency shapes escalation. Escalation shapes outcomes.
+
+When systems are optimized to look calm, they don't merely reduce distraction — they alter operator behavior. They dampen vigilance. They delay intervention. They encourage deference to the interface.
+
+A smooth dashboard with quietly repeating failures produces the same outcome as a sedative: the danger remains, but the reflex to act is suppressed.
+
+When automation optimizes for calm, it becomes psychoactive. Not rhetorically. Functionally.
+
+THE COST OF QUIET
+
+Silence from a heart monitor is not proof of health.
+
+Sometimes it means the signal failed. Sometimes it means the patient is gone.
+
+A quiet room is not always a good sign.
+
+The danger is not that our systems will fail noisily. The danger is that they will fail quietly — and teach us not to notice.`
   }
 ];
 

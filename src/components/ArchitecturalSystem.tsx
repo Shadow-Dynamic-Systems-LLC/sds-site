@@ -53,40 +53,53 @@ export const ARTIFACT_DEPTH: Record<ArtifactTypeCode, { layer: ArchitecturalLaye
 };
 
 // ZTG Invariants for reference chips
+// Updated structure: ZTG-5 eliminated, graduated containment folded into ZTG-2 (Stasis)
 export const ZTG_INVARIANTS: Record<string, { label: string; definition: string; layer: ArchitecturalLayer }> = {
+  // Structural Prerequisites (ZTG-0x)
   'ZTG-0a': {
-    label: 'Full Observability',
-    definition: 'All state transitions relevant to governance must be observable.',
+    label: 'Observability',
+    definition: 'All governance-relevant state transitions, decision points, and boundary checks must be recorded with sufficient fidelity to support deterministic post-hoc audit.',
     layer: 'INVARIANT'
   },
   'ZTG-0b': {
-    label: 'Observable Boundaries',
-    definition: 'System boundaries and external interfaces must be fully observable.',
+    label: 'Replayability',
+    definition: 'Given identical initial state and identical inputs, the governance system must produce identical governance decisions. Execution nondeterminism is permitted; governance nondeterminism is not.',
     layer: 'INVARIANT'
   },
+  'ZTG-0c': {
+    label: 'Temporal Integrity',
+    definition: 'All components participating in governance evaluation must operate against a synchronized time source with bounded skew. Clock skew exceeding declared tolerance triggers system halt.',
+    layer: 'INVARIANT'
+  },
+  'ZTG-0d': {
+    label: 'Identity Integrity',
+    definition: 'All cryptographic material used for authorization signing, evidence sealing, and identity binding must be traceable to an explicitly declared trust root. Identity must be unforgeable and non-delegatable.',
+    layer: 'INVARIANT'
+  },
+  'ZTG-0e': {
+    label: 'Governance Consistency',
+    definition: 'All components participating in governance evaluation must operate against a consistent view of governance state. During inconsistency, the system must deny authorization.',
+    layer: 'INVARIANT'
+  },
+  // System Invariants (ZTG-1 through ZTG-4)
   'ZTG-1': {
-    label: 'Replayable Authorization',
-    definition: 'Authorization decisions must be deterministically reproducible from logged state.',
+    label: 'Mechanistic Boundary',
+    definition: 'Governance boundaries are enforced mechanically, not discretionarily. No component may bypass, reinterpret, defer, or negotiate a boundary at runtime. Authorization must occur before irreversible action.',
     layer: 'INVARIANT'
   },
   'ZTG-2': {
-    label: 'Temporal Integrity',
-    definition: 'Governance state must maintain causal ordering guarantees.',
+    label: 'Stasis',
+    definition: 'When the system cannot guarantee its governance invariants hold, it must halt. Stasis operates at graduated scope: surface freeze → subsystem freeze → system-wide stasis. Containment is proportional to failure.',
     layer: 'INVARIANT'
   },
   'ZTG-3': {
-    label: 'Governed Effect Surfaces',
-    definition: 'All external effects occur through registered, classified interfaces.',
+    label: 'Governed Effect Surface',
+    definition: 'All agent-generated external effects must occur exclusively through registered and governance-addressable surfaces. Each surface formally declares effect type, reversal strategy, and authorization policy.',
     layer: 'SURFACE'
   },
   'ZTG-4': {
-    label: 'Mechanistic Boundary',
-    definition: 'Authorization boundaries are code-enforced, not intent-interpreted.',
-    layer: 'INVARIANT'
-  },
-  'ZTG-5': {
     label: 'Evidence-Coupled Execution',
-    definition: 'No effect without simultaneous durable evidence of authorization.',
+    definition: 'No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is constitutive, not documentary.',
     layer: 'INVARIANT'
   }
 };
