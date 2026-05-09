@@ -14,9 +14,9 @@ export const researchProjects: ResearchProject[] = [
         title: 'Zero Trust Governance Specification',
         description: 'Public invariant specification defining the structural conditions for governed execution in AI systems.',
         image: '/assets/phoenix-logo.jpg',
-        summary: 'ZTG defines nine invariants across five preconditions (Observability, Replayability, Temporal Integrity, Identity Integrity, Governance Consistency) and four operational guarantees (Mechanistic Boundary, Stasis, Governed Effect Surface, Evidence-Coupled Execution). Stasis now includes graduated containment. The specification is published for collaborative review.',
+        summary: 'ZTG defines ten invariants across five preconditions (Observability, Replayability, Temporal Integrity, Identity Integrity, Governance Consistency) and five operational guarantees (Mechanistic Boundary, Stasis, Governed Effect Surface, Evidence-Coupled Execution, Irreversibility of Harm). Stasis includes graduated containment; Irreversibility of Harm classifies governed actions at decision time by the restorability of their harm. The specification is published for collaborative review.',
         hasSchematic: true,
-        content: `ZERO TRUST GOVERNANCE (ZTG) SPECIFICATION v0.4
+        content: `ZERO TRUST GOVERNANCE (ZTG) SPECIFICATION v0.5
 
 The Zero Trust Governance (ZTG) Specification establishes the foundational requirements for deploying autonomous execution systems into high-consequence environments.
 
@@ -51,7 +51,27 @@ When the system cannot guarantee its governance invariants hold, it must halt. S
 All agent-generated external effects must occur exclusively through registered and governance-addressable surfaces. Each surface formally declares effect type, reversal strategy, and authorization policy.
 
 • ZTG-4 EVIDENCE-COUPLED EXECUTION
-No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is constitutive, not documentary.`
+No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is constitutive, not documentary.
+
+• ZTG-5 IRREVERSIBILITY OF HARM
+Every action a governed system may take must be classified at decision time by the restorability of its harm — Restorable (affected parties can be returned to a materially equivalent state by an action available to the system), Mitigable (no return to equivalent state, but harm reducible through a defined forward action), or Irreversible (no available forward action reduces the harm to the Mitigable class). Classification is over the harm the action causes, not the action itself. An action whose system-side effect is reversible may still cause irreversible harm; the presence of a forward mechanism (refund, retraction, settlement, correction) does not, on its own, lower the class.
+
+Actions in the Irreversible class must be subject to stricter controls than those applied to lower classes, such as verification thresholds, authorization gates, or architectural restrictions. Actions in the Mitigable class must record residual harm in the decision provenance. The classification must be made at decision time, not after execution, and must appear as a required field in the evidence record of every governed action (ZTG-4). Implementations must not treat the harm-class field as optional.
+
+ZTG-3's reversal_strategy is surface-side metadata describing whether the system can undo its own action. ZTG-5's harm class is consequence-side, classified per-decision, describing whether affected parties can be made whole. These are independent axes and both fields must be present in decision provenance for governed actions. A surface with reversal_strategy: rollback may authorize decisions whose harm class is Irreversible; a surface with reversal_strategy: none may authorize decisions whose harm class is Restorable.
+
+RATIONALE FOR ZTG-5
+
+Governance fails when system-side reversibility is mistaken for harm reversibility. A payment mechanism does not restore a person; a retraction does not unindex content; a settlement does not undo a death. Treating the existence of a forward action as evidence of recoverability silently routes catastrophic-harm decisions through the same gates as recoverable ones. Classifying by harm restorability rather than action reversibility forces the gate selection to track the consequence the affected party experiences.
+
+CHANGELOG
+
+v0.5 (2026-04-19)
+• Added: ZTG-5 Irreversibility of Harm — harm-class classification at decision time (Restorable / Mitigable / Irreversible); stricter gates for Irreversible class; residual-harm provenance for Mitigable class; explicit coupling to ZTG-4 evidence record.
+• Changed: ZTG-5 number reused. Previous ZTG-5 (Graduated Freeze) was retired in v0.4 and folded into ZTG-2 (Graduated Containment). ZTG-5 is reassigned to Irreversibility of Harm with entirely different semantics.
+
+v0.4 (2026-04-16)
+• Retired: ZTG-5 Graduated Freeze folded into ZTG-2 as graduated containment (surface freeze → subsystem freeze → system-wide stasis).`
     },
     {
         id: 'insurability',
@@ -125,28 +145,30 @@ ROOT CAUSE
 The common root cause is the absence of a mechanically enforced boundary between AI reasoning and irreversible execution (ZTG-1). Where that boundary does not exist, governance reduces to post-hoc observation.`
     },
     {
-        id: 'lighthouse',
-        title: 'Lighthouse',
-        description: 'Reference implementation of Zero Trust Governance for high-assurance environments.',
-        image: '/assets/lighthouse.webp',
-        summary: 'Lighthouse targets environments where failure carries systemic, financial, or safety consequences. It implements the full ZTG invariant set with layered deterministic governance, cryptographic provenance, full replayability, and invariant enforcement under adversarial conditions. Others may build ZTG-compatible implementations. Lighthouse is the certification reference.',
-        content: `LIGHTHOUSE 
-Reference Implementation
+        id: 'constable',
+        title: 'Constable',
+        description: 'Zero Trust Governance AI Control Kernel — reference implementation of ZTG for high-assurance environments.',
+        image: '/assets/constable.webp',
+        summary: 'Constable targets environments where failure carries systemic, financial, or safety consequences. It implements the full ZTG invariant set with layered deterministic governance, cryptographic provenance, full replayability, and invariant enforcement under adversarial conditions. Others may build ZTG-compatible implementations. Constable is the certification reference.',
+        content: `CONSTABLE
+Zero Trust Governance AI Control Kernel — Reference Implementation
 
-Lighthouse is the primary zero-trust governance engine built by Shadow Dynamic Systems. It exists not merely as software, but as the certification baseline for ZTG architectural compliance.
+Constable is the primary zero-trust governance kernel built by Shadow Dynamic Systems. It exists not merely as software, but as the certification baseline for ZTG architectural compliance. Site: https://constable.id.
 
 LAYERS OF COMPLIANCE
 
 1. The Intent Receiver
-Lighthouse intercept all requests generated by stochastic models. It strips metadata, normalizes payloads, and cryptographically signs the inbound intent.
+Constable intercepts all requests generated by stochastic models. It strips metadata, normalizes payloads, and cryptographically signs the inbound intent.
 
 2. The Deterministic Policy Engine
 Rules are executed in isolated, math-only environments (e.g., WebAssembly, strict logic interpreters). If an intent cannot be proven to satisfy all policies, the payload is destroyed and the action is blocked.
 
 3. The Cryptographic Commit Layer
-Actions leaving Lighthouse for execution endpoints are signed with a dual-key configuration, where the endpoint itself will refuse any payload not bearing the exact authorization signature of the Lighthouse governor.
+Actions leaving Constable for execution endpoints are signed with a dual-key configuration, where the endpoint itself will refuse any payload not bearing the exact authorization signature of the Constable governor.
 
-By providing a reference architecture, developers and underwriters finally share a common vernacular for what constitutes a "secured" autonomous loop.`
+By providing a reference architecture, developers and underwriters finally share a common vernacular for what constitutes a "secured" autonomous loop.
+
+(Earlier materials may reference "Lighthouse" or "Adjutant" — prior names for the same implementation.)`
     }
 ];
 

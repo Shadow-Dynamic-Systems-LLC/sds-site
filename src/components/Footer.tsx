@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Modal } from './Modal';
 
 export function Footer() {
@@ -21,7 +22,7 @@ export function Footer() {
                 Terms of Service
               </a>
             </li>
-            <li><a href="mailto:hello@shadowdynamicsystems.com">Contact</a></li>
+            <li><Link to="/contact">Contact</Link></li>
           </ul>
           <p>&copy; 2025–2026 Shadow Dynamic Systems. All Rights Reserved.</p>
           <div className="footer-metadata">

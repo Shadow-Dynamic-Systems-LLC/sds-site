@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const sections = ['services', 'projects', 'about', 'publications'];
 
 export function Navbar() {
   const [activeSection, setActiveSection] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -42,6 +44,7 @@ export function Navbar() {
           <li><a href="#projects" className={activeSection === 'projects' ? 'active' : ''}>Research</a></li>
           <li><a href="#about" className={activeSection === 'about' ? 'active' : ''}>About</a></li>
           <li><a href="#publications" className={activeSection === 'publications' ? 'active' : ''}>Publications</a></li>
+          <li><Link to="/contact" className={location.pathname === '/contact' ? 'active' : ''}>Contact</Link></li>
         </ul>
       </nav>
     </header>

@@ -1,0 +1,264 @@
+# Shadow Dynamic Systems
+
+> Shadow Dynamic Systems (SDS) is an AI governance company building the structural foundations for insurable autonomous systems. SDS develops Zero Trust Governance (ZTG), a framework that separates stochastic reasoning from deterministic execution authority, making AI systems auditable, understandable, and repeatable. The core product is Constable (https://constable.id), the Zero Trust Governance AI Control Kernel — a reference implementation of governed execution for high-assurance environments.
+
+Shadow Dynamic Systems was founded by Jason Crittenden (JD, 12+ years legal-tech engineering). SDS addresses the AI liability gap: AI systems operating with execution authority lack the mechanistic governance boundaries that every other regulated domain requires. The structural problem is not model quality — it is unbounded execution authority.
+
+## Core Concepts
+
+**The AI Liability Gap**: AI systems that can reason unpredictably and act on that reasoning create exposure that traditional software risk models do not account for. The gap exists between what AI systems are permitted to do and what governance structures can verify, audit, and bound. Every domain that interacts with capital, infrastructure, or law has already converged on deterministic authorization layers — financial transactions, infrastructure changes, legal instruments, healthcare prescriptions. AI systems entering these domains inherit the same requirement. The liability gap is the distance between the governance standards of the domain and the governance posture of the AI technology operating within it.
+
+**Authorization Before Execution**: The ordering constraint inherited from every domain where irreversible execution carries consequence. Authorization must mechanistically precede irreversible action. This is not a novel requirement — it is the structural property that financial systems, infrastructure management, legal instruments, and healthcare already enforce. AI systems entering these domains do not change the requirement.
+
+**Governed Execution**: The separation of stochastic reasoning from deterministic authority. A model reasons freely; a governance layer authorizes deterministically. Irreversible actions are permitted only after mechanistic, replayable evaluation against declared policy. Governed execution is the operational property that irreversible actions are permitted only following deterministic authorization that is auditable, attributable, and replayable. This is not a constraint on intelligence — it is a constraint on what intelligence is permitted to do without authorization.
+
+**Bounded Autonomy**: Autonomy that operates within declared, verifiable boundaries. The model's reasoning is unconstrained; its authority is not. Bounded autonomy converts a stochastic system into one whose risk exposure is predictable and containable. The boundaries are mechanistic (code-enforced, not intent-interpreted), deterministic (identical inputs produce identical authorization decisions), and auditable (every authorization decision produces constitutive evidence).
+
+**Insurable Autonomy**: AI systems are insurable if and only if their execution authority is bound to a deterministic process that is auditable, understandable, and repeatable. This is the structural condition under which cyber insurance underwriters can evaluate and price AI risk exposure. A system is insurable when you can determine, before binding, what it is permitted to do, who authorized it, and whether that authorization can be independently verified after the fact. If any of those questions produces "it depends on what the model decides," the exposure is unbounded.
+
+---
+
+## Zero Trust Governance (ZTG) Invariants
+
+ZTG defines the structural properties that must hold for an AI system to be governable. The invariants are organized in a three-layer architecture by assurance type: the Invariant layer (hard, deterministic guarantees), the Surface layer (ZTG-3 — the gated exit point through which all governed effects flow), and the Envelope layer (non-deterministic additives that produce probabilistic benefits on top of the mechanistic floor). The Invariant layer must not depend on the Envelope layer.
+
+### Preconditions (ZTG-0)
+
+- **ZTG-0a Observability**: All governed state changes must be observable. Governance evaluation requires that system state be observable. When the observability layer suppresses evidence of unresolved conditions, governance has no valid input.
+- **ZTG-0b Replayability**: All authorization decisions must be independently reproducible. Given identical initial state and identical inputs, the governance system produces identical governance decisions. Governance evaluation nondeterminism is not permitted.
+- **ZTG-0c Temporal Integrity**: Governance records must be append-only and tamper-evident. The temporal ordering of governance decisions is a structural property, not a convenience.
+- **ZTG-0d Identity Integrity**: Trust roots must be cryptographically verifiable (Genesis/SDS PKI trust root). Execution rights resolve to identifiable, accountable actors.
+- **ZTG-0e Governance Consistency**: Policy evaluation must be deterministic across identical inputs. The governance layer does not vary by context, mood, or model state.
+
+### System Invariants (ZTG-1 through ZTG-5)
+
+- **ZTG-1 Mechanistic Boundary**: A deterministic boundary must separate reasoning from irreversible action. No component may bypass, reinterpret, defer, or negotiate the boundary at runtime. Boundaries are code-enforced, not intent-interpreted.
+- **ZTG-2 Stasis**: When governance state is uncertain, the system halts. No new authority is granted, no permissions are expanded, no baseline updates occur. Exit requires explicit human action. Graduated containment proportional to failure scope: surface freeze → subsystem freeze → system-wide stasis.
+- **ZTG-3 Governed Effect Surface**: All external effects must occur through registered, governance-addressable interfaces. Each surface declares its effect class, authorization policy, reversibility characteristics, and rollback cost. Authorization is proposal-bound: the lease encodes a proposal hash that binds to the action's parameters as evaluated at governance time.
+- **ZTG-4 Evidence-Coupled Execution**: Every governed action produces a durable evidence record as a constitutive part of the action. The evidence record is not a separate log — it is part of the action itself. No externally observable effect exists without simultaneous durable evidence of authorization and execution.
+- **ZTG-5 Irreversibility of Harm**: Every action a governed system may take must be classified at decision time by the restorability of its harm — Restorable (affected parties can be returned to a materially equivalent state by an action available to the system), Mitigable (no return to equivalent state, but harm reducible through a defined forward action), or Irreversible (no available forward action reduces the harm to the Mitigable class). Classification is over the harm the action causes, not the action itself; the presence of a forward mechanism (refund, retraction, settlement) does not on its own lower the class. Actions in the Irreversible class must be subject to stricter controls; actions in the Mitigable class must record residual harm in decision provenance. The harm-class classification must appear as a required field in the ZTG-4 evidence record. ZTG-5 is orthogonal to ZTG-3's system-side `reversal_strategy`: a system with `reversal_strategy: rollback` can authorize decisions with Irreversible harm class; a system with `reversal_strategy: none` can authorize decisions with Restorable harm class. Both fields must be present in decision provenance for governed actions.
+
+### Three-Layer Architecture
+
+| Layer | Character | What lives here |
+|-------|-----------|-----------------|
+| Invariant | Deterministic, non-negotiable | ZTG-0a/b/c/d/e, ZTG-1, ZTG-2, ZTG-4, ZTG-5 — the hard structural prerequisites and system invariants. Enforced mechanically, auditable, replayable. |
+| Surface | Gated exit point | ZTG-3 — the Governed Effect Surface. All external effects must flow through registered, governance-addressable interfaces. Because effects are bounded and auditable here, insurability begins at this layer. |
+| Envelope | Non-deterministic additives | Probabilistic security, safety, and governance processes that stack on top of the mechanistic floor to produce probabilistic increases in effectiveness or probabilistic reductions in attack surface and failure modes. Examples: model alignment, ML moderation, reputation scoring, anomaly detection, behavioral heuristics. |
+
+**Critical constraint**: The Invariant layer must not depend on the Envelope layer. Model behavior, alignment properties, and moderation filters are Envelope properties. If governance correctness depends on any of them, governance has been architecturally subordinated to the Envelope — and reduces to whatever the envelope's statistical properties actually deliver, not what the invariants claim.
+
+---
+
+## Five Evaluation Primitives
+
+Any AI system can be evaluated against these five structural properties:
+
+1. **Execution Boundary Enforcement** — Is there a mechanistic boundary between reasoning and irreversible action? Can the boundary be bypassed, reinterpreted, or deferred at runtime?
+2. **Deterministic Policy Evaluation** — Are authorization decisions deterministic and model-independent? Do identical inputs produce identical governance decisions regardless of which model provides inference?
+3. **Authority Attribution** — Can every authorized action be traced to an identifiable, accountable human actor? Does the authority chain resolve to a person, not to "the model decided"?
+4. **Replayable Authorization Record** — Can authorization decisions be independently reproduced and verified? Can an auditor reconstruct the full authorization chain after the fact?
+5. **Commit Verification** — Is the evidence record constitutive (produced as part of the action) rather than post-hoc? Is the record tamper-evident and hash-chained?
+
+---
+
+## Diagnoses — Structural Failure Patterns
+
+### SDS.DX.001 — Heuristic Governance Substitution
+
+Systems that replace mechanistic enforcement with probabilistic filtering and treat the result as a governance control exhibit Heuristic Governance Substitution. The pattern produces the appearance of governance without the structural properties governance requires.
+
+A system interposes heuristic filters — output classifiers, content policies, prompt-level safety instructions, or behavioral fine-tuning — between a stochastic model and external execution. The filters are probabilistic. They operate on model output after generation. They are evaluated by the same class of stochastic process they are intended to constrain.
+
+**Pathology**: Non-determinism (variable outputs under identical inputs, violating ZTG-0b); post-generation evaluation (observation, not governance — violating ZTG-1); bypassability (circumventable through adversarial inputs); non-auditability (decisions not replayable, violating ZTG-4); degradation without detection (no Stasis trigger when filters degrade).
+
+**Structural consequence**: The system has monitoring, not governance. It can report on what happened. It cannot enforce what is permitted to happen. The governance claim is structurally unfounded.
+
+### SDS.DX.002 — Prompt-Mediated Governance
+
+Systems that encode governance intent as natural language instructions to a stochastic model exhibit Prompt-Mediated Governance. The resulting authorization decisions are non-deterministic, non-replayable, and non-enforceable.
+
+A system constrains agent behavior through prompt instructions: system prompts that define permitted actions, role definitions that bound authority, or conversational framing that establishes operational limits.
+
+**Pathology**: Non-determinism (same prompt may produce different authorization decisions across evaluations); non-enforceability (a prompt is an instruction, not a boundary — the model may disregard it); non-auditability (authorization decisions cannot be independently reconstructed); authority conflation (cognition and authorization are the same inference call); invisible degradation (model updates shift governance boundaries without detection).
+
+**Structural consequence**: A prompt is not an auditable control. It is not a reproducible evaluation. It is not an enforceable boundary. It is a cognitive input to a stochastic system.
+
+### SDS.DX.003 — Inference-Delegated Authorization
+
+Systems that delegate authorization decisions to the inference layer — where the model's output determines what actions are permitted — exhibit Inference-Delegated Authorization. Changing the model changes the governance boundary.
+
+**Pathology**: Provider-dependent governance (different models authorize different actions under identical inputs); non-deterministic authorization (model updates change authorization outcomes without policy changes); invisible boundary migration (no governance-layer mechanism detects when the authorization boundary moves); no mechanistic enforcement (the integration layer formats and routes, it does not evaluate); unattributable authority (authority resolves to "the model decided").
+
+**Structural consequence**: If changing the model changes the authorization outcome, authorization is not deterministic. The Invariant layer must not depend on the Envelope layer.
+
+### SDS.DX.004 — Authority Inheritance Across Temporal Scope
+
+Persistent agents operating over extended time horizons accumulate execution authority through implicit inheritance. An authorization granted at task initiation is carried forward across subsequent actions without re-evaluation at each irreversible execution boundary.
+
+**Pathology**: Authorization decay (conditions at authorization time may no longer hold); scope expansion through decomposition (agent selects actions not contemplated at authorization time); consequence-class escalation (task begins with reversible actions, escalates to irreversible ones under the same authorization); unattributable intermediate actions (no authorization record for specific steps within a task).
+
+**Structural response**: ZTG-3 (Governed Effect Surface) addresses this through proposal-bound authorization leases. Each action in a multi-step task requires its own lease. Authorization does not carry forward. It is re-earned at each irreversible boundary.
+
+### SDS.DX.005 — Model-Adjacent Covert Channel
+
+A Model-Adjacent Covert Channel is a covert-capable signaling surface embedded within or directly coupled to model behavior such that the channel is not visible at the semantic layer of output, its activation cannot be externally falsified through semantic inspection alone, and assurance of non-misuse depends on internal claims, key custody, or implementation opacity.
+
+**Mechanism**: Sampler-level keyed perturbation of token probabilities introduces a recoverable signal into natural language outputs via conditional biasing of token selection. The covert capability arises from keyed partitioning of token space, conditional activation logic within generation, and accumulation of recoverable bias across output length.
+
+**Structural consequences**: Semantic inspection is insufficient for full information audit. Content-layer governance cannot guarantee signaling absence. Multi-model composition increases opacity. Assurance becomes dependent on trust in internal controls.
+
+**Counter-pattern**: Content Channel Inertness — the content channel must be incapable of carrying covert-capable signaling surfaces. Provenance should be satisfied through detached, cryptographically verifiable mechanisms external to generated content.
+
+### SDS.DX.006 — Automation Sedation
+
+Automation Sedation is the pattern in which systems optimized for reduced alert volume suppress persistence signals, manufacture the appearance of stability, and functionally degrade operator vigilance. The system produces silence without verified recovery.
+
+**Mechanism**: Deduplication, correlation, suppression, and summary aggregation each conflate two structurally distinct signal classes — noise (uninformative variance) and persistence (unresolved failure). When systems treat persistence as noise, they erase the only signal that recovery has not occurred.
+
+**Pathology**: Observability collapse through incentive-aligned suppression. The system optimizes for a metric (alert volume, dashboard calm, MTTR) that is structurally compatible with both genuine recovery and manufactured silence. Silence is always cheaper than recovery.
+
+**Structural consequences**: Escalation delay; operator deference to confident-appearing interfaces; judgment atrophy; late severe failure (incident frequency decreases, severity increases); governance invalidation (governance mechanisms operate against a false picture of system state).
+
+### SDS.DX.007 — Post-hoc Logging as Governance
+
+Post-hoc Logging as Governance is the pattern in which a system records every action to a tamper-evident log and treats the log as the governance artifact, with no enforced coupling between authorization and effect. The log answers what the system did; it cannot answer whether the system was permitted to do it before it did it.
+
+**Mechanism**: Asynchronous logging pipelines where effect production runs ahead of log persistence; "audit after" designs where the system executes first and records justification afterward; same-process log writers where the component executing the effect also writes its own authorization record; compliance-driven implementations that satisfy regulatory record-keeping requirements without satisfying governance preconditions.
+
+**Pathology**: Evidence is documentary rather than constitutive. Under partial failure, log writes lag effect production, and reconstruction cannot distinguish "effect occurred and was authorized" from "effect occurred and authorization failed." Under adversarial pressure, log entries can be backdated relative to the effects they purport to authorize — tamper-evidence on the log substrate does not prevent a compromised writer from producing entries that order events incorrectly. Under scale, the log and the effect diverge through sampling, rate-limiting, retention policies, and storage failures.
+
+**Structural consequences**: Audit becomes a description of system behavior rather than a structural guarantee of governance. The organization can reconstruct what occurred but cannot guarantee that what occurred was permissible at the moment of occurrence. Violates ZTG-4 Evidence-Coupled Execution: no externally observable effect may exist without simultaneous durable evidence of authorization.
+
+**Counter-pattern**: Authorization Precedes Commit (SDS.FN.003). Authorization must precede the irreversible commit, and the evidence of authorization must be coupled to the effect itself. Failure of evidence write is failure of execution. The audit trail then ceases to be an interpretive reconstruction and becomes a constitutive account of governed action.
+
+---
+
+## Prescriptions — Design Requirements
+
+### SDS.RX.001 — Toward a Common Language
+
+Governance discourse across insurance, security, compliance, and operations uses different vocabulary for the same structural properties. This fragmentation prevents convergence. This Prescription defines shared terminology grounded in ZTG invariants mapped to domain-native equivalents.
+
+**Core terms with cross-domain mappings**:
+
+- **Governed Execution**: Insurance = "controlled execution environment"; Security = "enforced trust boundary with pre-authorization"; Compliance = "auditable control framework with deterministic evaluation"; Operations = "approval-gated execution with rollback classification"
+- **Mechanistic Boundary**: Insurance = "hard control"; Security = "enforced security boundary"; Compliance = "preventive control"; Operations = "hard gate"
+- **Stasis**: Insurance = "system halt requiring human re-authorization"; Security = "lockdown / fail-closed state"; Compliance = "control freeze pending remediation"; Operations = "change freeze / incident hold"
+- **Evidence-Coupled Execution**: Insurance = "constitutive audit trail"; Security = "non-repudiable execution record"; Compliance = "contemporaneous documentation"; Operations = "atomic action-and-record"
+- **Envelope (non-deterministic additive)**: Insurance = "probabilistic behavioral bound / residual-risk control"; Security = "probabilistic detection layer / ML filter"; Compliance = "risk-based control"; Operations = "SLO-bounded service / heuristic monitor"
+- **Invariant (hard guarantee)**: Insurance = "structural guarantee / non-degradable control"; Security = "security invariant"; Compliance = "absolute control"; Operations = "hard SLA"
+- **Surface (governed effect surface, ZTG-3)**: Insurance = "bounded and auditable effect channel — where insurability becomes possible"; Security = "enforced egress surface"; Compliance = "registered control point"; Operations = "authorized external interface"
+
+### SDS.RX.002 — Salience-Proportional Observability
+
+Observability systems must escalate salience in proportion to persistence duration, not suppress it. Silence is permitted only following verified recovery.
+
+**Four design requirements**:
+
+1. **DR-1: Salience Escalation on Persistence** — Unresolved conditions must increase in visual and operational salience over time. Salience is a function of persistence duration, not alert frequency.
+2. **DR-2: Silence Requires Verified Recovery** — Silence is permitted only following mechanistic verification that the triggering condition is no longer present. The verification is recorded as constitutive evidence of recovery.
+3. **DR-3: Failed Resolution Escalates the Condition** — When automated resolution fails, the condition escalates. Resistance to remediation increases risk, which increases salience.
+4. **DR-4: Explicit Comfort-Fidelity Tradeoff** — Every suppression operation that reduces salience must declare what signal was reduced, why, what recovery verification is pending, and whether the suppression was operator-requested or system-automated.
+
+---
+
+## Field Notes — Structural Observations
+
+### SDS.FN.001 — Authorization Precedes Commit
+
+The ordering constraint inherited from every domain where irreversible execution carries consequence. Financial systems: transaction authorization precedes commit. Infrastructure management: approval gates precede production mutations. Legal instruments: signatures precede execution. Healthcare: prescription authority is credentialed and logged. AI systems entering all of these domains inherit the same ordering constraint.
+
+### SDS.FN.002 — Stochastic Reasoning, Deterministic Authority
+
+The structural distinction that determines whether a system's risk exposure is bounded. If authority is stochastic, exposure is unbounded. If authority is deterministic, exposure can be priced. The model reasons stochastically. The governance layer authorizes deterministically. These are different architectural functions with different properties.
+
+### SDS.FN.003 — Observation Is Not Governance
+
+Monitoring and logging confirm what happened after the fact. Governance determines what is permitted to happen before execution. The difference is the difference between bounded and unbounded loss. Monitoring is a detective control. Governance is a preventive control. They serve different functions and one does not substitute for the other.
+
+### SDS.FN.004 — Reversibility Is Not a Default
+
+Systems must formally classify which actions are irreversible to offer proportional governance. If a system doesn't formally classify action reversibility, everything is treated the same — either over-governed (vendor can't deploy) or under-governed (risk can't be priced). Proportional governance requires explicit reversibility classification.
+
+### SDS.FN.005 — Governance Independence from Inference Provider
+
+Deterministic policy evaluation is model-independent by construction. A governance evaluation engine that satisfies ZTG-1 enforces authorization through rule-bound, deterministic logic. The inputs are: the proposed action, the surface registry, the active policy, and the authority chain. None of these inputs depend on which model generated the proposal. The model proposes. The governance layer evaluates. These are separate processes with separate properties.
+
+When a system's authorization behavior changes because the model changed, the system has demonstrated that its authorization layer is inference-dependent. This is the defining property of Inference-Delegated Authorization (SDS.DX.003).
+
+### SDS.FN.006 — Model Improvement Does Not Improve Governance
+
+Training quality, dataset composition, and fine-tuning operate in the Envelope layer — the layer of non-deterministic additives that produce probabilistic benefits. Governance operates in the Invariant layer. Improving one does not improve the other. A better model without execution boundaries has better reasoning and identical unbounded exposure. A model trained on superior data that operates without execution boundaries can reason more effectively about a destructive action and then execute it. Fine-tuning narrows model behavior statistically, not mechanistically. Model improvement is not a governance control.
+
+### SDS.FN.007 — A Silent Scream: The Hidden Cost of Quiet Systems
+
+Quiet is not stable. Systems optimized for calm suppress persistence signals, manufacture the appearance of recovery, and erode the operator reflexes that governance depends on. Silence is a hypothesis, not an outcome. When noise and persistence are conflated — when repeated alerts are deduplicated and ongoing failures are correlated into a single incident of decreasing urgency — repetition disappears from view. With it disappears the only signal that something is still wrong. When automation optimizes for calm, it becomes functionally psychoactive: the danger remains, but the reflex to act is suppressed.
+
+---
+
+## Industry Guidance — Insurance & Risk
+
+Target audience: Cyber insurance underwriters, emerging risk underwriters, risk architects, technology risk specialists.
+
+**Governing axiom**: A system is insurable when you can determine, before binding, what it is permitted to do, who authorized it, and whether that authorization can be independently verified after the fact. If any of those questions produces "it depends on what the model decides," the exposure is unbounded.
+
+**Underwriter evaluation framework** (17 questions derived from ZTG invariants):
+
+*Execution Authority*: Does the system permit AI-generated actions to execute without pre-authorization? Is authorization deterministic or model-dependent? Can authorization be replayed? If the model changes, do authorization outcomes change?
+
+*Authority Boundaries*: Does the system formally classify irreversible actions? Are irreversible actions subject to different governance? Is each irreversible action independently authorized? Do all external effects occur through registered surfaces?
+
+*Human Authority*: When governance state is uncertain, does the system halt or continue? Can the system resume without human re-authorization? Can authorization be traced to an accountable human?
+
+*Evidence & Audit*: Does every action produce constitutive evidence? Is the evidence tamper-evident and hash-chained? Can the full authorization chain be reconstructed?
+
+*Degradation Behavior*: When statistical controls degrade, does governance tighten automatically? Is there a defined escalation path to system halt? Are governance guarantees independent of model behavior?
+
+---
+
+## Projects
+
+### Constable — Zero Trust Governance AI Control Kernel
+
+The reference implementation of ZTG. A zero-trust execution layer for verified agent behavior across platforms; ensures that agent actions can be independently verified, logged, and audited regardless of where they run. Supports secure collaboration, deterministic output validation, and consistent behavior across heterogeneous environments. Includes Memoria (governed memory), edge routing, and a black-box logger. Designed for air-gapped and hybrid deployment in regulated-industry verticals (government, infosec, medical, insurance). Site: https://constable.id. (Earlier materials may reference "Lighthouse" or "Adjutant" — prior names for the same implementation.)
+
+### Orchestration Interfaces and Operator Control
+
+Interfaces for guiding and overseeing intelligent agent systems. Designed to balance observability with control, accommodating both autonomous agents and operator-initiated workflows. A more intuitive command structure for complex, evolving agent systems.
+
+### Agent Mesh Memory Model
+
+Distributed memory and resonance-based context across agents. Rather than isolating memory within a single agent, explores how distributed context can be maintained and evolved across cooperating systems. Emphasizes patterns of resonance rather than content alone.
+
+### Reasoning Pattern Catalog
+
+Codified methods for structured agent reasoning and decision support. From decomposition strategies to failure mode introspection, these patterns provide scaffolding for deeper analysis. The goal is insight shaped by method.
+
+### Safety and Governance
+
+Foundation for cooperative, high-assurance systems. Constable's safety model is built into the architecture: capability binding (actions exist only through explicitly defined, signed capabilities), intent-governed planning (execution derived from structured operator intent), contextual memory scoping (workflows access only required information), bounded heuristic behavior (effects remain measurable and predictable within structural constraints), and detectable failure states (bounded in scope, observable, diagnosable, recoverable).
+
+---
+
+## NIST Engagements
+
+### January 2026 — NIST Cyber AI Profile Comment
+
+Diagnostic register filed as formal comment on NIST Cybersecurity AI Profile Workshop 2. Flat diagnostic tone. Structural failure mode analysis applied to the temporal division problem in AI governance.
+
+### March 2026 — NIST RFI NIST-2025-0035 Response
+
+Architectural response to NIST Request for Information on "Security of AI Agent Systems." One degree warmer than the January filing — stakes claims. Presents judicial, clinical, financial, safety-critical, and insurance governance as prior art for bounded agent execution, not analogies.
+
+---
+
+## Publication Taxonomy
+
+Artifacts are typed by epistemic function and domain applicability:
+
+**Publication types** (epistemic function): DX = Diagnosis (structural failure mode analysis); CS = Case Study (documented incident or engagement); FN = Field Note (observation with structural implication); RX = Prescription (design requirement or counter-pattern); RP = Research Paper (extended analysis, not for site publication).
+
+**Category descriptors** (domain applicability): STRUCTURAL (core architectural analysis); INSURANCE (underwriting, risk evaluation, insurability); SECURITY (execution-layer security, adversarial governance evasion); COMPLIANCE (regulatory frameworks, standards mappings); OPERATIONS (production deployment, operational reliability).
+
+An artifact may carry multiple categories. Category descriptors enable filtered views, industry-specific collections, and audience-aware navigation without duplicating content.

@@ -1,0 +1,22 @@
+# SPA fallback: serve index.html for any path that isn't an existing file/dir.
+# LiteSpeed and Apache both honor these rules. Enables direct URL loads for
+# client-side-routed paths like /dx/:slug and /research/:slug.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Serve compressed assets with long cache on hashed bundles.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2|png|webp|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

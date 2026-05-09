@@ -12,7 +12,9 @@ import { About } from './components/About';
 import { Publications } from './components/Publications';
 import { ArtifactPage } from './components/ArtifactPage';
 import { ResearchPage } from './components/ResearchPage';
+import { ContactPage } from './pages/ContactPage';
 import { Footer } from './components/Footer';
+import { useMinimalMode } from './hooks/useMinimalMode';
 import './index.css';
 
 function HomePage() {
@@ -73,31 +75,36 @@ function HomePage() {
 }
 
 function App() {
+  const minimal = useMinimalMode();
+
   return (
     <>
-      {/* Fixed Background Layers */}
-      <div id="canvas-container">
-        <Canvas
-          dpr={[1, 1.5]}
-          gl={{ antialias: false, depth: false, alpha: false }}
-          orthographic
-          camera={{ zoom: 1, position: [0, 0, 1] }}
-          style={{ background: '#0a0a0a' }}
-        >
-          <Suspense fallback={null}>
-            <CrackBackground />
-          </Suspense>
-        </Canvas>
-      </div>
-
-      {/* Memory Graph Layer - separate fixed layer */}
-      <MemoryGraph opacity={0.35} />
+      {/* Fixed Background Layers — suppressed in minimal mode for double-blind preview */}
+      {!minimal && (
+        <>
+          <div id="canvas-container">
+            <Canvas
+              dpr={[1, 1.5]}
+              gl={{ antialias: false, depth: false, alpha: false }}
+              orthographic
+              camera={{ zoom: 1, position: [0, 0, 1] }}
+              style={{ background: '#0a0a0a' }}
+            >
+              <Suspense fallback={null}>
+                <CrackBackground />
+              </Suspense>
+            </Canvas>
+          </div>
+          <MemoryGraph opacity={0.35} />
+        </>
+      )}
 
       {/* Routes */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dx/:slug" element={<ArtifactPage />} />
         <Route path="/research/:slug" element={<ResearchPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </>
   );
