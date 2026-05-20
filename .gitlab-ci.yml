@@ -34,6 +34,8 @@ variables:
 
 default:
   image: node:${NODE_VERSION}-alpine
+  tags:
+    - docker
 
 cache:
   key:
