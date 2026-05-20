@@ -2,28 +2,22 @@
 #
 # Stages:
 #   build  — npm ci + vite build, artifacts in dist/
-#   deploy — rsync dist/ to Hostinger over SSH on every push to main
+#   deploy — inject contact API DB settings, then rsync dist/ to Hostinger
 #
-# Subgroup CI/CD variables consumed (set on shadowdynamicsystems/web):
-#   webhost  — Hostinger SSH host (e.g. apollo.hostinger.com)
+# Subgroup CI/CD variables consumed:
+#   webhost  — Hostinger SSH host
 #   webuser  — SSH username
 #   webport  — SSH port (optional; defaults to 22)
-#   webkey   — SSH private key. Recommended type: File (then $webkey is a path).
-#              If type Variable, the PEM content is written to a temp file at runtime.
+#   webkey   — SSH private key
+#   dbname   — contact form database name
+#   dbuser   — contact form database user
+#   dbpass   — contact form database password
 #
-# Project-level CI/CD variable required (set on this project):
-#   DEPLOY_PATH — absolute path on the Hostinger host that should receive dist/.
-#                 Example: /home/$webuser/domains/shadowdynamic.systems/public_html
+# Project-level CI/CD variable required:
+#   DEPLOY_PATH — absolute path on the Hostinger host that should receive dist/
 #
 # Project-level CI/CD variable optional:
 #   PUBLIC_URL  — public URL surfaced on the GitLab environment card.
-#
-# Notes:
-#   - rsync runs WITHOUT --delete so server-side files (contact form PHP, .htaccess
-#     written by Hostinger, etc.) are preserved. Add an exclude file if you later
-#     want strict mirror semantics.
-#   - Host key is captured via ssh-keyscan on first run (TOFU). For stricter
-#     verification, add the host's public key to a SSH_KNOWN_HOSTS variable.
 
 stages:
   - build
@@ -63,7 +57,7 @@ deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
-    - apk add --no-cache openssh-client rsync
+    - apk add --no-cache gettext openssh-client rsync
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - |
       if [ -f "$webkey" ]; then
@@ -83,6 +77,15 @@ deploy:
     - test -n "$webhost"     || { echo "webhost not set (subgroup variable)"; exit 1; }
     - test -n "$webuser"     || { echo "webuser not set (subgroup variable)"; exit 1; }
     - test -n "$DEPLOY_PATH" || { echo "DEPLOY_PATH not set (project variable)"; exit 1; }
+    - test -n "$dbname"      || { echo "dbname not set (subgroup variable)"; exit 1; }
+    - test -n "$dbuser"      || { echo "dbuser not set (subgroup variable)"; exit 1; }
+    - test -n "$dbpass"      || { echo "dbpass not set (subgroup variable)"; exit 1; }
+    - test -f dist/api/contact.php || { echo "dist/api/contact.php missing"; exit 1; }
+    - export dbname_b64="$(printf '%s' "$dbname" | base64 | tr -d '\n')"
+    - export dbuser_b64="$(printf '%s' "$dbuser" | base64 | tr -d '\n')"
+    - export dbpass_b64="$(printf '%s' "$dbpass" | base64 | tr -d '\n')"
+    - envsubst '${dbname_b64} ${dbuser_b64} ${dbpass_b64}' < dist/api/contact.php > dist/api/contact.php.tmp
+    - mv dist/api/contact.php.tmp dist/api/contact.php
     - >-
       rsync -az --human-readable --stats
       -e "ssh -i ~/.ssh/id_deploy -p ${webport:-22} -o StrictHostKeyChecking=yes"
