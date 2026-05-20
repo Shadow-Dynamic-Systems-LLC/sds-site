@@ -26,22 +26,22 @@ export interface LayerConfig {
 export const LAYER_CONFIG: Record<ArchitecturalLayer, LayerConfig> = {
   INVARIANT: {
     name: 'System Invariant',
-    color: '#ff6b35', // Deep amber-orange
+    color: '#ff6b35',
     depth: 0,
-    description: 'Foundational governance constraints. Non-negotiable structural requirements.'
-  },
-  ENVELOPE: {
-    name: 'Envelope',
-    color: '#ffd700', // Gold
-    depth: 1,
-    description: 'Model capabilities, training, fine-tuning. Variable properties.'
+    description: 'Foundational mechanical constraints. Non-negotiable. Enforced deterministically, not discretionarily — no component may bypass, reinterpret, or negotiate a boundary at runtime.'
   },
   SURFACE: {
     name: 'Effect Surface',
-    color: '#7dd3fc', // Light blue
+    color: '#7dd3fc',
+    depth: 1,
+    description: 'Governed effect surface. All agent-generated effects occur through registered, authorization-addressable interfaces. Because effects are bounded and auditable, insurability begins here.'
+  },
+  ENVELOPE: {
+    name: 'Envelope',
+    color: '#ffd700',
     depth: 2,
-    description: 'External interfaces. Where execution meets the world.'
-  }
+    description: 'Probabilistic containment that becomes possible once you have a governed surface. Statistical operating bounds — holds under additive conditions. Insufficient alone against non-additive or emergent decisions; the invariant layer exists because the envelope cannot guarantee against catastrophic boundary violations.'
+  },
 };
 
 export const ARTIFACT_DEPTH: Record<ArtifactTypeCode, { layer: ArchitecturalLayer; shadowIntensity: number }> = {
@@ -100,6 +100,11 @@ export const ZTG_INVARIANTS: Record<string, { label: string; definition: string;
   'ZTG-4': {
     label: 'Evidence-Coupled Execution',
     definition: 'No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is constitutive, not documentary.',
+    layer: 'INVARIANT'
+  },
+  'ZTG-5': {
+    label: 'Irreversibility of Harm',
+    definition: 'Every action a governed system may take must be classified at decision time by the restorability of its harm — Restorable, Mitigable, or Irreversible. Classification is over the harm the action causes, not the action itself. Actions in the Irreversible class must be subject to stricter controls; Mitigable-class actions must record residual harm in decision provenance. Orthogonal to ZTG-3 system-side reversal strategy.',
     layer: 'INVARIANT'
   }
 };
@@ -274,75 +279,114 @@ interface CrossSectionProps {
   interactive?: boolean;
 }
 
+// Stock-chart-like jagged points for the envelope's probabilistic ceiling
+// x spans 90–380 across a 400-wide viewBox; y varies between ~12 and ~42
+const ENVELOPE_TOP: [number, number][] = [
+  [90, 36], [108, 20], [124, 31], [140, 13], [158, 27],
+  [174, 19], [192, 34], [208, 15], [226, 29], [244, 21],
+  [260, 37], [276, 17], [294, 27], [312, 11], [330, 23],
+  [348, 33], [364, 18], [380, 28],
+];
+
+const envelopeTopString = ENVELOPE_TOP.map(([x, y]) => `${x},${y}`).join(' ');
+
+const envelopePath = [
+  `M ${ENVELOPE_TOP[0][0]},${ENVELOPE_TOP[0][1]}`,
+  ...ENVELOPE_TOP.slice(1).map(([x, y]) => `L ${x},${y}`),
+  'L 380,105 L 90,105 Z',
+].join(' ');
+
+const surfacePath  = 'M 90,105 L 380,105 L 380,175 L 90,175 Z';
+const invariantPath = 'M 90,175 L 380,175 L 380,230 L 90,230 Z';
+
+const LAYER_PATHS: Record<ArchitecturalLayer, string> = {
+  ENVELOPE: envelopePath,
+  SURFACE:  surfacePath,
+  INVARIANT: invariantPath,
+};
+
+// Vertical midpoint for labels within each layer band
+const LABEL_Y: Record<ArchitecturalLayer, number> = {
+  ENVELOPE: 68,
+  SURFACE:  140,
+  INVARIANT: 202,
+};
+
 export function CrossSection({ highlightLayer, showLabels = true, interactive = true }: CrossSectionProps) {
   const [activeLayer, setActiveLayer] = useState<ArchitecturalLayer | null>(highlightLayer || null);
 
-  const layers: ArchitecturalLayer[] = ['SURFACE', 'ENVELOPE', 'INVARIANT'];
+  const handleEnter = (layer: ArchitecturalLayer) => {
+    if (interactive) setActiveLayer(layer);
+  };
+  const handleLeave = () => {
+    if (interactive && !highlightLayer) setActiveLayer(null);
+  };
+  const handleClick = (layer: ArchitecturalLayer) => {
+    if (interactive) setActiveLayer(layer === activeLayer ? null : layer);
+  };
 
   return (
     <div className="cross-section">
       <div className="cross-section__diagram">
-        {/* Section cut line */}
+        {/* A-A' cut line overlay */}
         <div className="cross-section__cut-line">
           <span className="cross-section__cut-label">A</span>
           <div className="cross-section__cut-dash" />
           <span className="cross-section__cut-label">A'</span>
         </div>
 
-        {/* Strata layers */}
-        <div className="cross-section__strata">
-          {layers.map((layer, index) => {
-            const config = LAYER_CONFIG[layer];
+        <svg
+          className="cross-section__svg"
+          viewBox="0 0 400 240"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {(['INVARIANT', 'SURFACE', 'ENVELOPE'] as ArchitecturalLayer[]).map(layer => {
+            const cfg = LAYER_CONFIG[layer];
             const isActive = activeLayer === layer;
+            const labelY = LABEL_Y[layer];
 
             return (
-              <div
+              <g
                 key={layer}
-                className={`cross-section__layer ${isActive ? 'cross-section__layer--active' : ''}`}
-                style={{
-                  '--layer-color': config.color,
-                  '--layer-index': index
-                } as React.CSSProperties}
-                onMouseEnter={() => interactive && setActiveLayer(layer)}
-                onMouseLeave={() => interactive && !highlightLayer && setActiveLayer(null)}
-                onClick={() => interactive && setActiveLayer(layer === activeLayer ? null : layer)}
+                style={{ cursor: interactive ? 'pointer' : 'default' }}
+                onMouseEnter={() => handleEnter(layer)}
+                onMouseLeave={handleLeave}
+                onClick={() => handleClick(layer)}
               >
-                <div className="cross-section__layer-fill" />
-                <div className="cross-section__layer-edge-top" />
-                <div className="cross-section__layer-edge-bottom" />
-
+                <path
+                  d={LAYER_PATHS[layer]}
+                  fill={cfg.color}
+                  fillOpacity={isActive ? 0.22 : 0.07}
+                  stroke={cfg.color}
+                  strokeOpacity={isActive ? 0.6 : 0.25}
+                  strokeWidth="1"
+                />
                 {showLabels && (
-                  <div className="cross-section__layer-label">
-                    <span className="cross-section__layer-code">{layer}</span>
-                    <span className="cross-section__layer-name">{config.name}</span>
-                  </div>
+                  <>
+                    <text x="10" y={labelY - 6} fill={cfg.color} fontSize="6.5" fontFamily="monospace" fontWeight="700" letterSpacing="1.5" opacity={isActive ? 1 : 0.5}>{layer}</text>
+                    <text x="10" y={labelY + 6} fill="rgba(255,255,255,0.35)" fontSize="5.5" fontFamily="monospace" opacity={isActive ? 0.9 : 0.4}>{cfg.name}</text>
+                  </>
                 )}
-
-                {/* Depth markers */}
-                <div className="cross-section__depth-markers">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="cross-section__depth-marker" />
-                  ))}
-                </div>
-              </div>
+              </g>
             );
           })}
-        </div>
 
-        {/* Callout annotations */}
-        <div className="cross-section__callouts">
-          <div className="cross-section__callout cross-section__callout--surface">
-            <div className="cross-section__callout-line" />
-            <span>External Effects</span>
-          </div>
-          <div className="cross-section__callout cross-section__callout--invariant">
-            <div className="cross-section__callout-line" />
-            <span>Governance Boundary</span>
-          </div>
-        </div>
+          {/* Envelope jagged ceiling — drawn on top as its own stroke */}
+          <polyline
+            points={envelopeTopString}
+            fill="none"
+            stroke={LAYER_CONFIG.ENVELOPE.color}
+            strokeWidth={activeLayer === 'ENVELOPE' ? 2 : 1.5}
+            strokeOpacity={activeLayer === 'ENVELOPE' ? 0.9 : 0.55}
+            strokeLinejoin="round"
+          />
+
+          {/* Flat boundary lines */}
+          <line x1="90" y1="105" x2="380" y2="105" stroke={LAYER_CONFIG.SURFACE.color} strokeWidth="1" strokeOpacity="0.35" />
+          <line x1="90" y1="175" x2="380" y2="175" stroke={LAYER_CONFIG.INVARIANT.color} strokeWidth="1" strokeOpacity="0.35" />
+        </svg>
       </div>
 
-      {/* Layer detail panel */}
       {activeLayer && (
         <div className="cross-section__detail">
           <LayerIndicator layer={activeLayer} />

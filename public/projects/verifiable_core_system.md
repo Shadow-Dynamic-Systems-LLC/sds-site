@@ -4,13 +4,17 @@ description: "A zero-trust execution layer for verified agent behavior across pl
 image: "assets/phoenix-logo.jpg"
 ---
 
-We are building a zero-trust execution layer designed for intelligence at scale. It ensures that agent actions can be independently verified, logged, and audited—no matter where they run. This foundation supports secure collaboration, deterministic output validation, and consistent behavior across heterogeneous environments. It’s the reliability layer for systems that can’t afford to guess.
+When an AI system takes an irreversible action, someone must be able to verify who authorized it, what evidence supported it, and whether the decision can be replayed. Without that, the system is unauditable — and unauditable systems are uninsurable.
+
+We are building a zero-trust execution layer that enforces this requirement at the architectural level. Every agent action is independently verified, logged, and audited — no matter where it runs. This foundation supports secure collaboration, deterministic output validation, and consistent behavior across heterogeneous environments.
+
+This layer implements the core Zero Trust Governance (ZTG) invariants: Replayable Authorization (ZTG-1), Deterministic Policy Evaluation (ZTG-2), Evidence-Coupled Execution (ZTG-5), and Mechanistic Boundary enforcement (ZTG-4).
 
 ## The Problem
 Because LLMs gather data from unknown and unprotected sources, they are vulnerable to context poisoning, and other forms of manipulation. This can lead to information disclosure, or even the execution of arbitrary code. 
 
-## The Almost Entirely Not a Joke RPC Draft
-### RFC-ΨΦ-001: Signed AI Inference Payloads (SAIP)
+## SAIP: Signed AI Inference Payloads
+### RFC-ΨΦ-001 — Draft Specification
 
 ### Status
 

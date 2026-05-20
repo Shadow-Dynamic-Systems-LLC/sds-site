@@ -264,10 +264,6 @@ We intend to.
 
 ---
 
-Here it is — **clean, polished, and formatted exactly as it should appear at the bottom of the document**, with the micro-edits applied and no extra commentary.
-
----
-
 ## **Project Description**
 
 **Shadow Dynamic Systems: A Cultural Primer** is the foundational charter that defines how SDS thinks, builds, and operates. It is not a manifesto, a marketing artifact, or a blog post. It is a **governing document** — a statement of engineering discipline and governance philosophy that informs every architecture decision, every safety constraint, every workflow pattern, and every system we design.

@@ -5,12 +5,14 @@ import { parseContentToSections } from '../data/artifacts';
 import { SectionCut, Timestamp } from './ArchitecturalSystem';
 import { ZTGSchematic } from './ZTGSchematic';
 import { EVIDENCE_LOGGING } from '../data/glyphs';
+import { useMinimalMode } from '../hooks/useMinimalMode';
 import './ArchitecturalSystem.css';
 import './ZTGSchematic.css';
 
 export function ResearchPage() {
     const { slug } = useParams<{ slug: string }>();
     const project = slug ? getResearchProjectById(slug) : undefined;
+    const minimal = useMinimalMode();
 
     // Scroll to top on mount
     useEffect(() => {
@@ -40,18 +42,20 @@ export function ResearchPage() {
 
     return (
         <div className="research-page">
-            {/* Navigation Bar */}
-            <nav className="research-page__nav">
-                <div className="container">
-                    <Link to="/#projects" className="research-nav-link">
-                        <span className="research-nav-glyph">{EVIDENCE_LOGGING.REPLAY.glyph}</span>
-                        RETURN TO INDEX
-                    </Link>
-                    <div className="research-nav-path">
-                        SYS.EXT // RESEARCH // {project.id.toUpperCase()}
+            {/* Navigation Bar — suppressed in minimal mode for double-blind preview */}
+            {!minimal && (
+                <nav className="research-page__nav">
+                    <div className="container">
+                        <Link to="/#projects" className="research-nav-link">
+                            <span className="research-nav-glyph">{EVIDENCE_LOGGING.REPLAY.glyph}</span>
+                            RETURN TO INDEX
+                        </Link>
+                        <div className="research-nav-path">
+                            SYS.EXT // RESEARCH // {project.id.toUpperCase()}
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            )}
 
             <div className="container">
                 {/* Document Header */}
@@ -149,30 +153,32 @@ export function ResearchPage() {
                     </aside>
                 </div>
 
-                {/* Document Navigation */}
-                <nav className="research-page__doc-nav">
-                    <div className="research-doc-nav__prev">
-                        {prevProject && (
-                            <Link to={`/research/${prevProject.id}`} className="research-doc-nav__link">
-                                <span className="research-doc-nav__direction">PREVIOUS</span>
-                                <span className="research-doc-nav__title">{prevProject.title}</span>
-                            </Link>
-                        )}
-                    </div>
-                    <div className="research-doc-nav__next">
-                        {nextProject && (
-                            <Link to={`/research/${nextProject.id}`} className="research-doc-nav__link">
-                                <span className="research-doc-nav__direction">NEXT</span>
-                                <span className="research-doc-nav__title">{nextProject.title}</span>
-                            </Link>
-                        )}
-                    </div>
-                </nav>
+                {/* Document Navigation — suppressed in minimal mode (cross-doc links leak related-work attribution) */}
+                {!minimal && (
+                    <nav className="research-page__doc-nav">
+                        <div className="research-doc-nav__prev">
+                            {prevProject && (
+                                <Link to={`/research/${prevProject.id}`} className="research-doc-nav__link">
+                                    <span className="research-doc-nav__direction">PREVIOUS</span>
+                                    <span className="research-doc-nav__title">{prevProject.title}</span>
+                                </Link>
+                            )}
+                        </div>
+                        <div className="research-doc-nav__next">
+                            {nextProject && (
+                                <Link to={`/research/${nextProject.id}`} className="research-doc-nav__link">
+                                    <span className="research-doc-nav__direction">NEXT</span>
+                                    <span className="research-doc-nav__title">{nextProject.title}</span>
+                                </Link>
+                            )}
+                        </div>
+                    </nav>
+                )}
 
-                {/* Footer notation */}
+                {/* Footer notation — brand attribution suppressed in minimal mode */}
                 <div className="research-page__footer">
-                    <span>SDS.EXT.{project.id.toUpperCase()}</span>
-                    <span>Shadow Dynamic Systems</span>
+                    <span>{minimal ? project.id.toUpperCase() : `SDS.EXT.${project.id.toUpperCase()}`}</span>
+                    {!minimal && <span>Shadow Dynamic Systems</span>}
                 </div>
             </div>
         </div>

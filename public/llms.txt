@@ -1,0 +1,90 @@
+# Shadow Dynamic Systems
+
+> Shadow Dynamic Systems (SDS) is an AI governance company building the structural foundations for insurable autonomous systems. SDS develops Zero Trust Governance (ZTG), a framework that separates stochastic reasoning from deterministic execution authority, making AI systems auditable, understandable, and repeatable. The core product is Constable (https://constable.id), the Zero Trust Governance AI Control Kernel — a reference implementation of governed execution for high-assurance environments.
+
+Shadow Dynamic Systems was founded by Jason Crittenden (JD, 12+ years legal-tech engineering). SDS addresses the AI liability gap: AI systems operating with execution authority lack the mechanistic governance boundaries that every other regulated domain requires. The structural problem is not model quality — it is unbounded execution authority.
+
+## Core Concepts
+
+**The AI Liability Gap**: AI systems that can reason unpredictably and act on that reasoning create exposure that traditional software risk models do not account for. The gap exists between what AI systems are permitted to do and what governance structures can verify, audit, and bound.
+
+**Authorization Before Execution**: Every domain that interacts with capital, infrastructure, or law already enforces this ordering — financial transactions, infrastructure changes, legal instruments, healthcare prescriptions. AI systems entering these domains inherit the same requirement. Authorization must mechanistically precede irreversible action.
+
+**Governed Execution**: The separation of stochastic reasoning from deterministic authority. A model reasons freely; a governance layer authorizes deterministically. Irreversible actions are permitted only after mechanistic, replayable evaluation against declared policy. This is not a constraint on intelligence — it is a constraint on what intelligence is permitted to do without authorization.
+
+**Bounded Autonomy**: Autonomy that operates within declared, verifiable boundaries. The model's reasoning is unconstrained; its authority is not. Bounded autonomy converts a stochastic system into one whose risk exposure is predictable and containable.
+
+**Insurable Autonomy**: AI systems are insurable if and only if their execution authority is bound to a deterministic process that is auditable, understandable, and repeatable. This is the structural condition under which cyber insurance underwriters can evaluate and price AI risk exposure.
+
+## Zero Trust Governance (ZTG) Invariants
+
+ZTG defines the structural properties that must hold for an AI system to be governable:
+
+- **ZTG-0a Observability**: All governed state changes must be observable
+- **ZTG-0b Replayability**: All authorization decisions must be independently reproducible
+- **ZTG-0c Temporal Integrity**: Governance records must be append-only and tamper-evident
+- **ZTG-0d Identity Integrity**: Trust roots must be cryptographically verifiable
+- **ZTG-0e Governance Consistency**: Policy evaluation must be deterministic across identical inputs
+- **ZTG-1 Mechanistic Boundary**: A deterministic boundary must separate reasoning from irreversible action
+- **ZTG-2 Stasis**: When governance state is uncertain, the system halts; graduated containment proportional to failure scope
+- **ZTG-3 Governed Effect Surface**: All external effects must occur through registered, governance-addressable interfaces
+- **ZTG-4 Evidence-Coupled Execution**: Every governed action produces a durable evidence record as a constitutive part of the action
+- **ZTG-5 Irreversibility of Harm**: Every governed action is classified at decision time by the restorability of its harm (Restorable, Mitigable, Irreversible); Irreversible-class actions are subject to stricter controls; orthogonal to ZTG-3 system-side reversal strategy
+
+## Five Evaluation Primitives
+
+Any AI system can be evaluated against these five structural properties:
+
+1. **Execution Boundary Enforcement** — Is there a mechanistic boundary between reasoning and irreversible action?
+2. **Deterministic Policy Evaluation** — Are authorization decisions deterministic and model-independent?
+3. **Authority Attribution** — Can every authorized action be traced to an identifiable, accountable human actor?
+4. **Replayable Authorization Record** — Can authorization decisions be independently reproduced and verified?
+5. **Commit Verification** — Is the evidence record constitutive (produced as part of the action) rather than post-hoc?
+
+## Diagnoses — Structural Failure Patterns
+
+- [SDS.DX.001 — Heuristic Governance Substitution](/artifacts/SDS.DX.001): Systems that replace mechanistic enforcement with probabilistic filtering and treat the result as governance
+- [SDS.DX.002 — Prompt-Mediated Governance](/artifacts/SDS.DX.002): Systems that rely on prompt instructions to constrain agent behavior — compliance is stochastic, not mechanistic
+- [SDS.DX.003 — Inference-Delegated Authorization](/artifacts/SDS.DX.003): Systems where changing the model changes what actions are authorized
+- [SDS.DX.004 — Authority Inheritance Across Temporal Scope](/artifacts/SDS.DX.004): Persistent agents authorized once at task assignment that execute across extended time horizons without re-authorization
+- [SDS.DX.005 — Model-Adjacent Covert Channel](/artifacts/SDS.DX.005): Hidden information channels adjacent to model execution that create non-auditable memory and implicit authority
+- [SDS.DX.006 — Automation Sedation](/artifacts/SDS.DX.006): Observability systems that suppress persistence signals, producing manufactured silence
+- [SDS.DX.007 — Post-hoc Logging as Governance](/artifacts/SDS.DX.007): Systems that treat the audit log as the governance mechanism — evidence is documentary rather than constitutive, and authorization is dissociable from effect
+
+## Prescriptions — Design Requirements
+
+- [SDS.RX.001 — Toward a Common Language](/artifacts/SDS.RX.001): Shared terminology grounded in ZTG invariants, mapped to domain-native equivalents across insurance, security, compliance, and operations
+- [SDS.RX.002 — Salience-Proportional Observability](/artifacts/SDS.RX.002): Observability systems must escalate salience in proportion to persistence duration, not suppress it
+
+## Field Notes — Structural Observations
+
+- [SDS.FN.001 — Authorization Precedes Commit](/artifacts/SDS.FN.001): The ordering constraint inherited from every domain where irreversible execution carries consequence
+- [SDS.FN.002 — Stochastic Reasoning, Deterministic Authority](/artifacts/SDS.FN.002): The structural distinction that determines whether a system's risk exposure is bounded
+- [SDS.FN.003 — Observation Is Not Governance](/artifacts/SDS.FN.003): Monitoring confirms what happened; governance determines what is permitted to happen
+- [SDS.FN.004 — Reversibility Is Not a Default](/artifacts/SDS.FN.004): Systems must formally classify which actions are irreversible to offer proportional governance
+- [SDS.FN.005 — Governance Independence from Inference Provider](/artifacts/SDS.FN.005): Governance architecture must not depend on inference provider identity
+- [SDS.FN.006 — Model Improvement Does Not Improve Governance](/artifacts/SDS.FN.006): Model quality operates in the statistical layer; governance operates in the deterministic layer
+- [SDS.FN.007 — A Silent Scream: The Hidden Cost of Quiet Systems](/artifacts/SDS.FN.007): The operational consequences of observability systems that manufacture calm
+
+## Industry Guidance
+
+- [Insurance & Risk Collection](/collections/insurance): Curated reading path for cyber insurance underwriters evaluating AI risk exposure, with terminology bridge and evaluation framework
+
+## Projects
+
+- [Constable — Zero Trust Governance AI Control Kernel](https://constable.id): Reference implementation of ZTG; zero-trust execution layer for verified agent behavior across platforms. Includes Memoria (governed memory), edge routing, and a black-box logger. Designed for regulated-industry deployment
+- [Orchestration Interfaces](/projects/orchestration-interfaces): Interaction layers balancing observability with control for autonomous agents and operator workflows
+- [Agent Mesh Memory Model](/projects/mesh-memory): Distributed context maintained and evolved across cooperating agents
+- [Reasoning Pattern Catalog](/projects/reasoning-patterns): Codified structured reasoning methods for agent decision support
+- [Safety and Governance](/projects/safety-governance): Foundation for cooperative, high-assurance systems with structural safety
+
+## NIST Engagements
+
+- [January 2026 — NIST Cyber AI Profile Comment](/nist/cyber-profile): Diagnostic register filed as formal comment on NIST Cybersecurity AI Profile Workshop 2
+- [March 2026 — NIST RFI NIST-2025-0035 Response](/nist/rfi-response): Architectural response to "Security of AI Agent Systems" request for information
+
+## Optional
+
+- [Publication Taxonomy](/artifacts/taxonomy): Category descriptor system (STRUCTURAL, INSURANCE, SECURITY, COMPLIANCE, OPERATIONS) for cross-domain artifact classification
+- [AI.SYS.FAIL Registry](/ai-sys-fail): Structured registry of systemic governance and architectural failure modes in intelligent systems
+- [Cultural Primer](/about/culture): Why SDS builds the way it builds — design philosophy and organizational values

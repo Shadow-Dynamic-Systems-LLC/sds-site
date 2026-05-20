@@ -108,8 +108,8 @@ Until the framework explicitly acknowledges that monitoring and response may be 
     date: '2026-03-09',
     author: 'Jason Crittenden',
     summary: 'Formal response to NIST-2025-0035 identifying structural requirements for governing AI agent execution authority. Presents Zero Trust Governance as an architectural framework addressing threats, security practices, assessment methods, and deployment constraints.',
-    image: '/assets/lighthouse.webp',
-    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0c', 'ZTG-0d', 'ZTG-0e', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4', 'SDS.DX.001', 'SDS.DX.002', 'SDS.DX.003', 'SDS.DX.004', 'SDS.DX.005', 'SDS.CS.001'],
+    image: '/assets/constable.webp',
+    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0c', 'ZTG-0d', 'ZTG-0e', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4', 'ZTG-5', 'SDS.DX.001', 'SDS.DX.002', 'SDS.DX.003', 'SDS.DX.004', 'SDS.DX.005', 'SDS.CS.001'],
     content: `RESPONSE TO NIST RFI: SECURITY OF AI AGENT SYSTEMS (NIST-2025-0035)
 
 Submitted by: Jason Crittenden, Founder & Research Lead, Shadow Dynamic Systems LLC
@@ -176,6 +176,8 @@ SYSTEM INVARIANTS
 
 • ZTG-4 Evidence-Coupled Execution — No externally observable effect may exist without simultaneous durable evidence of authorization and execution.
 
+• ZTG-5 Irreversibility of Harm — Every governed action is classified at decision time by the restorability of its harm (Restorable, Mitigable, Irreversible). Irreversible-class actions are subject to stricter controls; Mitigable-class actions record residual harm in provenance. Orthogonal to ZTG-3 system-side reversal strategy.
+
 ASSESSMENT FRAMEWORK
 
 Five evaluation primitives for any AI agent system:
@@ -222,7 +224,7 @@ Zero Trust Governance applies zero trust security principles to execution author
     author: 'Jason Crittenden',
     summary: 'Governance discourse across insurance, security, compliance, and operations uses different vocabulary for the same structural properties. This fragmentation prevents convergence. This Prescription defines a shared vocabulary for cross-domain governance evaluation.',
     image: '/assets/assembly-hall.webp',
-    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0d', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4'],
+    references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0d', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4', 'ZTG-5'],
     content: `TOWARD A COMMON LANGUAGE
 
 Governance discourse across insurance, security, compliance, and operations uses different vocabulary for the same structural properties. This fragmentation prevents convergence.
@@ -277,6 +279,13 @@ The property that no externally observable effect exists without simultaneous du
 • Compliance: Contemporaneous documentation; real-time audit evidence
 • Operations: Atomic action-and-record; write-ahead logging with seal
 
+IRREVERSIBILITY OF HARM (ZTG-5)
+The property that every governed action is classified at decision time by the restorability of its harm to affected parties — Restorable, Mitigable, or Irreversible — with the classification recorded in decision provenance. Orthogonal to system-side reversal strategy (ZTG-3).
+• Insurance: Per-decision harm-class tagging; loss severity at authorization time, not after claim
+• Security: Blast-radius classification at decision time; stricter gates for irrecoverable actions
+• Compliance: Decision-time impact classification; residual-harm provenance for mitigable actions
+• Operations: Action-class taxonomy; change-risk classification bound to authorization record
+
 USAGE
 
 This vocabulary is intended to be referenced, not memorized. When evaluating a system's governance posture across disciplines:
@@ -295,7 +304,7 @@ Findings documented in shared vocabulary compose across disciplines.`
     date: '2026-03-04',
     author: 'Jason Crittenden',
     summary: 'Observability systems must escalate salience in proportion to persistence duration, not suppress it. Silence is permitted only following verified recovery. Defines four design requirements for observability that preserves governance input fidelity.',
-    image: '/assets/lighthouse.webp',
+    image: '/assets/constable.webp',
     references: ['ZTG-0a', 'ZTG-0b', 'ZTG-2', 'ZTG-4', 'SDS.DX.006'],
     content: `SALIENCE-PROPORTIONAL OBSERVABILITY
 
@@ -941,13 +950,77 @@ VERDICT
 Automation Sedation => Observability Collapse => Governance Invalidation`
   },
   {
+    type: 'DIAGNOSIS',
+    identifier: 'SDS.DX.007',
+    title: 'Post-hoc Logging as Governance',
+    date: '2026-04-23',
+    author: 'Jason Crittenden',
+    summary: 'Systems that record every action to a tamper-evident log and treat the log as the governance artifact — without enforced coupling between authorization and effect — exhibit Post-hoc Logging as Governance. The log answers what the system did; it cannot answer whether the system was permitted to do it before it did it.',
+    image: '/assets/filing-cabinet.webp',
+    references: ['ZTG-0a', 'ZTG-4', 'SDS.DX.002', 'SDS.DX.003', 'SDS.FN.003'],
+    content: `PATTERN DEFINITION
+
+Post-hoc Logging as Governance is a structural anti-pattern in which the audit log is treated as the governance mechanism, with no enforced coupling between authorization and effect. The pattern is characterized by:
+
+• Comprehensive logging of executed actions, often to tamper-evident or append-only stores.
+• Authorization decisions that are recorded after — or independent of — the action they purport to authorize.
+• An audit-readiness posture that conflates the existence of a record with the legitimacy of what it records.
+• No mechanism by which the log itself can prevent an unauthorized effect from occurring.
+
+This pattern concerns the temporal and causal relationship between authorization and effect, not the integrity of the logging substrate.
+
+MECHANISM UNDER EXAMINATION
+
+The mechanism typically manifests through:
+
+• Asynchronous logging pipelines where effect production runs ahead of log persistence.
+• "Audit after" designs where the system executes first and records justification afterward.
+• Same-process log writers, where the component executing the effect also writes its own authorization record.
+• Compliance-driven implementations that satisfy regulatory record-keeping requirements without satisfying governance preconditions.
+
+The mechanism produces evidence as a documentary artifact rather than as a constitutive part of the action. Logging is downstream of effect; governance requires it to be upstream.
+
+PRIMARY PATHOLOGY
+
+The audit trail describes what happened. It cannot guarantee that what happened was authorized.
+
+Three failure modes follow:
+
+• Under partial failure, log writes lag effect production. The system performs effects whose authorization records are pending, lost, or never written. Reconstruction after the fact cannot distinguish "effect occurred and was authorized" from "effect occurred and authorization failed."
+
+• Under adversarial pressure, log entries can be backdated relative to the effects they purport to authorize. Tamper-evidence on the log substrate does not prevent a compromised writer from producing entries that order events incorrectly.
+
+• Under scale, the log and the effect diverge. Sampling, rate-limiting, retention policies, and storage failures all break the one-to-one correspondence the governance claim depends on.
+
+ASSURANCE FAILURE
+
+Audit becomes a description of system behavior rather than a structural guarantee of governance. The organization can reconstruct what occurred but cannot guarantee that what occurred was permissible at the moment of occurrence.
+
+This violates Evidence-Coupled Execution (ZTG-4): no externally observable effect may exist without simultaneous durable evidence of authorization. Logging-as-governance produces effects whose evidence is documentary, asynchronous, and dissociable.
+
+COUNTER-PATTERN: Authorization Precedes Commit (SDS.FN.003)
+
+Authorization must precede the irreversible commit, and the evidence of authorization must be coupled to the effect itself — not written about it after the fact. The counter-pattern requires:
+
+• A pre-execution authorization step that produces a binding decision artifact.
+• Atomic coupling between effect and evidence: the action either commits with its authorization record or does not commit at all.
+• A governance layer separate from the executor, so the writer of the authorization record is not the consumer of its protections.
+• Failure of evidence write is failure of execution.
+
+The audit trail then ceases to be an interpretive reconstruction and becomes a constitutive account of governed action.
+
+VERDICT
+
+Post-hoc Logging as Governance produces records that describe system behavior. Governance requires evidence that constitutes system behavior. The two are not interchangeable, and the gap between them is where ungoverned effects originate.`
+  },
+  {
     type: 'FIELD NOTE',
     identifier: 'SDS.FN.007',
     title: 'A Silent Scream: The Hidden Cost of Quiet Systems',
     date: '2026-03-04',
     author: 'Jason Crittenden',
     summary: 'Quiet is not stable. Systems optimized for calm suppress persistence signals, manufacture the appearance of recovery, and erode the operator reflexes that governance depends on. Silence is a hypothesis, not an outcome.',
-    image: '/assets/lighthouse.webp',
+    image: '/assets/constable.webp',
     references: ['ZTG-0a', 'ZTG-2', 'SDS.DX.006', 'SDS.RX.002'],
     content: `THE PROMISE THAT BROKE TRUST
 

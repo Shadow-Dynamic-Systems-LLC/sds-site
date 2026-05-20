@@ -54,7 +54,7 @@ Most automation platforms rely on reactive safety mechanisms:
 
 These approaches are valuable but insufficient for systems where automation coordinates across clusters or interacts with multiple operational domains.
 
-Lighthouse emphasizes **structural safety**:
+Lighthouse emphasizes **structural safety** — what Zero Trust Governance (ZTG) formalizes as *Mechanistic Boundaries* enforced by *System Invariants*:
 
 * actions exist only within defined capability boundaries,
 * workflows execute according to explicit operator intent,
@@ -121,9 +121,9 @@ This approach enhances capability while reducing operational risk.
 
 Lighthouse’s safety model is built into the architecture itself:
 
-### **Capability Binding**
+### **Capability Binding — Governed Effect Surfaces**
 
-Automation can only act through explicitly defined, signed, verifiable capabilities.
+Automation can only act through explicitly defined, signed, verifiable capabilities. In ZTG terms, every point where the system can produce an irreversible effect is a *Governed Effect Surface* — a registered boundary that requires authorization before execution.
 
 ### **Intent-Governed Planning**
 
@@ -133,12 +133,12 @@ Execution is derived from structured operator intent, not ad-hoc imperative inst
 
 Workflows gain access only to the information required for their task — preserving safety and clarity.
 
-### **Bounded Heuristic Behavior**
+### **Bounded Heuristic Behavior — Statistically Bounded Envelope**
 
 Internal heuristics support flexibility and adaptation,
-but their effects remain **measurable, predictable, and bounded** within structural constraints.
+but their effects remain **measurable, predictable, and bounded** within structural constraints. ZTG defines this as the *Statistically Bounded Envelope* — the boundary within which stochastic reasoning may operate without requiring per-action authorization.
 
-### **Detectable Failure States**
+### **Detectable Failure States — Graduated Containment**
 
 Failures are not silent.
 They are:
@@ -148,7 +148,7 @@ They are:
 * diagnosable,
 * and recoverable.
 
-This is the foundation of a reliable, high-assurance automation substrate.
+ZTG calls this *Graduated Containment* — the system invariant that failures produce progressively constrained execution rather than silent continuation. This is the foundation of a reliable, high-assurance automation substrate.
 
 ---
 

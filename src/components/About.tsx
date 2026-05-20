@@ -48,7 +48,7 @@ export function About() {
                 attributable, and replayable.
               </p>
               <div className="doctrine-definition__reference">
-                <span className="doctrine-reference-chip">Lighthouse</span>
+                <span className="doctrine-reference-chip">Constable</span>
                 <span className="doctrine-reference-note">Reference implementation</span>
               </div>
             </div>
