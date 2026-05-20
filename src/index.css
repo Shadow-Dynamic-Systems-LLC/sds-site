@@ -2417,3 +2417,182 @@ footer {
     color: var(--color-text-secondary);
     opacity: 0.4;
 }
+/* =====================================================================
+   MINIMAL MODE — double-blind academic preview
+   Activated when document.body has class "minimal-mode" (set via the
+   useMinimalMode hook when the URL carries ?theme=minimal). Strips brand
+   chrome, custom typography, color identity, and the canvas backdrop so
+   cited artifact pages render in a neutral, attribution-free layout.
+   ===================================================================== */
+
+body.minimal-mode {
+    /* Redefine theme color variables. The default dark-theme values
+       (--color-text-primary: #e0e0e0 etc.) render invisible on our
+       white background. Overriding at body scope propagates to every
+       var() consumer across the site. */
+    --color-dark-bg: #ffffff;
+    --color-medium-bg: #ffffff;
+    --color-light-bg: #f5f5f5;
+    --color-text-primary: #111111;
+    --color-text-secondary: #333333;
+    --color-accent-yellow: #0033cc;
+    --color-accent-orange: #0033cc;
+    --color-accent-red: #990000;
+
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+}
+
+/* Catch-all: descendants inherit readable color unless they declare
+   their own. Prevents stragglers from going invisible. !important
+   needed to beat any hardcoded !important dark-theme colors. */
+body.minimal-mode,
+body.minimal-mode * {
+    color: #111111 !important;
+}
+
+/* React inline styles outrank regular CSS; we need !important to
+   override `style={{ color: "var(--color-accent-yellow)" }}` etc. */
+body.minimal-mode [style*="color"] {
+    color: #111111 !important;
+}
+
+body.minimal-mode #canvas-container,
+body.minimal-mode .navbar,
+body.minimal-mode .footer,
+body.minimal-mode .section-gutter,
+body.minimal-mode .artifact-page-nav {
+    display: none !important;
+}
+
+body.minimal-mode .artifact-page,
+body.minimal-mode .artifact-page-container,
+body.minimal-mode .diagnosis-document,
+body.minimal-mode .diagnosis-document-fullpage {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: #111111 !important;
+}
+
+body.minimal-mode .diagnosis-header,
+body.minimal-mode .diagnosis-section,
+body.minimal-mode .diagnosis-sidebar,
+body.minimal-mode .diagnosis-sidebar-card,
+body.minimal-mode .diagnosis-footer {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: #111111 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+}
+
+body.minimal-mode .diagnosis-title,
+body.minimal-mode .section-heading,
+body.minimal-mode .sidebar-heading,
+body.minimal-mode .diagnosis-number,
+body.minimal-mode .diagnosis-badge,
+body.minimal-mode .sidebar-content,
+body.minimal-mode .diagnosis-list,
+body.minimal-mode .diagnosis-footer-text {
+    color: #111111 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+}
+
+body.minimal-mode .diagnosis-header {
+    border-bottom: 1px solid #cccccc !important;
+    padding-bottom: 1rem !important;
+}
+
+body.minimal-mode .diagnosis-badge {
+    border: 1px solid #999999 !important;
+    background: #f5f5f5 !important;
+    padding: 0.15rem 0.5rem !important;
+    margin-right: 0.5rem !important;
+    font-size: 0.85rem !important;
+}
+
+body.minimal-mode .diagnosis-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+}
+
+body.minimal-mode .diagnosis-sidebar {
+    border-top: 1px solid #cccccc !important;
+    padding-top: 1.5rem !important;
+}
+
+body.minimal-mode .diagnosis-footer {
+    border-top: 1px solid #cccccc !important;
+    margin-top: 2rem !important;
+    padding-top: 1rem !important;
+    opacity: 1 !important;
+}
+
+body.minimal-mode a {
+    color: #0033cc !important;
+}
+
+/* Research-page minimal-mode overrides (parallel to artifact-page rules above) */
+
+body.minimal-mode .research-page,
+body.minimal-mode .research-page__header,
+body.minimal-mode .research-page__main,
+body.minimal-mode .research-section,
+body.minimal-mode .research-page__schematic,
+body.minimal-mode .research-page__footer {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: #111111 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+}
+
+body.minimal-mode .research-header__title,
+body.minimal-mode .research-header__type,
+body.minimal-mode .research-header__id,
+body.minimal-mode .research-header__description,
+body.minimal-mode .research-section__heading,
+body.minimal-mode .research-section__number,
+body.minimal-mode .research-page__footer {
+    color: #111111 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+}
+
+body.minimal-mode .research-page__header {
+    border-bottom: 1px solid #cccccc !important;
+    padding-bottom: 1rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+body.minimal-mode .research-page__footer {
+    border-top: 1px solid #cccccc !important;
+    margin-top: 2rem !important;
+    padding-top: 1rem !important;
+    opacity: 1 !important;
+    font-size: 0.85rem !important;
+}
+
+body.minimal-mode .research-page__grid {
+    grid-template-columns: 1fr !important;
+}
+
+/* Suppress aside / sidebar in minimal mode (related-work links leak attribution) */
+body.minimal-mode .research-page__aside,
+body.minimal-mode .research-related,
+body.minimal-mode .research-page__schematic {
+    display: none !important;
+}

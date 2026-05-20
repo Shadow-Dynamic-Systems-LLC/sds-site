@@ -1,10 +1,12 @@
 import { useParams, Link } from 'react-router-dom';
 import { artifacts, artifactTypeDefs, parseContentToSections, slugToIdentifier } from '../data/artifacts';
+import { useMinimalMode } from '../hooks/useMinimalMode';
 
 export function ArtifactPage() {
   const { slug } = useParams<{ slug: string }>();
   const identifier = slug ? slugToIdentifier(slug) : '';
   const artifact = artifacts.find(a => a.identifier === identifier);
+  const minimal = useMinimalMode();
 
   if (!artifact) {
     return (
@@ -22,9 +24,11 @@ export function ArtifactPage() {
 
   return (
     <div className="artifact-page">
-      <div className="artifact-page-nav">
-        <Link to="/#publications" className="back-link">← Back to Publications</Link>
-      </div>
+      {!minimal && (
+        <div className="artifact-page-nav">
+          <Link to="/#publications" className="back-link">← Back to Publications</Link>
+        </div>
+      )}
 
       <div className="container artifact-page-container">
         <div className="diagnosis-document diagnosis-document-fullpage">
@@ -35,7 +39,9 @@ export function ArtifactPage() {
             </div>
             <div className="diagnosis-badges">
               <span className="diagnosis-badge">Type: {artifactTypeDefs[artifact.type].label}</span>
-              <span className="diagnosis-badge">Author: {artifact.author}</span>
+              {!minimal && (
+                <span className="diagnosis-badge">Author: {artifact.author}</span>
+              )}
               <span className="diagnosis-badge">Date: {artifact.date}</span>
             </div>
           </div>
@@ -76,7 +82,7 @@ export function ArtifactPage() {
                 <p className="sidebar-content">{artifact.summary}</p>
               </div>
 
-              {artifact.repository && (
+              {artifact.repository && !minimal && (
                 <div className="diagnosis-sidebar-card">
                   <div className="sidebar-heading">REPOSITORY</div>
                   <a
@@ -117,7 +123,7 @@ export function ArtifactPage() {
 
           <div className="diagnosis-footer">
             <span className="diagnosis-footer-text">
-              SDS · {artifact.identifier}
+              {minimal ? artifact.identifier : `SDS · ${artifact.identifier}`}
             </span>
           </div>
         </div>

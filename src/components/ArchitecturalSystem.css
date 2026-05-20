@@ -318,7 +318,11 @@
 
 .cross-section__diagram {
   position: relative;
-  height: 240px;
+}
+
+.cross-section__svg {
+  display: block;
+  width: 100%;
 }
 
 /* Section cut line (architectural A-A' notation) */
@@ -333,6 +337,7 @@
   height: 100%;
   z-index: 10;
   pointer-events: none;
+  bottom: 0;
 }
 
 .cross-section__cut-label {
