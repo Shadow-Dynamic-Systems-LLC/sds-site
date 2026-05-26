@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-define('DB_HOST', '72.60.122.123');
+define('DB_HOST', 'localhost');
 define('DB_NAME_B64', '${dbname_b64}');
 define('DB_USER_B64', '${dbuser_b64}');
 define('DB_PASS_B64', '${dbpass_b64}');
