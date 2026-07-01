@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './ContactForm.css';
 
@@ -15,7 +15,6 @@ const CONTACT_TYPES: { value: ContactType; label: string }[] = [
 ];
 
 const VERTICALS = ['Insurance', 'Legal', 'Healthcare', 'Finance', 'Technology', 'General Business'];
-
 const PARTNERSHIP_KINDS = ['Reseller', 'Referral', 'Strategic', 'OEM', 'Licensing'];
 const CONSULTING_TIMELINES = ['ASAP', '1-3 months', '3-6 months', 'Just exploring'];
 const INVESTOR_STAGES = ['Seed', 'Series A', 'Growth', 'Pre-IPO'];
@@ -23,11 +22,14 @@ const NEWSLETTER_PUBLICATIONS = ['SDS Newsletter', 'Journal of Modern Systems Ar
 const NEWSLETTER_FREQUENCIES = ['Weekly', 'Monthly', 'Quarterly'];
 const DEPLOYMENT_NEEDS = ['API', 'Database', 'Cloud', 'On-prem'];
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function ContactForm() {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const leadCapturedRef = useRef(false);
 
   const [data, setData] = useState({
     contactType: (searchParams.get('type') as ContactType) || '',
@@ -64,58 +66,75 @@ export function ContactForm() {
     setData(prev => ({ ...prev, [field]: value }));
   };
 
-  const getTotalSteps = () => {
-    switch (data.contactType) {
-      case 'newsletter': return 2;
-      case 'press': return 4;
-      case 'investor': return 4;
-      case 'general': return 4;
-      default: return 5;
-    }
-  };
+  // newsletter is 2 steps; everything else is 3
+  const getTotalSteps = () => data.contactType === 'newsletter' ? 2 : 3;
 
   const canProceed = () => {
     switch (step) {
-      case 1: return !!data.contactType;
-      case 2:
+      case 1:
+        return !!data.contactType;
+      case 2: {
+        if (!EMAIL_RE.test(data.email)) return false;
         switch (data.contactType) {
-          case 'partnership': return !!data.partnershipKind;
-          case 'deployment': return !!data.deploymentInfra.trim();
-          case 'consulting': return !!data.consultingTimeline;
-          case 'press': return !!data.pressPublication.trim() && !!data.pressTopics.trim();
-          case 'investor': return !!data.investorStage && !!data.investorThesis.trim();
-          case 'newsletter': return !!data.newsletterPublication && !!data.newsletterFrequency;
-          default: return true;
+          case 'newsletter':
+            return !!data.newsletterPublication && !!data.newsletterFrequency;
+          case 'press':
+            return !!data.name.trim() && !!data.pressPublication.trim() && !!data.pressTopics.trim();
+          case 'investor':
+            return !!data.name.trim() && !!data.investorStage;
+          case 'partnership':
+            return !!data.name.trim() && !!data.partnershipKind;
+          case 'consulting':
+            return !!data.name.trim() && !!data.consultingTimeline;
+          case 'general':
+            return !!data.name.trim() && !!data.vertical;
+          default:
+            return !!data.name.trim();
         }
+      }
       case 3:
-        if (['press', 'investor'].includes(data.contactType)) {
-          return !!data.name.trim() && !!data.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
-        }
-        if (data.contactType === 'newsletter') {
-          return !!data.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
-        }
-        return !!data.vertical;
-      case 4:
-        if (data.contactType === 'general') {
-          return !!data.name.trim() && !!data.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
-        }
-        if (data.contactType === 'newsletter') return true;
-        return !!data.name.trim() && !!data.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
-      case 5:
         switch (data.contactType) {
-          case 'partnership': return !!data.partnershipValue.trim();
-          case 'deployment': return data.deploymentNeeds.length > 0;
-          case 'consulting': return !!data.consultingProblem.trim();
-          case 'press': return !!data.pressDeadline.trim();
-          case 'investor': return !!data.investorQuestion.trim();
-          case 'general': return !!data.generalMessage.trim();
-          default: return true;
+          case 'partnership':
+            return !!data.vertical && !!data.partnershipValue.trim();
+          case 'deployment':
+            return !!data.deploymentInfra.trim() && data.deploymentNeeds.length > 0;
+          case 'consulting':
+            return !!data.vertical && !!data.consultingProblem.trim();
+          case 'press':
+            return !!data.pressDeadline.trim();
+          case 'investor':
+            return !!data.investorThesis.trim() && !!data.investorQuestion.trim();
+          case 'general':
+            return !!data.generalMessage.trim();
+          default:
+            return true;
         }
-      default: return false;
+      default:
+        return false;
+    }
+  };
+
+  const fireLead = (snapshot: typeof data) => {
+    if (leadCapturedRef.current) return;
+    leadCapturedRef.current = true;
+    const fd = new FormData();
+    fd.append('form_name', 'contact_lead');
+    fd.append('contact_type', snapshot.contactType);
+    fd.append('email', snapshot.email);
+    if (snapshot.name) fd.append('name', snapshot.name);
+    fetch('/api/contact.php', { method: 'POST', body: fd }).catch(() => {});
+  };
+
+  // fire lead as soon as we have a valid email, even before the user advances
+  const handleEmailBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (EMAIL_RE.test(val) && data.contactType) {
+      fireLead({ ...data, email: val });
     }
   };
 
   const handleNext = () => {
+    if (step === 2) fireLead(data);
     if (step < getTotalSteps()) setStep(step + 1);
   };
 
@@ -126,6 +145,9 @@ export function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canProceed()) return;
+
+    // newsletter submits from step 2, so fire lead here too (no-op if already captured)
+    fireLead(data);
 
     setIsSubmitting(true);
     const formData = new FormData();
@@ -169,11 +191,12 @@ export function ContactForm() {
     }
 
     try {
-      const response = await fetch('/__forms/submit', {
+      const response = await fetch('/api/contact.php', {
         method: 'POST',
         body: formData,
       });
-      if (response.ok || response.status === 302) {
+      const result = response.ok ? await response.json().catch(() => ({})) : {};
+      if (response.ok && result.ok) {
         setSubmitted(true);
       } else {
         alert('Something went wrong. Please try again.');
@@ -237,110 +260,46 @@ export function ContactForm() {
           </div>
         )}
 
-        {/* STEP 2: Type-Specific */}
+        {/* STEP 2: Email + Name + Type Qualifier */}
         {step === 2 && (
           <div className="contact-step">
-            {data.contactType === 'partnership' && (
-              <>
-                <h3>What kind of partnership?</h3>
-                <div className="contact-chips">
-                  {PARTNERSHIP_KINDS.map(kind => (
-                    <button
-                      key={kind}
-                      type="button"
-                      className={`filter-chip ${data.partnershipKind === kind ? 'active' : ''}`}
-                      onClick={() => updateField('partnershipKind', kind)}
-                    >
-                      {kind}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
+            <h3>Your details</h3>
 
-            {data.contactType === 'deployment' && (
+            {data.contactType !== 'newsletter' && (
               <>
-                <h3>Describe your current infrastructure</h3>
-                <textarea
-                  className="contact-textarea"
-                  rows={4}
-                  placeholder="e.g. AWS, on-prem, hybrid..."
-                  value={data.deploymentInfra}
-                  onChange={e => updateField('deploymentInfra', e.target.value)}
-                />
-              </>
-            )}
-
-            {data.contactType === 'consulting' && (
-              <>
-                <h3>Timeline to engage?</h3>
-                <div className="contact-chips">
-                  {CONSULTING_TIMELINES.map(t => (
-                    <button
-                      key={t}
-                      type="button"
-                      className={`filter-chip ${data.consultingTimeline === t ? 'active' : ''}`}
-                      onClick={() => updateField('consultingTimeline', t)}
-                    >
-                      {t}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {data.contactType === 'press' && (
-              <>
-                <h3>Publication details</h3>
-                <label className="contact-label">Publication / Outlet</label>
+                <label className="contact-label">Name</label>
                 <input
                   type="text"
                   className="contact-input"
-                  placeholder="e.g. TechCrunch"
-                  value={data.pressPublication}
-                  onChange={e => updateField('pressPublication', e.target.value)}
-                />
-                <label className="contact-label">Topics covered</label>
-                <textarea
-                  className="contact-textarea"
-                  rows={3}
-                  placeholder="What are you writing about?"
-                  value={data.pressTopics}
-                  onChange={e => updateField('pressTopics', e.target.value)}
+                  placeholder="Your name"
+                  value={data.name}
+                  onChange={e => updateField('name', e.target.value)}
                 />
               </>
             )}
 
-            {data.contactType === 'investor' && (
-              <>
-                <h3>Investment details</h3>
-                <label className="contact-label">Stage</label>
-                <div className="contact-chips">
-                  {INVESTOR_STAGES.map(s => (
-                    <button
-                      key={s}
-                      type="button"
-                      className={`filter-chip ${data.investorStage === s ? 'active' : ''}`}
-                      onClick={() => updateField('investorStage', s)}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-                <label className="contact-label">Investment thesis</label>
-                <textarea
-                  className="contact-textarea"
-                  rows={3}
-                  placeholder="What do you look for in portfolio companies?"
-                  value={data.investorThesis}
-                  onChange={e => updateField('investorThesis', e.target.value)}
-                />
-              </>
-            )}
+            <label className="contact-label">
+              Email{data.contactType === 'newsletter' && <span className="contact-required"> *</span>}
+            </label>
+            <input
+              type="email"
+              className="contact-input"
+              placeholder="name@company.com"
+              value={data.email}
+              onChange={e => updateField('email', e.target.value)}
+              onBlur={handleEmailBlur}
+            />
 
             {data.contactType === 'newsletter' && (
               <>
-                <h3>Newsletter preferences</h3>
+                <label className="contact-label">Name <span className="contact-optional">(optional)</span></label>
+                <input
+                  type="text"
+                  className="contact-input"
+                  placeholder="Your name"
+                  value={data.name}
+                  onChange={e => updateField('name', e.target.value)}
+                />
                 <label className="contact-label">Which publication?</label>
                 <div className="contact-chips">
                   {NEWSLETTER_PUBLICATIONS.map(p => (
@@ -370,159 +329,121 @@ export function ContactForm() {
               </>
             )}
 
-            {data.contactType === 'general' && (
-              <>
-                <h3>General inquiry</h3>
-                <p className="contact-hint">Tell us what vertical you're in so we can route you correctly.</p>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* STEP 3: Vertical OR Contact Info */}
-        {step === 3 && (
-          <div className="contact-step">
-            {['partnership', 'deployment', 'consulting', 'general'].includes(data.contactType) && (
-              <>
-                <h3>Industry vertical</h3>
-                <div className="contact-chips">
-                  {VERTICALS.map(v => (
-                    <button
-                      key={v}
-                      type="button"
-                      className={`filter-chip ${data.vertical === v ? 'active' : ''}`}
-                      onClick={() => updateField('vertical', v)}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {['press', 'investor'].includes(data.contactType) && (
-              <>
-                <h3>Your details</h3>
-                <label className="contact-label">Name</label>
-                <input
-                  type="text"
-                  className="contact-input"
-                  placeholder="Your name"
-                  value={data.name}
-                  onChange={e => updateField('name', e.target.value)}
-                  required
-                />
-                <label className="contact-label">Email</label>
-                <input
-                  type="email"
-                  className="contact-input"
-                  placeholder="name@company.com"
-                  value={data.email}
-                  onChange={e => updateField('email', e.target.value)}
-                  required
-                />
-              </>
-            )}
-
-            {data.contactType === 'newsletter' && (
-              <>
-                <h3>Your details</h3>
-                <label className="contact-label">Email <span className="contact-required">*</span></label>
-                <input
-                  type="email"
-                  className="contact-input"
-                  placeholder="name@company.com"
-                  value={data.email}
-                  onChange={e => updateField('email', e.target.value)}
-                  required
-                />
-                <label className="contact-label">Name <span className="contact-optional">(optional)</span></label>
-                <input
-                  type="text"
-                  className="contact-input"
-                  placeholder="Your name"
-                  value={data.name}
-                  onChange={e => updateField('name', e.target.value)}
-                />
-                <label className="contact-label">Vertical <span className="contact-optional">(optional)</span></label>
-                <div className="contact-chips">
-                  {VERTICALS.map(v => (
-                    <button
-                      key={v}
-                      type="button"
-                      className={`filter-chip ${data.vertical === v ? 'active' : ''}`}
-                      onClick={() => updateField('vertical', v)}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* STEP 4: Contact Info OR Compound */}
-        {step === 4 && (
-          <div className="contact-step">
-            {['partnership', 'deployment', 'consulting', 'general'].includes(data.contactType) && (
-              <>
-                <h3>Your details</h3>
-                <label className="contact-label">Name</label>
-                <input
-                  type="text"
-                  className="contact-input"
-                  placeholder="Your name"
-                  value={data.name}
-                  onChange={e => updateField('name', e.target.value)}
-                  required
-                />
-                <label className="contact-label">Email</label>
-                <input
-                  type="email"
-                  className="contact-input"
-                  placeholder="name@company.com"
-                  value={data.email}
-                  onChange={e => updateField('email', e.target.value)}
-                  required
-                />
-              </>
-            )}
-
             {data.contactType === 'press' && (
               <>
-                <h3>Deadline</h3>
+                <label className="contact-label">Publication / Outlet</label>
                 <input
                   type="text"
                   className="contact-input"
-                  placeholder="e.g. May 15, 2025"
-                  value={data.pressDeadline}
-                  onChange={e => updateField('pressDeadline', e.target.value)}
+                  placeholder="e.g. TechCrunch"
+                  value={data.pressPublication}
+                  onChange={e => updateField('pressPublication', e.target.value)}
+                />
+                <label className="contact-label">Topics covered</label>
+                <textarea
+                  className="contact-textarea"
+                  rows={3}
+                  placeholder="What are you writing about?"
+                  value={data.pressTopics}
+                  onChange={e => updateField('pressTopics', e.target.value)}
                 />
               </>
             )}
 
             {data.contactType === 'investor' && (
               <>
-                <h3>What is the most important question we can answer?</h3>
-                <textarea
-                  className="contact-textarea"
-                  rows={4}
-                  placeholder="What would you like to know?"
-                  value={data.investorQuestion}
-                  onChange={e => updateField('investorQuestion', e.target.value)}
-                />
+                <label className="contact-label">Investment stage</label>
+                <div className="contact-chips">
+                  {INVESTOR_STAGES.map(s => (
+                    <button
+                      key={s}
+                      type="button"
+                      className={`filter-chip ${data.investorStage === s ? 'active' : ''}`}
+                      onClick={() => updateField('investorStage', s)}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {data.contactType === 'partnership' && (
+              <>
+                <label className="contact-label">Partnership type</label>
+                <div className="contact-chips">
+                  {PARTNERSHIP_KINDS.map(kind => (
+                    <button
+                      key={kind}
+                      type="button"
+                      className={`filter-chip ${data.partnershipKind === kind ? 'active' : ''}`}
+                      onClick={() => updateField('partnershipKind', kind)}
+                    >
+                      {kind}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {data.contactType === 'consulting' && (
+              <>
+                <label className="contact-label">Timeline to engage</label>
+                <div className="contact-chips">
+                  {CONSULTING_TIMELINES.map(t => (
+                    <button
+                      key={t}
+                      type="button"
+                      className={`filter-chip ${data.consultingTimeline === t ? 'active' : ''}`}
+                      onClick={() => updateField('consultingTimeline', t)}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {data.contactType === 'general' && (
+              <>
+                <label className="contact-label">Industry vertical</label>
+                <div className="contact-chips">
+                  {VERTICALS.map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      className={`filter-chip ${data.vertical === v ? 'active' : ''}`}
+                      onClick={() => updateField('vertical', v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
               </>
             )}
           </div>
         )}
 
-        {/* STEP 5: Compound */}
-        {step === 5 && (
+        {/* STEP 3: Final Details */}
+        {step === 3 && (
           <div className="contact-step">
             {data.contactType === 'partnership' && (
               <>
-                <h3>What do you bring?</h3>
+                <h3>Tell us more</h3>
+                <label className="contact-label">Industry vertical</label>
+                <div className="contact-chips">
+                  {VERTICALS.map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      className={`filter-chip ${data.vertical === v ? 'active' : ''}`}
+                      onClick={() => updateField('vertical', v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+                <label className="contact-label">What do you bring?</label>
                 <textarea
                   className="contact-textarea"
                   rows={4}
@@ -535,7 +456,16 @@ export function ContactForm() {
 
             {data.contactType === 'deployment' && (
               <>
-                <h3>Integration needs</h3>
+                <h3>Technical context</h3>
+                <label className="contact-label">Current infrastructure</label>
+                <textarea
+                  className="contact-textarea"
+                  rows={3}
+                  placeholder="e.g. AWS, on-prem, hybrid..."
+                  value={data.deploymentInfra}
+                  onChange={e => updateField('deploymentInfra', e.target.value)}
+                />
+                <label className="contact-label">Integration needs</label>
                 <div className="contact-checkboxes">
                   {DEPLOYMENT_NEEDS.map(need => (
                     <label key={need} className="contact-checkbox-label">
@@ -558,7 +488,21 @@ export function ContactForm() {
 
             {data.contactType === 'consulting' && (
               <>
-                <h3>Describe the problem</h3>
+                <h3>The challenge</h3>
+                <label className="contact-label">Industry vertical</label>
+                <div className="contact-chips">
+                  {VERTICALS.map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      className={`filter-chip ${data.vertical === v ? 'active' : ''}`}
+                      onClick={() => updateField('vertical', v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+                <label className="contact-label">Describe the problem</label>
                 <textarea
                   className="contact-textarea"
                   rows={4}
@@ -569,12 +513,47 @@ export function ContactForm() {
               </>
             )}
 
-            {data.contactType === 'general' && (
+            {data.contactType === 'press' && (
               <>
-                <h3>Tell us more</h3>
+                <h3>Deadline</h3>
+                <input
+                  type="text"
+                  className="contact-input"
+                  placeholder="e.g. May 15, 2025"
+                  value={data.pressDeadline}
+                  onChange={e => updateField('pressDeadline', e.target.value)}
+                />
+              </>
+            )}
+
+            {data.contactType === 'investor' && (
+              <>
+                <h3>Investment details</h3>
+                <label className="contact-label">Investment thesis</label>
                 <textarea
                   className="contact-textarea"
-                  rows={4}
+                  rows={3}
+                  placeholder="What do you look for in portfolio companies?"
+                  value={data.investorThesis}
+                  onChange={e => updateField('investorThesis', e.target.value)}
+                />
+                <label className="contact-label">Most important question we can answer</label>
+                <textarea
+                  className="contact-textarea"
+                  rows={3}
+                  placeholder="What would you like to know?"
+                  value={data.investorQuestion}
+                  onChange={e => updateField('investorQuestion', e.target.value)}
+                />
+              </>
+            )}
+
+            {data.contactType === 'general' && (
+              <>
+                <h3>Your message</h3>
+                <textarea
+                  className="contact-textarea"
+                  rows={5}
                   placeholder="What would you like to discuss?"
                   value={data.generalMessage}
                   onChange={e => updateField('generalMessage', e.target.value)}
