@@ -11,7 +11,6 @@ const CONTACT_TYPES: { value: ContactType; label: string }[] = [
   { value: 'press', label: 'Press' },
   { value: 'investor', label: 'Investor' },
   { value: 'newsletter', label: 'Newsletter' },
-  { value: 'general', label: 'General Inquiry' },
 ];
 
 const VERTICALS = ['Insurance', 'Legal', 'Healthcare', 'Finance', 'Technology', 'General Business'];
@@ -53,7 +52,6 @@ export function ContactForm() {
     generalMessage: '',
   });
 
-  // Pre-fill contact type from URL
   useEffect(() => {
     const typeParam = searchParams.get('type') as ContactType;
     if (typeParam && CONTACT_TYPES.some(t => t.value === typeParam)) {
@@ -157,7 +155,6 @@ export function ContactForm() {
     if (data.email) formData.append('email', data.email);
     if (data.vertical) formData.append('vertical', data.vertical);
 
-    // Type-specific fields
     switch (data.contactType) {
       case 'partnership':
         formData.append('partnership_kind', data.partnershipKind);
@@ -191,7 +188,7 @@ export function ContactForm() {
     }
 
     try {
-      const response = await fetch('/api/contact.php', {
+      const response = await await fetch('/api/contact.php', {
         method: 'POST',
         body: formData,
       });
@@ -202,7 +199,6 @@ export function ContactForm() {
         alert('Something went wrong. Please try again.');
       }
     } catch (err) {
-      // If fetch fails (e.g. not on Pages), show success anyway for demo
       console.warn('Form submission failed, likely not deployed to Cloudflare Pages:', err);
       setSubmitted(true);
     } finally {
@@ -593,3 +589,4 @@ export function ContactForm() {
     </div>
   );
 }
+              {isSubmitting ? 'Sending...' : 'Send'}
