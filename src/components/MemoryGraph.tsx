@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 interface Node extends d3.SimulationNodeDatum {
     id: number;
     generation?: number; // Track which "era" this node belongs to
+    beat?: boolean; // the one-in-several "live" specimen node (SDS Forge Glyph Specimens: Living Graph)
 }
 
 interface Link extends d3.SimulationLinkDatum<Node> {
@@ -14,8 +15,15 @@ interface Link extends d3.SimulationLinkDatum<Node> {
 export interface MemoryGraphProps {
     maxNodes?: number;
     addInterval?: number;
+    /** Ink-toned node fill (SDS Forge tokens: --ink). */
     nodeColor?: string;
+    /** Ink-toned edge stroke (SDS Forge tokens: --ink, low alpha). */
     linkColor?: string;
+    /** Magma beat-node fill (SDS Forge tokens: --forge-magma #ff9900). */
+    beatColor?: string;
+    /** Fraction of nodes that render as a pulsing magma "beat" — per the
+     *  Living Graph specimen (~28% in the reference sheet). */
+    beatRatio?: number;
     opacity?: number;
     collapseDuration?: number; // ms for collapse animation
 }
@@ -23,9 +31,11 @@ export interface MemoryGraphProps {
 export function MemoryGraph({
     maxNodes = 35,
     addInterval = 3000,
-    nodeColor = 'rgba(255, 215, 0, 0.9)',
-    linkColor = 'rgba(255, 215, 0, 0.4)',
-    opacity = 0.5,
+    nodeColor = 'rgba(20, 20, 20, 0.55)',
+    linkColor = 'rgba(20, 20, 20, 0.16)',
+    beatColor = '#ff9900',
+    beatRatio = 0.28,
+    opacity = 0.85,
     collapseDuration = 1500,
 }: MemoryGraphProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -68,6 +78,7 @@ export function MemoryGraph({
                 nodes.push({
                     id: state.nextId++,
                     generation: state.generation,
+                    beat: Math.random() < beatRatio,
                     x: width / 2 + (Math.random() - 0.5) * 200,
                     y: graphCenterY + (Math.random() - 0.5) * 200,
                 });
@@ -134,18 +145,38 @@ export function MemoryGraph({
             }
             context.stroke();
 
-            // Draw nodes
-            context.beginPath();
-            context.fillStyle = nodeColor;
-            const nodeRadius = 2.5 * Math.max(scale, 0.3);
+            // Draw nodes — ink specimens, with the occasional magma "beat"
+            // (SDS Forge Glyph Specimens: Living Graph — "the one live specimen").
+            const baseRadius = 2.5 * Math.max(scale, 0.3);
+            const now = Date.now();
             for (const node of nodes) {
-                if (node.x != null && node.y != null) {
-                    const [nx, ny] = transform(node.x, node.y);
-                    context.moveTo(nx + nodeRadius, ny);
-                    context.arc(nx, ny, nodeRadius, 0, 2 * Math.PI);
+                if (node.x == null || node.y == null) continue;
+                const [nx, ny] = transform(node.x, node.y);
+
+                if (node.beat) {
+                    // Pulsing ring around the beat, ~1 pulse per 2.2s.
+                    const pulse = (Math.sin(now / 350 + node.id) + 1) / 2; // 0..1
+                    const ringRadius = baseRadius * (1.8 + pulse * 1.4);
+
+                    context.beginPath();
+                    context.strokeStyle = beatColor;
+                    context.globalAlpha = 0.25 + pulse * 0.35;
+                    context.lineWidth = 1;
+                    context.arc(nx, ny, ringRadius, 0, 2 * Math.PI);
+                    context.stroke();
+                    context.globalAlpha = 1;
+
+                    context.beginPath();
+                    context.fillStyle = beatColor;
+                    context.arc(nx, ny, baseRadius * 1.15, 0, 2 * Math.PI);
+                    context.fill();
+                } else {
+                    context.beginPath();
+                    context.fillStyle = nodeColor;
+                    context.arc(nx, ny, baseRadius, 0, 2 * Math.PI);
+                    context.fill();
                 }
             }
-            context.fill();
         }
 
         // Collapse animation loop
@@ -173,6 +204,7 @@ export function MemoryGraph({
                 const singularityNode: Node = {
                     id: state.nextId++,
                     generation: state.generation,
+                    beat: true, // the reborn node is always the live one
                     x: width / 2,
                     y: graphCenterY,
                 };
@@ -245,6 +277,7 @@ export function MemoryGraph({
             const newNode: Node = {
                 id: state.nextId++,
                 generation: state.generation,
+                beat: Math.random() < beatRatio,
                 x: width / 2 + (Math.random() - 0.5) * 100,
                 y: graphCenterY + (Math.random() - 0.5) * 100,
             };
@@ -289,7 +322,7 @@ export function MemoryGraph({
             stateRef.current.collapsing = false;
             stateRef.current.rotation = 0;
         };
-    }, [maxNodes, addInterval, nodeColor, linkColor, collapseDuration]);
+    }, [maxNodes, addInterval, nodeColor, linkColor, beatColor, beatRatio, collapseDuration]);
 
     return (
         <canvas

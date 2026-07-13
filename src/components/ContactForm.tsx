@@ -589,4 +589,3 @@ export function ContactForm() {
     </div>
   );
 }
-              {isSubmitting ? 'Sending...' : 'Send'}

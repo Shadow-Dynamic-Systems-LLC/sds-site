@@ -5,7 +5,7 @@ import { Modal } from './Modal';
 export function Footer() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showTosModal, setShowTosModal] = useState(false);
-  const buildDate = new Date().toISOString().split('T')[0].replace(/-/g, '.');
+  const buildDate = new Date().toISOString().split('T')[0].replace(/-/g, '·');
 
   return (
     <>
@@ -26,7 +26,7 @@ export function Footer() {
           </ul>
           <p>&copy; 2025–2026 Shadow Dynamic Systems. All Rights Reserved.</p>
           <div className="footer-metadata">
-            <span>NODE: SDS-PUBLIC-01</span>
+            <span>NODE: SDS-PUBLIC-0x01</span>
             <span>BUILD: {buildDate}</span>
             <span>PROTOCOL: v0.3-draft</span>
           </div>

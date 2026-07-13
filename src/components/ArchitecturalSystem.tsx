@@ -23,22 +23,26 @@ export interface LayerConfig {
   description: string;
 }
 
+// Categorical layer colors — saturated forge tokens, not pastel primaries.
+// This is structural chrome (persistent diagram, not a per-view "heat"),
+// so reusing forge-ramp/signal tokens here doesn't conflict with the
+// one-heat-per-view-state rule elsewhere on the site.
 export const LAYER_CONFIG: Record<ArchitecturalLayer, LayerConfig> = {
   INVARIANT: {
     name: 'System Invariant',
-    color: '#ff6b35',
+    color: 'var(--forge-rust)',
     depth: 0,
     description: 'Foundational mechanical constraints. Non-negotiable. Enforced deterministically, not discretionarily — no component may bypass, reinterpret, or negotiate a boundary at runtime.'
   },
   SURFACE: {
     name: 'Effect Surface',
-    color: '#7dd3fc',
+    color: 'var(--sig-info)',
     depth: 1,
     description: 'Governed effect surface. All agent-generated effects occur through registered, authorization-addressable interfaces. Because effects are bounded and auditable, insurability begins here.'
   },
   ENVELOPE: {
     name: 'Envelope',
-    color: '#ffd700',
+    color: 'var(--brass)',
     depth: 2,
     description: 'Probabilistic containment that becomes possible once you have a governed surface. Statistical operating bounds — holds under additive conditions. Insufficient alone against non-additive or emergent decisions; the invariant layer exists because the envelope cannot guarantee against catastrophic boundary violations.'
   },
@@ -548,7 +552,7 @@ export function DerivationChain({ steps, currentIdentifier }: DerivationChainPro
               <div className="derivation-chain__content">
                 <span className="derivation-chain__id">{step.identifier}</span>
                 <span className="derivation-chain__title">{step.title}</span>
-                <span className="derivation-chain__date">{step.date}</span>
+                <span className="derivation-chain__date">{formatDecimalDate(step.date)}</span>
               </div>
             </div>
           );
@@ -602,7 +606,7 @@ export function VersionHistory({ versions, currentVersion, collapsed = true }: V
               <div className="version-history__entry-header">
                 <span className="version-history__entry-version">{v.version}</span>
                 <time className="version-history__entry-date" dateTime={v.date}>
-                  {v.date}
+                  {formatDecimalDate(v.date)}
                 </time>
               </div>
               <ul className="version-history__entry-changes">
@@ -619,12 +623,19 @@ export function VersionHistory({ versions, currentVersion, collapsed = true }: V
 }
 
 // ============================================================================
-// TIMESTAMP (ISO 8601)
+// TIMESTAMP (decimal calendar — SDS Forge: dot-separated, e.g. 2026·05·29.
+// The `dateTime` attribute stays true ISO 8601 for machine/a11y semantics;
+// only the human-visible text adopts the decimal-dot convention.)
 // ============================================================================
 
 interface TimestampProps {
   date: string;
   precision?: 'date' | 'datetime' | 'full';
+}
+
+/** ISO date/datetime string -> decimal-dot display string (2026·05·29[ HH:MM:SSZ]). */
+export function formatDecimalDate(isoString: string): string {
+  return isoString.replace(/^(\d{4})-(\d{2})-(\d{2})/, '$1·$2·$3');
 }
 
 export function Timestamp({ date, precision = 'datetime' }: TimestampProps) {
@@ -633,14 +644,14 @@ export function Timestamp({ date, precision = 'datetime' }: TimestampProps) {
   let formatted: string;
   switch (precision) {
     case 'date':
-      formatted = d.toISOString().split('T')[0];
+      formatted = formatDecimalDate(d.toISOString().split('T')[0]);
       break;
     case 'datetime':
-      formatted = d.toISOString().replace('T', ' ').slice(0, 19) + 'Z';
+      formatted = formatDecimalDate(d.toISOString().replace('T', ' ').slice(0, 19) + 'Z');
       break;
     case 'full':
     default:
-      formatted = d.toISOString();
+      formatted = formatDecimalDate(d.toISOString());
   }
 
   return (

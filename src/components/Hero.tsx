@@ -1,5 +1,5 @@
 export function Hero() {
-  const buildDate = new Date().toISOString().split('T')[0].replace(/-/g, '.');
+  const buildDate = new Date().toISOString().split('T')[0].replace(/-/g, '·');
 
   return (
     <section id="hero" className="page-section visible">
@@ -14,7 +14,13 @@ export function Hero() {
         <div className="hero-metadata">
           <span>ENV: PUBLIC-NODE</span>
           <span>BUILD: SDS-{buildDate}</span>
-          <span>STATUS: OPERATIONAL</span>
+          <span>
+            STATUS:{' '}
+            <span className="status-inline s-active">
+              <span className="dot live" />
+              OPERATIONAL
+            </span>
+          </span>
         </div>
       </div>
     </section>

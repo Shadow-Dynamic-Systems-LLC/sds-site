@@ -20,7 +20,7 @@
 .layer-indicator__bar {
   width: 3px;
   height: 1.25rem;
-  border-radius: 1px;
+  border-radius: 0;
 }
 
 .layer-indicator__label {
@@ -40,7 +40,7 @@
 .layer-indicator__depth-mark {
   width: 4px;
   height: 4px;
-  border-radius: 1px;
+  border-radius: 0;
 }
 
 .layer-indicator--compact {
@@ -66,10 +66,9 @@
 
 .depth-card {
   position: relative;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px) brightness(0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-radius: 0;
   overflow: hidden;
   transition: all 0.25s ease;
 
@@ -77,7 +76,7 @@
   box-shadow:
     0 calc(4px * var(--shadow-intensity)) calc(8px * var(--shadow-intensity)) rgba(0, 0, 0, 0.3),
     0 calc(8px * var(--shadow-intensity)) calc(24px * var(--shadow-intensity)) rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    inset 0 1px 0 rgba(20, 20, 20, 0.03);
 }
 
 /* Layer edge indicator */
@@ -118,34 +117,34 @@
 
 /* INVARIANT layer - deepest */
 .depth-card--invariant {
-  border-color: rgba(255, 107, 53, 0.2);
+  border-color: color-mix(in srgb, var(--forge-rust) 20%, transparent);
   transform: translateY(4px);
 }
 
 .depth-card--invariant:hover {
-  border-color: rgba(255, 107, 53, 0.4);
+  border-color: color-mix(in srgb, var(--forge-rust) 40%, transparent);
   transform: translateY(2px);
 }
 
 /* ENVELOPE layer - middle */
 .depth-card--envelope {
-  border-color: rgba(255, 215, 0, 0.15);
+  border-color: color-mix(in srgb, var(--brass) 15%, transparent);
   transform: translateY(2px);
 }
 
 .depth-card--envelope:hover {
-  border-color: rgba(255, 215, 0, 0.3);
+  border-color: color-mix(in srgb, var(--brass) 30%, transparent);
   transform: translateY(0);
 }
 
 /* SURFACE layer - closest */
 .depth-card--surface {
-  border-color: rgba(125, 211, 252, 0.12);
+  border-color: color-mix(in srgb, var(--sig-info) 12%, transparent);
   transform: translateY(0);
 }
 
 .depth-card--surface:hover {
-  border-color: rgba(125, 211, 252, 0.25);
+  border-color: color-mix(in srgb, var(--sig-info) 25%, transparent);
   transform: translateY(-2px);
 }
 
@@ -219,10 +218,10 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.2rem 0.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
   border-left: 2px solid var(--chip-color);
-  border-radius: 2px;
+  border-radius: 0;
   font-family: var(--font-secondary);
   font-size: 0.65rem;
   color: var(--color-text-secondary);
@@ -231,13 +230,13 @@
 }
 
 .reference-chip:hover {
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--paper-2);
   border-color: var(--chip-color);
   color: var(--color-text-primary);
 }
 
 .reference-chip--expanded {
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--paper-2);
   border-color: var(--chip-color);
 }
 
@@ -259,11 +258,10 @@
   z-index: 1000;
   width: 280px;
   padding: 1rem;
-  background: rgba(10, 10, 10, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
   border-left: 3px solid var(--chip-color);
-  border-radius: 4px;
-  backdrop-filter: blur(12px);
+  border-radius: 0;
   animation: tooltip-enter 0.15s ease;
 }
 
@@ -273,7 +271,7 @@
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  border-bottom: 1px dashed var(--hair);
   font-family: var(--font-secondary);
   font-size: 0.7rem;
   color: var(--chip-color);
@@ -311,9 +309,9 @@
 .cross-section {
   position: relative;
   padding: 2rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-radius: 0;
 }
 
 .cross-section__diagram {
@@ -345,10 +343,10 @@
   font-size: 0.6rem;
   font-weight: 700;
   color: var(--color-text-secondary);
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--paper-2);
   padding: 0.15rem 0.35rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  border: 1px solid var(--hair);
+  border-radius: 0;
 }
 
 .cross-section__cut-dash {
@@ -356,8 +354,8 @@
   width: 1px;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.4) 0px,
-    rgba(255, 255, 255, 0.4) 4px,
+    rgba(20, 20, 20, 0.4) 0px,
+    rgba(20, 20, 20, 0.4) 4px,
     transparent 4px,
     transparent 8px
   );
@@ -381,16 +379,18 @@
 }
 
 .cross-section__layer-fill {
+  /* A muted, opaque tint (mixed into paper) rather than a translucent
+   * wash of the raw categorical hue — the latter reads as pastel
+   * (washed-out orange/blue/yellow) rather than "held heat on paper." */
   position: absolute;
   inset: 0;
-  background: var(--layer-color);
-  opacity: 0.08;
-  transition: opacity 0.2s ease;
+  background: color-mix(in srgb, var(--layer-color) 7%, var(--paper-2));
+  transition: background 0.2s ease;
 }
 
 .cross-section__layer:hover .cross-section__layer-fill,
 .cross-section__layer--active .cross-section__layer-fill {
-  opacity: 0.2;
+  background: color-mix(in srgb, var(--layer-color) 16%, var(--paper-2));
 }
 
 .cross-section__layer-edge-top,
@@ -508,7 +508,7 @@
 .cross-section__detail {
   margin-top: 1.5rem;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--paper-2);
   border-left: 2px solid var(--color-accent-yellow);
   animation: detail-enter 0.2s ease;
 }
@@ -537,9 +537,9 @@
 
 .dependency-graph {
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-radius: 0;
 }
 
 .dependency-graph__svg {
@@ -549,7 +549,7 @@
 }
 
 .dependency-graph__edge line {
-  stroke: rgba(255, 255, 255, 0.15);
+  stroke: rgba(20, 20, 20, 0.15);
   stroke-width: 1;
   transition: stroke 0.2s ease;
 }
@@ -577,17 +577,17 @@
 
 .dependency-graph__node-circle {
   fill: rgba(0, 0, 0, 0.8);
-  stroke: rgba(255, 255, 255, 0.3);
+  stroke: rgba(20, 20, 20, 0.3);
   stroke-width: 1.5;
   transition: all 0.2s ease;
 }
 
 .dependency-graph__node--invariant .dependency-graph__node-circle {
-  stroke: #ff6b35;
+  stroke: var(--forge-rust);
 }
 
 .dependency-graph__node--artifact .dependency-graph__node-circle {
-  stroke: #ffd700;
+  stroke: var(--brass);
 }
 
 .dependency-graph__node--failure .dependency-graph__node-circle {
@@ -621,8 +621,8 @@
 
 .derivation-chain {
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--paper-2);
+  border-left: 2px solid var(--hair);
 }
 
 .derivation-chain__label {
@@ -657,15 +657,15 @@
   width: 1px;
   flex: 1;
   min-height: 12px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(20, 20, 20, 0.15);
 }
 
 .derivation-chain__node {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: var(--paper-2);
+  border: 2px solid var(--hair);
   flex-shrink: 0;
 }
 
@@ -678,7 +678,7 @@
 }
 
 .derivation-chain__step--invariant .derivation-chain__node {
-  border-color: #ff6b35;
+  border-color: var(--forge-rust);
 }
 
 .derivation-chain__step--current .derivation-chain__node {
@@ -718,8 +718,8 @@
    ============================================================================ */
 
 .version-history {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  border: 1px solid var(--hair);
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -729,14 +729,14 @@
   align-items: center;
   width: 100%;
   padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--paper-2);
   border: none;
   cursor: pointer;
   transition: background 0.15s ease;
 }
 
 .version-history__header:hover {
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--paper-2);
 }
 
 .version-history__current {
@@ -769,8 +769,8 @@
 
 .version-history__changelog {
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--paper-2);
+  border-top: 1px solid var(--hair);
   animation: changelog-expand 0.2s ease;
 }
 
@@ -787,7 +787,7 @@
 
 .version-history__entry {
   padding: 0.75rem 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+  border-bottom: 1px dashed var(--hair);
 }
 
 .version-history__entry:last-child {
@@ -878,7 +878,7 @@
 .callout__line {
   width: 24px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(20, 20, 20, 0.3);
   margin-top: 0.5em;
   flex-shrink: 0;
 }
@@ -939,12 +939,12 @@
   height: 1px;
   background: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.2) 0px,
-    rgba(255, 255, 255, 0.2) 8px,
+    rgba(20, 20, 20, 0.2) 0px,
+    rgba(20, 20, 20, 0.2) 8px,
     transparent 8px,
     transparent 12px,
-    rgba(255, 255, 255, 0.1) 12px,
-    rgba(255, 255, 255, 0.1) 14px,
+    rgba(20, 20, 20, 0.1) 12px,
+    rgba(20, 20, 20, 0.1) 14px,
     transparent 14px,
     transparent 18px
   );

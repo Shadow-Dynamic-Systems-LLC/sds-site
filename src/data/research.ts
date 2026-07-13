@@ -13,7 +13,7 @@ export const researchProjects: ResearchProject[] = [
         id: 'ztg-spec',
         title: 'Zero Trust Governance Specification',
         description: 'Public invariant specification defining the structural conditions for governed execution in AI systems.',
-        image: '/assets/phoenix-logo.jpg',
+        image: '/assets/phoenix-logo.png',
         summary: 'ZTG defines ten invariants across five preconditions (Observability, Replayability, Temporal Integrity, Identity Integrity, Governance Consistency) and five operational guarantees (Mechanistic Boundary, Stasis, Governed Effect Surface, Evidence-Coupled Execution, Irreversibility of Harm). Stasis includes graduated containment; Irreversibility of Harm classifies governed actions at decision time by the restorability of their harm. The specification is published for collaborative review.',
         hasSchematic: true,
         content: `ZERO TRUST GOVERNANCE (ZTG) SPECIFICATION v0.5
@@ -66,18 +66,18 @@ Governance fails when system-side reversibility is mistaken for harm reversibili
 
 CHANGELOG
 
-v0.5 (2026-04-19)
+v0.5 (2026·04·19)
 • Added: ZTG-5 Irreversibility of Harm — harm-class classification at decision time (Restorable / Mitigable / Irreversible); stricter gates for Irreversible class; residual-harm provenance for Mitigable class; explicit coupling to ZTG-4 evidence record.
 • Changed: ZTG-5 number reused. Previous ZTG-5 (Graduated Freeze) was retired in v0.4 and folded into ZTG-2 (Graduated Containment). ZTG-5 is reassigned to Irreversibility of Harm with entirely different semantics.
 
-v0.4 (2026-04-16)
+v0.4 (2026·04·16)
 • Retired: ZTG-5 Graduated Freeze folded into ZTG-2 as graduated containment (surface freeze → subsystem freeze → system-wide stasis).`
     },
     {
         id: 'insurability',
         title: 'AI Insurability Framework',
         description: 'Executive framework examining minimum architectural conditions for AI insurability, grounded in ZTG.',
-        image: '/assets/industrial-integrity.webp',
+        image: '/assets/industrial-integrity.png',
         summary: 'Maps Zero Trust Governance invariants to five underwriting-relevant evaluation primitives. A system satisfying all five has bounded governance integrity risk. A system failing any one has identifiable, characterizable exposure.',
         content: `AI INSURABILITY FRAMEWORK
 
@@ -148,7 +148,7 @@ The common root cause is the absence of a mechanically enforced boundary between
         id: 'constable',
         title: 'Constable',
         description: 'Zero Trust Governance AI Control Kernel — reference implementation of ZTG for high-assurance environments.',
-        image: '/assets/constable.webp',
+        image: '/assets/constable-logo.svg',
         summary: 'Constable targets environments where failure carries systemic, financial, or safety consequences. It implements the full ZTG invariant set with layered deterministic governance, cryptographic provenance, full replayability, and invariant enforcement under adversarial conditions. Others may build ZTG-compatible implementations. Constable is the certification reference.',
         content: `CONSTABLE
 Zero Trust Governance AI Control Kernel — Reference Implementation

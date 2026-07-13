@@ -4,6 +4,7 @@ import { Modal } from './Modal';
 import { SectionHeader } from './SectionHeader';
 import { artifacts, artifactTypeDefs, parseContentToSections, identifierToSlug, type Artifact } from '../data/artifacts';
 import { ArtifactCard } from './ArtifactCard';
+import { Timestamp } from './ArchitecturalSystem';
 import './ArchitecturalSystem.css';
 
 type ArtifactType = Artifact['type'];
@@ -149,7 +150,7 @@ export function Publications() {
               <div className="diagnosis-badges">
                 <span className="diagnosis-badge">Type: {artifactTypeDefs[selectedArtifact.type].label}</span>
                 <span className="diagnosis-badge">Author: {selectedArtifact.author}</span>
-                <span className="diagnosis-badge">Date: {selectedArtifact.date}</span>
+                <span className="diagnosis-badge">Date: <Timestamp date={selectedArtifact.date} precision="date" /></span>
               </div>
             </div>
 

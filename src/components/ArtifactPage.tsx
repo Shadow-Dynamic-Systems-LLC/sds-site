@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { artifacts, artifactTypeDefs, parseContentToSections, slugToIdentifier } from '../data/artifacts';
 import { useMinimalMode } from '../hooks/useMinimalMode';
+import { Timestamp } from './ArchitecturalSystem';
 
 export function ArtifactPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -42,7 +43,7 @@ export function ArtifactPage() {
               {!minimal && (
                 <span className="diagnosis-badge">Author: {artifact.author}</span>
               )}
-              <span className="diagnosis-badge">Date: {artifact.date}</span>
+              <span className="diagnosis-badge">Date: <Timestamp date={artifact.date} precision="date" /></span>
             </div>
           </div>
 

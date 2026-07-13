@@ -1,7 +1,5 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Canvas } from '@react-three/fiber';
-import { CrackBackground } from './components/CrackBackground';
 import { MemoryGraph } from './components/MemoryGraph';
 import { Navbar } from './components/Navbar';
 import { SectionGutter } from './components/SectionGutter';
@@ -79,23 +77,13 @@ function App() {
 
   return (
     <>
-      {/* Fixed Background Layers — suppressed in minimal mode for double-blind preview */}
+      {/* Fixed Background Layers — suppressed in minimal mode for double-blind preview.
+          Forged Restraint v2: drafting-grid paper surface + the Living Graph
+          ambient device, replacing the retired dark fracture-shader canvas. */}
       {!minimal && (
         <>
-          <div id="canvas-container">
-            <Canvas
-              dpr={[1, 1.5]}
-              gl={{ antialias: false, depth: false, alpha: false }}
-              orthographic
-              camera={{ zoom: 1, position: [0, 0, 1] }}
-              style={{ background: '#0a0a0a' }}
-            >
-              <Suspense fallback={null}>
-                <CrackBackground />
-              </Suspense>
-            </Canvas>
-          </div>
-          <MemoryGraph opacity={0.35} />
+          <div className="drafting-grid-bg" aria-hidden="true" />
+          <MemoryGraph opacity={0.85} />
         </>
       )}
 

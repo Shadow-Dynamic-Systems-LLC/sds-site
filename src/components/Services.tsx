@@ -2,33 +2,41 @@ import { SectionHeader } from './SectionHeader';
 import { ZTGSchematic } from './ZTGSchematic';
 import { SectionCut } from './ArchitecturalSystem';
 import { CORE_GOVERNANCE } from '../data/glyphs';
+import { BoundaryGlyph, PolicyGlyph, AuthorityGlyph, EvidenceGlyph, SurfaceGlyph } from './GlyphIcons';
 import './ArchitecturalSystem.css';
 import './ZTGSchematic.css';
 
+interface ServiceItem {
+  icon?: typeof BoundaryGlyph;
+  glyph?: string;
+  title: string;
+  description: string;
+}
+
 export function Services() {
-  const services = [
+  const services: ServiceItem[] = [
     {
-      glyph: CORE_GOVERNANCE.BOUNDARY.glyph,
+      icon: BoundaryGlyph,
       title: 'Execution Boundary Enforcement',
       description: 'All irreversible actions pass through a mechanistic governance gate prior to execution. Boundaries are code-enforced, not intent-interpreted. Post-execution detection does not constitute governance.'
     },
     {
-      glyph: CORE_GOVERNANCE.POLICY.glyph,
+      icon: PolicyGlyph,
       title: 'Deterministic Policy Evaluation',
       description: 'Authorization logic is rule-bound and reproducible. Given identical initial state and identical inputs, the governance system produces identical decisions. Governance evaluation nondeterminism is not permitted.'
     },
     {
-      glyph: CORE_GOVERNANCE.AUTHORITY.glyph,
+      icon: AuthorityGlyph,
       title: 'Authority Attribution',
       description: 'Execution rights resolve to identifiable, accountable actors. When governance state is uncertain, the system halts rather than proceeding under degraded authority. Resumed execution requires explicit human authorization.'
     },
     {
-      glyph: CORE_GOVERNANCE.EVIDENCE.glyph,
+      icon: EvidenceGlyph,
       title: 'Evidence-Coupled Execution',
       description: 'No externally observable effect may exist without simultaneous durable evidence of authorization and execution. The evidence record is not documentation of the effect — it is a constitutive part of it.'
     },
     {
-      glyph: CORE_GOVERNANCE.SURFACE.glyph,
+      icon: SurfaceGlyph,
       title: 'Governed Effect Surfaces',
       description: 'All agent-generated external effects occur exclusively through registered, governance-addressable surfaces. Each surface formally classifies actions by effect type, reversibility, and rollback cost prior to execution.'
     },
@@ -46,7 +54,9 @@ export function Services() {
         <div className="services-grid">
           {services.map((service, index) => (
             <div key={index} className="service-card">
-              <div className="service-glyph">{service.glyph}</div>
+              <div className="service-glyph">
+                {service.icon ? <service.icon /> : service.glyph}
+              </div>
               <h3>{service.title}</h3>
               <p>{service.description}</p>
             </div>

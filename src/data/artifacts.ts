@@ -108,7 +108,7 @@ Until the framework explicitly acknowledges that monitoring and response may be 
     date: '2026-03-09',
     author: 'Jason Crittenden',
     summary: 'Formal response to NIST-2025-0035 identifying structural requirements for governing AI agent execution authority. Presents Zero Trust Governance as an architectural framework addressing threats, security practices, assessment methods, and deployment constraints.',
-    image: '/assets/constable.webp',
+    image: '/assets/constable-logo.svg',
     references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0c', 'ZTG-0d', 'ZTG-0e', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4', 'ZTG-5', 'SDS.DX.001', 'SDS.DX.002', 'SDS.DX.003', 'SDS.DX.004', 'SDS.DX.005', 'SDS.CS.001'],
     content: `RESPONSE TO NIST RFI: SECURITY OF AI AGENT SYSTEMS (NIST-2025-0035)
 
@@ -223,7 +223,7 @@ Zero Trust Governance applies zero trust security principles to execution author
     date: '2026-03-03',
     author: 'Jason Crittenden',
     summary: 'Governance discourse across insurance, security, compliance, and operations uses different vocabulary for the same structural properties. This fragmentation prevents convergence. This Prescription defines a shared vocabulary for cross-domain governance evaluation.',
-    image: '/assets/assembly-hall.webp',
+    image: '/assets/assembly-hall.png',
     references: ['ZTG-0a', 'ZTG-0b', 'ZTG-0d', 'ZTG-1', 'ZTG-2', 'ZTG-3', 'ZTG-4', 'ZTG-5'],
     content: `TOWARD A COMMON LANGUAGE
 
@@ -304,7 +304,7 @@ Findings documented in shared vocabulary compose across disciplines.`
     date: '2026-03-04',
     author: 'Jason Crittenden',
     summary: 'Observability systems must escalate salience in proportion to persistence duration, not suppress it. Silence is permitted only following verified recovery. Defines four design requirements for observability that preserves governance input fidelity.',
-    image: '/assets/constable.webp',
+    image: '/assets/constable-logo.svg',
     references: ['ZTG-0a', 'ZTG-0b', 'ZTG-2', 'ZTG-4', 'SDS.DX.006'],
     content: `SALIENCE-PROPORTIONAL OBSERVABILITY
 
@@ -363,7 +363,7 @@ Salience-Proportional Observability is not a governance mechanism. It is an obse
     date: '2026-03-02',
     author: 'Jason Crittenden',
     summary: 'Sampler-level keyed perturbation of token probabilities introduces recoverable signal below semantics. The assurance failure: "cannot" collapses into "has not," which is not externally falsifiable over time.',
-    image: '/assets/monolith-terminal.webp',
+    image: '/assets/monolith-terminal.png',
     references: ['ZTG-0b', 'ZTG-1', 'ZTG-2'],
     content: `PATTERN DEFINITION
 
@@ -419,7 +419,7 @@ Model-adjacent keyed perturbations that yield recoverable signal create a covert
     date: '2026-03-02',
     author: 'Jason Crittenden',
     summary: 'Systems that replace mechanistic enforcement with probabilistic filtering and treat the result as a governance control exhibit Heuristic Governance Substitution. The pattern produces the appearance of governance without the structural properties governance requires.',
-    image: '/assets/industrial-integrity.webp',
+    image: '/assets/industrial-integrity.png',
     references: ['ZTG-0b', 'ZTG-1', 'ZTG-2', 'ZTG-4'],
     content: `PATTERN DEFINITION
 
@@ -484,7 +484,7 @@ Heuristic Governance Substitution produces the appearance of governance without 
     date: '2026-03-02',
     author: 'Jason Crittenden',
     summary: 'Systems that encode governance intent as natural language instructions to a stochastic model exhibit Prompt-Mediated Governance. The resulting authorization decisions are non-deterministic, non-replayable, and non-enforceable.',
-    image: '/assets/monolith-terminal.webp',
+    image: '/assets/monolith-terminal.png',
     references: ['ZTG-0b', 'ZTG-1', 'ZTG-2', 'ZTG-4'],
     content: `PATTERN DEFINITION
 
@@ -550,7 +550,7 @@ Prompt-Mediated Governance encodes authorization constraints in a substrate that
     date: '2026-03-02',
     author: 'Jason Crittenden',
     summary: 'Systems that delegate authorization decisions to the inference layer — where the model\'s output determines what actions are permitted — exhibit Inference-Delegated Authorization. Changing the model changes the governance boundary.',
-    image: '/assets/filing-cabinet.webp',
+    image: '/assets/filing-cabinet.png',
     references: ['ZTG-0b', 'ZTG-1', 'ZTG-2'],
     content: `PATTERN DEFINITION
 
@@ -683,7 +683,7 @@ Authority Inheritance Across Temporal Scope converts bounded authorization decis
     date: '2026-01-02',
     author: 'Jason Crittenden',
     summary: 'Systematic study of cultural keyword sensitivity in large language models, analyzing 5,760 responses across 10 frontier models. Primary finding: domain-selective sensitivity where interpretive domains show substantial differential hedging while mathematical domains remain robust.',
-    image: '/assets/industrial-integrity.webp',
+    image: '/assets/industrial-integrity.png',
     status: 'DRAFT',
     repository: 'https://github.com/Shadow-Dynamic-Systems-LLC/SDS-Cultural-Experiment',
     references: ['SDS.DX.001', 'SDS.DX.002', 'SDS.DX.003'],
@@ -772,7 +772,7 @@ This paper is currently in DRAFT status, pending peer review. Data and code are 
     date: '2026-03-01',
     author: 'Jason Crittenden',
     summary: 'In high-consequence systems, authorization precedes commit. AI systems entering high-consequence domains do not change this constraint.',
-    image: '/assets/phoenix-logo.jpg',
+    image: '/assets/phoenix-logo.png',
     references: ['ZTG-1'],
     content: `In high-consequence systems, authorization precedes commit.
 
@@ -793,7 +793,7 @@ Reference invariants: ZTG-1 (Replayable Authorization).`
     date: '2026-03-01',
     author: 'Jason Crittenden',
     summary: 'AI systems are probabilistic in how they reason. They do not need to be probabilistic in how they act.',
-    image: '/assets/phoenix-logo.jpg',
+    image: '/assets/phoenix-logo.png',
     references: ['ZTG-0b', 'ZTG-1'],
     content: `AI systems are probabilistic in how they reason. They do not need to be probabilistic in how they act.
 
@@ -812,7 +812,7 @@ Reference invariants: ZTG-0b (Observability), ZTG-1 (Replayable Authorization).`
     date: '2026-03-01',
     author: 'Jason Crittenden',
     summary: 'Logging confirms that something happened. Governance determines whether it is allowed to happen. Most AI risk conversations conflate them.',
-    image: '/assets/phoenix-logo.jpg',
+    image: '/assets/phoenix-logo.png',
     references: ['ZTG-1', 'ZTG-4'],
     content: `Logging confirms that something happened. Governance determines whether it is allowed to happen. These are different architectural functions.
 
@@ -833,7 +833,7 @@ Reference invariants: ZTG-1 (Replayable Authorization), ZTG-4 (Mechanistic Bound
     date: '2026-03-01',
     author: 'Jason Crittenden',
     summary: 'Not all actions require the same governance layer. Systems that do not formally classify irreversibility cannot bound risk.',
-    image: '/assets/phoenix-logo.jpg',
+    image: '/assets/phoenix-logo.png',
     references: ['ZTG-3'],
     content: `Not all actions require the same governance layer. Querying data is reversible. Committing infrastructure changes is not. Generating a recommendation is reversible. Executing a financial transaction is not.
 
@@ -852,7 +852,7 @@ Reference invariants: ZTG-3 (Governed Effect Surfaces).`
     date: '2026-03-02',
     author: 'Jason Crittenden',
     summary: 'Deterministic policy evaluation is model-independent by construction. If governance correctness depends on which model provides inference, governance is not deterministic.',
-    image: '/assets/neutral-orchestration.webp',
+    image: '/assets/neutral-orchestration.png',
     references: ['ZTG-1', 'SDS.DX.003'],
     content: `Deterministic policy evaluation is model-independent by construction. If governance correctness depends on which model provides inference, governance is not deterministic.
 
@@ -873,7 +873,7 @@ Reference invariants: ZTG-1 (Replayable Authorization), SDS.DX.003 (Inference-De
     date: '2026-03-02',
     author: 'Jason Crittenden',
     summary: 'Training quality, dataset composition, and fine-tuning operate in the Envelope layer. Governance operates in the System Invariant layer. Improving one does not improve the other.',
-    image: '/assets/assembly-hall.webp',
+    image: '/assets/assembly-hall.png',
     references: ['ZTG-1', 'SDS.DX.001'],
     content: `Training quality, dataset composition, and fine-tuning operate in the Envelope layer. Governance operates in the System Invariant layer. Improving one does not improve the other.
 
@@ -956,7 +956,7 @@ Automation Sedation => Observability Collapse => Governance Invalidation`
     date: '2026-04-23',
     author: 'Jason Crittenden',
     summary: 'Systems that record every action to a tamper-evident log and treat the log as the governance artifact — without enforced coupling between authorization and effect — exhibit Post-hoc Logging as Governance. The log answers what the system did; it cannot answer whether the system was permitted to do it before it did it.',
-    image: '/assets/filing-cabinet.webp',
+    image: '/assets/filing-cabinet.png',
     references: ['ZTG-0a', 'ZTG-4', 'SDS.DX.002', 'SDS.DX.003', 'SDS.FN.003'],
     content: `PATTERN DEFINITION
 
@@ -1020,7 +1020,7 @@ Post-hoc Logging as Governance produces records that describe system behavior. G
     date: '2026-03-04',
     author: 'Jason Crittenden',
     summary: 'Quiet is not stable. Systems optimized for calm suppress persistence signals, manufacture the appearance of recovery, and erode the operator reflexes that governance depends on. Silence is a hypothesis, not an outcome.',
-    image: '/assets/constable.webp',
+    image: '/assets/constable-logo.svg',
     references: ['ZTG-0a', 'ZTG-2', 'SDS.DX.006', 'SDS.RX.002'],
     content: `THE PROMISE THAT BROKE TRUST
 

@@ -1,23 +1,162 @@
-/* --- 1. Global Styles & Color Palette --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap');
-
+/* --- 1. Global Styles & Color Palette ---
+ * SDS Forge v2.0 "Forged Restraint / Naturalist Metallurgy"
+ * Paper register. Fonts are vendored via /assets/sds-fonts.css
+ * (linked in index.html) — no network font fetch.
+ * v1 dark-forge aliases are kept pointing at v2 values so any
+ * stray var(--color-*) reference elsewhere in the codebase still
+ * resolves into the new register instead of silently falling
+ * back to the old palette. New code should use the --paper/--ink/
+ * --forge-* tokens directly. */
 :root {
-    --color-dark-bg: #111111;
-    --color-medium-bg: #1a1a1a;
-    --color-light-bg: #2a2a2a;
-    --color-text-primary: #e0e0e0;
-    --color-text-secondary: #aaaaaa;
-    --color-accent-yellow: #ffd700;
-    --color-accent-orange: #ffa500;
-    --color-accent-red: #ff4136;
-    --font-primary: 'Inter', sans-serif;
-    --font-secondary: 'Roboto Mono', monospace;
+    /* -- v2 canonical tokens (Forged Restraint.html) -- */
+    --paper:      #FBFAF7;
+    --paper-2:    #F4F2EC;
+    --ink:        #141414;
+    --ink-soft:   #3a352e;
+    --ink-mute:   #6f685d;
+    --rule:       #181818;
+    --hair:       #d9d3c7;
+
+    --brass:      #b8860b;
+    --brass-soft: rgba(184,134,11,0.45);
+
+    /* Naturalist glyph hand (SDS Forge Glyph Specimens): graphite is the
+     * pencil convention for hand-drawn icon linework — distinct from --ink
+     * (structural text/chrome). --construct is the faint dashed crosshair
+     * some specimens draw behind a glyph; not used for icon-scale UI icons. */
+    --graphite:      #423f39;
+    --graphite-soft: #8c867a;
+    --construct:     #c7c0b1;
+
+    --forge-rust:    #c33000;
+    --forge-crimson: #d70000;
+    --forge-ember:   #ff4433;
+    --forge-magma:   #ff9900;
+    --forge-gold:    #ffd700;
+
+    --font-display: 'Squada One', Impact, sans-serif;
+    --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+    /* -- Seven-signal status set (SDS Forge Components/Controls/Patterns).
+     * Distinct from the --forge-* heat ramp — these are semantic status
+     * colors, not the one-heat-per-view beat. --sig-active reuses --brass
+     * rather than magma; magma stays reserved for the live beat elsewhere. */
+    --sig-ok:       #1f8a5b;
+    --sig-active:   var(--brass);
+    --sig-warning:  #c2670a;
+    --sig-danger:   #d23a1e;
+    --sig-critical: #b00d0d;
+    --sig-info:     #2a6f91;
+    --sig-idle:     var(--ink-mute);
+
+    /* -- v1 legacy aliases, remapped to v2 values for backward compat --
+     * Surfaces invert light/dark: "dark/medium/light bg" become paper
+     * shades rather than near-black. Do not add new usages of these. */
+    --color-dark-bg: var(--paper);
+    --color-medium-bg: var(--paper-2);
+    --color-light-bg: var(--hair);
+    --color-text-primary: var(--ink);
+    --color-text-secondary: var(--ink-mute);
+    --color-accent-yellow: var(--brass);
+    --color-accent-orange: var(--forge-magma);
+    --color-accent-red: var(--forge-crimson);
+    --font-primary: var(--font-sans);
+    --font-secondary: var(--font-mono);
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+/* Drafting-grid surface texture (Forged Restraint v2).
+ * A surface texture only — never a text background. Content components
+ * must ride a panel/card/paper-halo above it; only Squada display
+ * headings are permitted to stand on it unaided. Fixed behind everything,
+ * replaces the retired dark fracture-shader canvas. */
+.drafting-grid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-color: var(--paper);
+    background-image:
+        linear-gradient(var(--hair) 1px, transparent 1px),
+        linear-gradient(90deg, var(--hair) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.5;
+}
+
+/* Seven-signal status components (SDS Forge Components, Sheet 0x02 § 0x01).
+ * .s-ok/.s-active/.s-warning/.s-danger/.s-critical/.s-info/.s-idle set --c
+ * to the matching --sig-* token; apply alongside .status, .status-inline,
+ * or .badge.sig. Only active/critical are meant to carry a live pulse. */
+.s-ok       { --c: var(--sig-ok); }
+.s-active   { --c: var(--sig-active); }
+.s-warning  { --c: var(--sig-warning); }
+.s-danger   { --c: var(--sig-danger); }
+.s-critical { --c: var(--sig-critical); }
+.s-info     { --c: var(--sig-info); }
+.s-idle     { --c: var(--sig-idle); }
+
+.status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    padding: 7px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    white-space: nowrap;
+    background: var(--paper);
+}
+.status .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c);
+    flex: none;
+}
+.status .dot.live {
+    animation: sig-pulse 2.5s ease-in-out infinite;
+}
+.status.strong {
+    border-color: var(--c);
+    color: var(--ink);
+}
+.status .val {
+    color: var(--c);
+}
+
+/* Lighter inline variant — for status readouts inside dense text runs
+ * (metadata rows, table cells) where a full bordered pill is too heavy. */
+.status-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--c, var(--ink));
+}
+.status-inline .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c);
+    flex: none;
+}
+.status-inline .dot.live {
+    animation: sig-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes sig-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
 }
 
 html {
@@ -53,23 +192,27 @@ h3 {
 }
 
 h1 {
+    font-family: var(--font-display);
     font-size: 3rem;
-    font-weight: 900;
+    font-weight: 400;
 }
 
 h2 {
     font-size: 2.5rem;
-    color: var(--color-accent-yellow);
+    color: var(--brass);
     margin-bottom: 2rem;
 }
 
 h3 {
     font-size: 1.5rem;
-    color: var(--color-accent-orange);
+    color: var(--ink-soft);
 }
 
 .highlight {
-    color: var(--color-accent-yellow);
+    /* The one live beat for this view-state (hero). Magma, not brass —
+     * static period-separators elsewhere (e.g. the navbar wordmark) stay
+     * brass; this is the single animated exception per CLAUDE.md's "Beat". */
+    color: var(--forge-magma);
     animation: pulsing-glow 2.5s infinite ease-in-out;
 }
 
@@ -91,21 +234,22 @@ h3 {
 }
 
 .section-title {
+    font-family: var(--font-display);
     font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-text-primary);
+    font-weight: 400;
+    color: var(--ink);
     letter-spacing: -0.01em;
 }
 
 /* --- 2. Navigation Bar --- */
 .navbar {
+    /* Flat paper. No blur — CLAUDE.md: "the navbar is flat paper." */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: rgba(17, 17, 17, 0.8);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--color-light-bg);
+    background-color: var(--paper);
+    border-bottom: 1px solid var(--hair);
     position: fixed;
     width: 100%;
     top: 0;
@@ -127,9 +271,10 @@ h3 {
 }
 
 .navbar-logo .logo-text {
-    font-family: var(--font-secondary);
+    /* Wordmark: always Squada, never mono (SDS Forge Typography). */
+    font-family: var(--font-display);
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 400;
     line-height: 1;
 }
 
@@ -187,7 +332,7 @@ main {
 
 .page-section {
     padding: 6rem 0;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    border-bottom: 1px dashed var(--hair);
     position: relative;
     z-index: 1;
 }
@@ -281,22 +426,29 @@ main {
 }
 
 #hero p {
+    display: inline-block;
     font-size: 1.2rem;
     max-width: 600px;
     margin: 1rem auto 2rem;
+    padding: 0.75rem 1.5rem;
     color: var(--color-text-secondary);
+    /* Body copy rides a paper-halo — never raw on the drafting grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 
 .hero-metadata {
-    display: flex;
+    display: inline-flex;
     gap: 2rem;
     justify-content: center;
     margin-top: 3rem;
+    padding: 0.5rem 1.25rem;
     font-family: var(--font-secondary);
     font-size: 10px;
     letter-spacing: 0.1em;
     color: var(--color-text-secondary);
-    opacity: 0.4;
+    opacity: 0.7;
+    /* Labels ride a paper-halo — never raw on the drafting grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 
 .hero-metadata span {
@@ -329,10 +481,9 @@ main {
 }
 
 .service-card {
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(12px) brightness(0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 0;
     padding: 2rem;
     transition: border-color 0.15s ease;
     position: relative;
@@ -342,8 +493,8 @@ main {
     content: '';
     position: absolute;
     inset: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 2px;
+    border: 1px solid var(--hair);
+    border-radius: 0;
     pointer-events: none;
     transition: border-color 0.15s ease;
 }
@@ -356,14 +507,14 @@ main {
     opacity: 0.12;
     z-index: 1;
     background:
-        linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 0 / 12px 1px,
-        linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 0 / 1px 12px,
-        linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 0 / 12px 1px,
-        linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 0 / 1px 12px,
-        linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 100% / 12px 1px,
-        linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 100% / 1px 12px,
-        linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 100% / 12px 1px,
-        linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 100% / 1px 12px;
+        linear-gradient(to right, var(--ink), var(--ink)) no-repeat 0 0 / 12px 1px,
+        linear-gradient(to bottom, var(--ink), var(--ink)) no-repeat 0 0 / 1px 12px,
+        linear-gradient(to left, var(--ink), var(--ink)) no-repeat 100% 0 / 12px 1px,
+        linear-gradient(to bottom, var(--ink), var(--ink)) no-repeat 100% 0 / 1px 12px,
+        linear-gradient(to right, var(--ink), var(--ink)) no-repeat 0 100% / 12px 1px,
+        linear-gradient(to top, var(--ink), var(--ink)) no-repeat 0 100% / 1px 12px,
+        linear-gradient(to left, var(--ink), var(--ink)) no-repeat 100% 100% / 12px 1px,
+        linear-gradient(to top, var(--ink), var(--ink)) no-repeat 100% 100% / 1px 12px;
 }
 
 .service-card:hover {
@@ -380,14 +531,17 @@ main {
 }
 
 .service-glyph {
-    font-size: 2.5rem;
-    font-weight: 300;
-    color: var(--color-accent-yellow);
+    /* Naturalist glyph hand icons (SVG) render at 28px; the Containment
+     * card still falls back to its Unicode notation glyph pending the
+     * rest of the icon set. */
+    display: flex;
+    align-items: center;
     margin-bottom: 1rem;
     line-height: 1;
-    opacity: 0.9;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    font-family: 'Roboto Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--brass);
+    font-family: var(--font-mono);
 }
 
 .service-card h3 {
@@ -399,10 +553,9 @@ main {
 }
 
 .research-card {
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(12px) brightness(0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 0;
     overflow: hidden;
     transition: border-color 0.15s ease;
     display: flex;
@@ -414,8 +567,8 @@ main {
     content: '';
     position: absolute;
     inset: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 2px;
+    border: 1px solid var(--hair);
+    border-radius: 0;
     pointer-events: none;
     z-index: 1;
     transition: border-color 0.15s ease;
@@ -429,14 +582,14 @@ main {
     opacity: 0.12;
     z-index: 2;
     background:
-        linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 0 / 12px 1px,
-        linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 0 / 1px 12px,
-        linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 0 / 12px 1px,
-        linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 0 / 1px 12px,
-        linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 100% / 12px 1px,
-        linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 100% / 1px 12px,
-        linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 100% / 12px 1px,
-        linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 100% / 1px 12px;
+        linear-gradient(to right, var(--ink), var(--ink)) no-repeat 0 0 / 12px 1px,
+        linear-gradient(to bottom, var(--ink), var(--ink)) no-repeat 0 0 / 1px 12px,
+        linear-gradient(to left, var(--ink), var(--ink)) no-repeat 100% 0 / 12px 1px,
+        linear-gradient(to bottom, var(--ink), var(--ink)) no-repeat 100% 0 / 1px 12px,
+        linear-gradient(to right, var(--ink), var(--ink)) no-repeat 0 100% / 12px 1px,
+        linear-gradient(to top, var(--ink), var(--ink)) no-repeat 0 100% / 1px 12px,
+        linear-gradient(to left, var(--ink), var(--ink)) no-repeat 100% 100% / 12px 1px,
+        linear-gradient(to top, var(--ink), var(--ink)) no-repeat 100% 100% / 1px 12px;
 }
 
 .research-card:hover {
@@ -482,8 +635,8 @@ main {
     margin-top: 1rem;
     padding: 0.5rem 0.75rem;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 2px;
+    border: 1px solid var(--hair);
+    border-radius: 0;
     color: var(--color-text-secondary);
     font-family: var(--font-secondary);
     font-size: 0.65rem;
@@ -548,7 +701,7 @@ main {
     align-items: flex-start;
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    border-bottom: 1px dashed var(--hair);
 }
 
 .manifest-card-badges {
@@ -604,7 +757,7 @@ main {
 .manifest-card-references {
     margin-top: 0.75rem;
     padding-top: 0.75rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.04);
+    border-top: 1px dashed var(--hair);
 }
 
 .manifest-card-footer {
@@ -613,7 +766,7 @@ main {
     align-items: center;
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    border-top: 1px dashed var(--hair);
 }
 
 .manifest-card-meta {
@@ -640,14 +793,14 @@ main {
 
 .manifest-trigger {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--hair);
     color: var(--color-text-secondary);
     width: 28px;
     height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 2px;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -657,23 +810,41 @@ main {
     color: var(--color-accent-yellow);
 }
 
+.meta-statement {
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
+    border-left: 2px solid var(--brass);
+    /* Body copy rides a paper-halo — never raw on the grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+}
+
+.meta-statement p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
 /* Publications Controls */
 .publications-controls {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 2rem;
+    padding: 0.75rem 1rem;
     gap: 1rem;
     flex-wrap: wrap;
+    /* Filter labels + toggle ride a paper-halo — never raw on the grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 
 .view-toggle {
     display: flex;
     gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--paper-2);
     padding: 0.25rem;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0;
+    border: 1px solid var(--hair);
 }
 
 .view-toggle-btn {
@@ -684,7 +855,7 @@ main {
     height: 32px;
     background: transparent;
     border: none;
-    border-radius: 2px;
+    border-radius: 0;
     color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -692,7 +863,7 @@ main {
 
 .view-toggle-btn:hover {
     color: var(--color-accent-yellow);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(20, 20, 20, 0.05);
 }
 
 .view-toggle-btn.active {
@@ -722,8 +893,8 @@ main {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(20, 20, 20, 0.03);
+    border: 1px solid var(--hair);
     color: var(--color-text-secondary);
     font-family: var(--font-secondary);
     font-size: 0.6rem;
@@ -731,13 +902,13 @@ main {
     padding: 0.4rem 0.6rem;
     cursor: pointer;
     transition: all 0.15s ease;
-    border-radius: 2px;
+    border-radius: 9999px; /* status chip: pill radius exception */
 }
 
 .filter-chip:hover {
     border-color: rgba(255, 215, 0, 0.4);
     color: var(--color-text-primary);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(20, 20, 20, 0.05);
 }
 
 .filter-chip.active {
@@ -746,35 +917,36 @@ main {
     background: rgba(255, 215, 0, 0.08);
 }
 
-/* Layer-specific filter chip colors */
+/* Layer-specific filter chip colors — match ArchitecturalSystem's
+ * LAYER_CONFIG (rust / brass / info), not the old pastel primaries. */
 .filter-chip--invariant.active {
-    border-color: #ff6b35;
-    color: #ff6b35;
-    background: rgba(255, 107, 53, 0.08);
+    border-color: var(--forge-rust);
+    color: var(--forge-rust);
+    background: color-mix(in srgb, var(--forge-rust) 8%, var(--paper));
 }
 
 .filter-chip--envelope.active {
-    border-color: #ffd700;
-    color: #ffd700;
-    background: rgba(255, 215, 0, 0.08);
+    border-color: var(--brass);
+    color: var(--brass);
+    background: color-mix(in srgb, var(--brass) 8%, var(--paper));
 }
 
 .filter-chip--surface.active {
-    border-color: #7dd3fc;
-    color: #7dd3fc;
-    background: rgba(125, 211, 252, 0.08);
+    border-color: var(--sig-info);
+    color: var(--sig-info);
+    background: color-mix(in srgb, var(--sig-info) 8%, var(--paper));
 }
 
 .filter-chip--invariant.active .chip-count {
-    background: rgba(255, 107, 53, 0.15);
+    background: color-mix(in srgb, var(--forge-rust) 15%, var(--paper));
 }
 
 .filter-chip--envelope.active .chip-count {
-    background: rgba(255, 215, 0, 0.15);
+    background: color-mix(in srgb, var(--brass) 15%, var(--paper));
 }
 
 .filter-chip--surface.active .chip-count {
-    background: rgba(125, 211, 252, 0.15);
+    background: color-mix(in srgb, var(--sig-info) 15%, var(--paper));
 }
 
 .chip-label {
@@ -785,8 +957,8 @@ main {
     font-size: 0.55rem;
     opacity: 0.5;
     padding: 0.1rem 0.3rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 2px;
+    background: rgba(20, 20, 20, 0.05);
+    border-radius: 9999px; /* status chip: pill radius exception */
 }
 
 .filter-chip.active .chip-count {
@@ -796,7 +968,7 @@ main {
 
 .filter-clear {
     background: transparent;
-    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border: 1px dashed var(--hair);
     color: var(--color-text-secondary);
     font-family: var(--font-secondary);
     font-size: 0.55rem;
@@ -817,7 +989,7 @@ main {
 .type-definition-tooltip {
     margin-bottom: 1.5rem;
     padding: 1rem 1.25rem;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--paper-2);
     border-left: 2px solid var(--color-accent-yellow);
     animation: tooltipFadeIn 0.15s ease;
 }
@@ -848,7 +1020,7 @@ main {
     font-style: italic;
     margin: 0;
     padding-top: 0.5rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    border-top: 1px dashed var(--hair);
 }
 
 /* Artifacts List View */
@@ -860,16 +1032,16 @@ main {
 
 .artifact-list-item {
     padding: 1.25rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--hair);
     transition: all 0.2s ease;
 }
 
 .artifact-list-item:first-child {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--hair);
 }
 
 .artifact-list-item:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(20, 20, 20, 0.02);
     padding-left: 1rem;
     margin-left: -1rem;
     padding-right: 1rem;
@@ -891,7 +1063,7 @@ main {
     color: var(--color-accent-yellow);
     background: rgba(255, 215, 0, 0.08);
     padding: 0.2rem 0.5rem;
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .artifact-list-id {
@@ -909,7 +1081,7 @@ main {
     color: var(--color-accent-orange);
     border: 1px solid var(--color-accent-orange);
     padding: 0.15rem 0.4rem;
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .artifact-list-link {
@@ -954,42 +1126,42 @@ main {
 
 /* Layer-specific list item styling */
 .artifact-list-item--invariant {
-    border-left: 2px solid rgba(255, 107, 53, 0.3);
+    border-left: 2px solid color-mix(in srgb, var(--forge-rust) 30%, transparent);
     padding-left: 1rem;
     margin-left: 0;
 }
 
 .artifact-list-item--invariant:hover {
-    border-left-color: rgba(255, 107, 53, 0.6);
-    background: rgba(255, 107, 53, 0.02);
+    border-left-color: color-mix(in srgb, var(--forge-rust) 60%, transparent);
+    background: color-mix(in srgb, var(--forge-rust) 2%, transparent);
 }
 
 .artifact-list-item--envelope {
-    border-left: 2px solid rgba(255, 215, 0, 0.2);
+    border-left: 2px solid color-mix(in srgb, var(--brass) 20%, transparent);
     padding-left: 1rem;
     margin-left: 0;
 }
 
 .artifact-list-item--envelope:hover {
-    border-left-color: rgba(255, 215, 0, 0.5);
-    background: rgba(255, 215, 0, 0.02);
+    border-left-color: color-mix(in srgb, var(--brass) 50%, transparent);
+    background: color-mix(in srgb, var(--brass) 2%, transparent);
 }
 
 .artifact-list-item--surface {
-    border-left: 2px solid rgba(125, 211, 252, 0.15);
+    border-left: 2px solid color-mix(in srgb, var(--sig-info) 15%, transparent);
     padding-left: 1rem;
     margin-left: 0;
 }
 
 .artifact-list-item--surface:hover {
-    border-left-color: rgba(125, 211, 252, 0.4);
-    background: rgba(125, 211, 252, 0.02);
+    border-left-color: color-mix(in srgb, var(--sig-info) 40%, transparent);
+    background: color-mix(in srgb, var(--sig-info) 2%, transparent);
 }
 
 .artifact-list-quickview {
     margin-left: auto;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--hair);
     color: var(--color-text-secondary);
     font-family: var(--font-secondary);
     font-size: 0.6rem;
@@ -1007,12 +1179,11 @@ main {
 
 /* --- 5. Footer --- */
 footer {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(12px);
+    background: var(--paper-2);
     padding: 3rem 0;
     text-align: center;
     color: var(--color-text-secondary);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--hair);
 }
 
 .footer-links {
@@ -1038,7 +1209,7 @@ footer {
     justify-content: center;
     margin-top: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    border-top: 1px dashed var(--hair);
     font-family: var(--font-secondary);
     font-size: 9px;
     letter-spacing: 0.12em;
@@ -1073,12 +1244,11 @@ footer {
 }
 
 .modal-content {
-    background: rgba(10, 10, 10, 0.9);
-    backdrop-filter: blur(20px);
+    background: var(--paper-2);
     margin: 5% auto;
     padding: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
+    border: 1px solid var(--hair);
+    border-radius: 0;
     width: 80%;
     max-width: 800px;
     max-height: 80vh;
@@ -1091,8 +1261,8 @@ footer {
     content: '';
     position: absolute;
     inset: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 2px;
+    border: 1px solid var(--hair);
+    border-radius: 0;
     pointer-events: none;
 }
 
@@ -1104,14 +1274,14 @@ footer {
     opacity: 0.12;
     z-index: 1;
     background:
-        linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 0 / 14px 1px,
-        linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 0 / 1px 14px,
-        linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 0 / 14px 1px,
-        linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 0 / 1px 14px,
-        linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 100% / 14px 1px,
-        linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 0 100% / 1px 14px,
-        linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 100% / 14px 1px,
-        linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) no-repeat 100% 100% / 1px 14px;
+        linear-gradient(to right, var(--ink), var(--ink)) no-repeat 0 0 / 14px 1px,
+        linear-gradient(to bottom, var(--ink), var(--ink)) no-repeat 0 0 / 1px 14px,
+        linear-gradient(to left, var(--ink), var(--ink)) no-repeat 100% 0 / 14px 1px,
+        linear-gradient(to bottom, var(--ink), var(--ink)) no-repeat 100% 0 / 1px 14px,
+        linear-gradient(to right, var(--ink), var(--ink)) no-repeat 0 100% / 14px 1px,
+        linear-gradient(to top, var(--ink), var(--ink)) no-repeat 0 100% / 1px 14px,
+        linear-gradient(to left, var(--ink), var(--ink)) no-repeat 100% 100% / 14px 1px,
+        linear-gradient(to top, var(--ink), var(--ink)) no-repeat 100% 100% / 1px 14px;
 }
 
 .modal.closing {
@@ -1157,7 +1327,7 @@ footer {
     text-transform: uppercase;
     padding-bottom: 1.5rem;
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--hair);
 }
 
 .modal-content h4 {
@@ -1172,7 +1342,7 @@ footer {
     font-size: 1rem;
     line-height: 1.75;
     margin-bottom: 1.25rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
 }
 
 .modal-content p:last-child {
@@ -1187,7 +1357,7 @@ footer {
 
 .modal-content li {
     margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
 }
 
 .modal-content li::marker {
@@ -1195,12 +1365,12 @@ footer {
 }
 
 .modal-content code {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--ink-mute);
     padding: 0.15rem 0.4rem;
-    border-radius: 2px;
+    border-radius: 0;
     font-family: var(--font-secondary);
     font-size: 0.9em;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--hair);
 }
 
 .modal-content blockquote {
@@ -1208,7 +1378,7 @@ footer {
     padding-left: 1.25rem;
     margin: 1.5rem 0;
     font-style: italic;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--ink);
 }
 
 .modal-content strong {
@@ -1217,7 +1387,7 @@ footer {
 }
 
 .modal-content em {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
 }
 
 .blog-article {
@@ -1227,7 +1397,7 @@ footer {
 .blog-article-footer {
     margin-top: 2.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--hair);
     font-family: var(--font-secondary);
     font-size: 10px;
     letter-spacing: 0.1em;
@@ -1340,8 +1510,8 @@ footer {
     width: 1px;
     background: linear-gradient(to bottom,
             transparent 0%,
-            rgba(255, 255, 255, 0.06) 10%,
-            rgba(255, 255, 255, 0.06) 90%,
+            rgba(20, 20, 20, 0.06) 10%,
+            rgba(20, 20, 20, 0.06) 90%,
             transparent 100%);
 }
 
@@ -1413,29 +1583,11 @@ footer {
     }
 }
 
-/* --- 10. Canvas Container --- */
-#canvas-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    overflow: hidden;
-}
-
-#canvas-container canvas {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
-}
-
 /* --- 11. Archaeology / SDS.SYS.FAIL --- */
 .archaeology-meta {
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 0;
     padding: 1.5rem 2rem;
     margin-bottom: 3rem;
 }
@@ -1447,18 +1599,17 @@ footer {
 }
 
 .diagnosis-document {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 0;
     margin-bottom: 3rem;
     overflow: hidden;
 }
 
 .diagnosis-header {
-    background: rgba(20, 20, 20, 0.8);
+    background: var(--paper-2);
     padding: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--hair);
 }
 
 .diagnosis-header-top {
@@ -1494,10 +1645,10 @@ footer {
     font-family: var(--font-secondary);
     font-size: 0.7rem;
     color: var(--color-text-secondary);
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(20, 20, 20, 0.04);
     padding: 0.35rem 0.75rem;
-    border-radius: 2px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0;
+    border: 1px solid var(--hair);
 }
 
 .diagnosis-content-grid {
@@ -1508,7 +1659,7 @@ footer {
 
 .diagnosis-main-content {
     padding: 2rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid var(--hair);
 }
 
 .diagnosis-section {
@@ -1528,13 +1679,13 @@ footer {
     text-transform: uppercase;
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--hair);
 }
 
 .diagnosis-section p {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
     margin-bottom: 0.75rem;
 }
 
@@ -1550,7 +1701,7 @@ footer {
 .diagnosis-list li {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
     margin-bottom: 0.5rem;
 }
 
@@ -1564,7 +1715,7 @@ footer {
     padding: 1.25rem;
     background: rgba(255, 215, 0, 0.04);
     border: 1px solid rgba(255, 215, 0, 0.15);
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 .diagnosis-pattern-identified .section-heading {
@@ -1581,13 +1732,13 @@ footer {
 
 .diagnosis-sidebar {
     padding: 1.5rem;
-    background: rgba(15, 15, 15, 0.6);
+    background: var(--paper-2);
 }
 
 .diagnosis-sidebar-card {
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--hair);
 }
 
 .diagnosis-sidebar-card:last-child {
@@ -1621,8 +1772,8 @@ footer {
 
 .diagnosis-footer {
     padding: 1rem 2rem;
-    background: rgba(10, 10, 10, 0.6);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--paper-2);
+    border-top: 1px solid var(--hair);
 }
 
 .diagnosis-footer-text {
@@ -1640,7 +1791,7 @@ footer {
 
     .diagnosis-main-content {
         border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid var(--hair);
     }
 }
 
@@ -1665,10 +1816,10 @@ footer {
     right: 12px;
     width: 32px;
     height: 32px;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-    color: rgba(255, 255, 255, 0.7);
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 0;
+    color: var(--ink);
     font-size: 1.1rem;
     cursor: pointer;
     display: flex;
@@ -1684,7 +1835,7 @@ footer {
 }
 
 .card-modal-trigger:hover {
-    background: rgba(0, 0, 0, 0.9);
+    background: var(--paper-2);
     color: var(--color-accent-yellow);
     border-color: var(--color-accent-yellow);
 }
@@ -1703,9 +1854,8 @@ footer {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--hair);
     padding: 1rem 2rem;
 }
 
@@ -1727,12 +1877,15 @@ footer {
 }
 
 .diagnosis-document-fullpage {
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--paper-2);
 }
 
 .artifact-not-found {
     text-align: center;
     padding: 6rem 2rem;
+    display: inline-block;
+    /* Body copy rides a paper-halo — never raw on the grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 
 .artifact-not-found h1 {
@@ -1798,7 +1951,7 @@ footer {
     display: inline-flex;
     align-items: center;
     transition: all 0.2s ease;
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .research-card-read-btn:hover {
@@ -1814,8 +1967,8 @@ footer {
 }
 
 .research-carousel-selector {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
     color: var(--color-text-secondary);
     padding: 0.35rem 0.85rem;
     font-family: var(--font-secondary);
@@ -1823,13 +1976,13 @@ footer {
     cursor: pointer;
     transition: all 0.2s ease;
     letter-spacing: 0.1em;
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .research-carousel-selector:hover {
     border-color: rgba(255, 215, 0, 0.4);
-    color: white;
-    background: rgba(255, 215, 0, 0.05);
+    color: var(--ink);
+    background: rgba(255, 215, 0, 0.08);
 }
 
 .research-carousel-selector.active {
@@ -1884,8 +2037,8 @@ footer {
 /* --- 14. Doctrine Frame --- */
 .doctrine-frame {
     position: relative;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 107, 53, 0.3);
+    background: var(--paper-2);
+    border: 1px solid color-mix(in srgb, var(--forge-rust) 30%, transparent);
     padding: 2.5rem;
     margin-top: 1rem;
 }
@@ -1901,29 +2054,29 @@ footer {
 .doctrine-frame__corner--tl {
     top: -1px;
     left: -1px;
-    border-top: 2px solid #ff6b35;
-    border-left: 2px solid #ff6b35;
+    border-top: 2px solid var(--forge-rust);
+    border-left: 2px solid var(--forge-rust);
 }
 
 .doctrine-frame__corner--tr {
     top: -1px;
     right: -1px;
-    border-top: 2px solid #ff6b35;
-    border-right: 2px solid #ff6b35;
+    border-top: 2px solid var(--forge-rust);
+    border-right: 2px solid var(--forge-rust);
 }
 
 .doctrine-frame__corner--bl {
     bottom: -1px;
     left: -1px;
-    border-bottom: 2px solid #ff6b35;
-    border-left: 2px solid #ff6b35;
+    border-bottom: 2px solid var(--forge-rust);
+    border-left: 2px solid var(--forge-rust);
 }
 
 .doctrine-frame__corner--br {
     bottom: -1px;
     right: -1px;
-    border-bottom: 2px solid #ff6b35;
-    border-right: 2px solid #ff6b35;
+    border-bottom: 2px solid var(--forge-rust);
+    border-right: 2px solid var(--forge-rust);
 }
 
 .doctrine-frame__layer-strip {
@@ -1934,13 +2087,13 @@ footer {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(10, 10, 10, 0.95);
+    background: var(--paper-2);
     padding: 0.35rem 1rem;
-    border: 1px solid rgba(255, 107, 53, 0.4);
+    border: 1px solid color-mix(in srgb, var(--forge-rust) 40%, transparent);
 }
 
 .doctrine-layer-glyph {
-    color: #ff6b35;
+    color: var(--forge-rust);
     font-size: 1rem;
 }
 
@@ -1949,7 +2102,7 @@ footer {
     font-size: 0.55rem;
     font-weight: 700;
     letter-spacing: 0.15em;
-    color: #ff6b35;
+    color: var(--forge-rust);
 }
 
 .doctrine-content {
@@ -2011,7 +2164,7 @@ footer {
     gap: 0.75rem;
     margin-top: 1rem;
     padding-top: 0.75rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    border-top: 1px dashed var(--hair);
 }
 
 .doctrine-reference-chip {
@@ -2021,7 +2174,7 @@ footer {
     color: var(--color-accent-yellow);
     background: rgba(255, 215, 0, 0.1);
     padding: 0.25rem 0.5rem;
-    border-radius: 2px;
+    border-radius: 0;
     letter-spacing: 0.05em;
 }
 
@@ -2037,7 +2190,7 @@ footer {
     justify-content: space-between;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    border-top: 1px dashed var(--hair);
     font-family: var(--font-secondary);
     font-size: 0.55rem;
     letter-spacing: 0.1em;
@@ -2062,6 +2215,9 @@ footer {
 .research-not-found {
     text-align: center;
     padding: 4rem 2rem;
+    display: inline-block;
+    /* Labels + link ride a paper-halo — never raw on the grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 
 .research-not-found__code {
@@ -2097,9 +2253,8 @@ footer {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--hair);
     padding: 1rem 0;
 }
 
@@ -2139,9 +2294,11 @@ footer {
 }
 
 .research-page__header {
-    padding: 3rem 0 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 3rem 2rem 2rem;
+    border-bottom: 1px solid var(--hair);
     margin-bottom: 2rem;
+    /* Meta labels + description ride a paper-halo — never raw on the grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 
 .research-header__meta {
@@ -2168,7 +2325,7 @@ footer {
     color: var(--color-accent-yellow);
     background: rgba(255, 215, 0, 0.1);
     padding: 0.25rem 0.5rem;
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .research-header__title {
@@ -2205,6 +2362,10 @@ footer {
 
 .research-page__main {
     min-width: 0;
+    padding: 2rem;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    /* Document body rides a panel — never raw on the grid/graph. */
 }
 
 .research-section {
@@ -2232,7 +2393,7 @@ footer {
     color: var(--color-accent-orange);
     margin: 0 0 1rem 0;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--hair);
 }
 
 .research-section__number {
@@ -2246,7 +2407,7 @@ footer {
 .research-section__paragraph {
     font-size: 1rem;
     line-height: 1.75;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
     margin: 0 0 1rem 0;
 }
 
@@ -2258,7 +2419,7 @@ footer {
 .research-section__list li {
     font-size: 1rem;
     line-height: 1.75;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
     margin-bottom: 0.5rem;
 }
 
@@ -2273,10 +2434,10 @@ footer {
 }
 
 .research-sidebar__card {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
     padding: 1.25rem;
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 .research-sidebar__heading {
@@ -2330,15 +2491,15 @@ footer {
     flex-direction: column;
     gap: 0.25rem;
     padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 2px;
+    background: rgba(20, 20, 20, 0.02);
+    border: 1px solid var(--hair);
+    border-radius: 0;
     text-decoration: none;
     transition: all 0.15s ease;
 }
 
 .research-related-link:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(20, 20, 20, 0.05);
     border-color: rgba(255, 215, 0, 0.3);
 }
 
@@ -2362,7 +2523,7 @@ footer {
     gap: 2rem;
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--hair);
 }
 
 .research-doc-nav__prev {
@@ -2379,14 +2540,14 @@ footer {
     gap: 0.25rem;
     text-decoration: none;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 0;
     transition: all 0.15s ease;
 }
 
 .research-doc-nav__link:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--paper-2) 60%, var(--paper));
     border-color: rgba(255, 215, 0, 0.3);
 }
 
@@ -2409,13 +2570,15 @@ footer {
     display: flex;
     justify-content: space-between;
     margin-top: 3rem;
-    padding: 1.5rem 0;
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    padding: 1.5rem 2rem;
+    border-top: 1px dashed var(--hair);
     font-family: var(--font-secondary);
     font-size: 0.55rem;
     letter-spacing: 0.1em;
     color: var(--color-text-secondary);
-    opacity: 0.4;
+    opacity: 0.7;
+    /* Trailing notation rides a paper-halo — never raw on the grid/graph. */
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
 }
 /* =====================================================================
    MINIMAL MODE — double-blind academic preview
@@ -2458,7 +2621,7 @@ body.minimal-mode [style*="color"] {
     color: #111111 !important;
 }
 
-body.minimal-mode #canvas-container,
+body.minimal-mode .drafting-grid-bg,
 body.minimal-mode .navbar,
 body.minimal-mode .footer,
 body.minimal-mode .section-gutter,
