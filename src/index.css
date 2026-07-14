@@ -221,7 +221,15 @@ h3 {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    width: fit-content;
+    max-width: 100%;
     margin-bottom: 2.5rem;
+    padding: 0.85rem 1.15rem;
+    background:
+        radial-gradient(ellipse at center, color-mix(in srgb, var(--paper) 86%, transparent) 0%, color-mix(in srgb, var(--paper) 72%, transparent) 54%, transparent 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 12px 32px rgba(20, 20, 20, 0.04);
 }
 
 .section-path {
@@ -247,9 +255,8 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 1rem 2rem 0;
     background-color: var(--paper);
-    border-bottom: 1px solid var(--hair);
     position: fixed;
     width: 100%;
     top: 0;
@@ -266,14 +273,15 @@ h3 {
 }
 
 .navbar-logo img {
-    height: 40px;
-    width: auto;
+    height: 60px;
+    width: 60px;
+    object-fit: contain;
 }
 
 .navbar-logo .logo-text {
     /* Wordmark: always Squada, never mono (SDS Forge Typography). */
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     font-weight: 400;
     line-height: 1;
 }
@@ -425,11 +433,19 @@ main {
     justify-content: center;
 }
 
+#hero h1 {
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #hero p {
-    display: inline-block;
+    display: block;
+    width: fit-content;
     font-size: 1.2rem;
     max-width: 600px;
-    margin: 1rem auto 2rem;
+    margin: 1rem auto 0;
     padding: 0.75rem 1.5rem;
     color: var(--color-text-secondary);
     /* Body copy rides a paper-halo — never raw on the drafting grid/graph. */
@@ -440,7 +456,7 @@ main {
     display: inline-flex;
     gap: 2rem;
     justify-content: center;
-    margin-top: 3rem;
+    margin-top: 0;
     padding: 0.5rem 1.25rem;
     font-family: var(--font-secondary);
     font-size: 10px;
@@ -1179,11 +1195,20 @@ main {
 
 /* --- 5. Footer --- */
 footer {
-    background: var(--paper-2);
+    background: transparent;
     padding: 3rem 0;
     text-align: center;
     color: var(--color-text-secondary);
     border-top: 1px solid var(--hair);
+}
+
+footer .container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    background: rgba(251, 250, 247, 0.68);
+    backdrop-filter: blur(18px) saturate(1.08);
+    -webkit-backdrop-filter: blur(18px) saturate(1.08);
+    box-shadow: 0 12px 32px rgba(20, 20, 20, 0.05);
 }
 
 .footer-links {
@@ -1583,7 +1608,7 @@ footer {
     }
 }
 
-/* --- 11. Archaeology / SDS.SYS.FAIL --- */
+/* --- 11. Archaeology / AI.SYS.FAIL --- */
 .archaeology-meta {
     background: var(--paper-2);
     border: 1px solid var(--hair);

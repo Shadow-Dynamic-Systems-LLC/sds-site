@@ -50,7 +50,7 @@ export function Services() {
   return (
     <section id="services" className="page-section">
       <div className="container">
-        <SectionHeader path="SYS.CORE //" title="Zero Trust Governance" />
+        <SectionHeader path="SDS.ZTG.CORE //" title="Zero Trust Governance" />
         <div className="services-grid">
           {services.map((service, index) => (
             <div key={index} className="service-card">

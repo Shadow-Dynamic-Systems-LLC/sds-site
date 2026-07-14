@@ -13,7 +13,7 @@ export function Projects() {
   return (
     <section id="projects" className="page-section">
       <div className="container">
-        <SectionHeader path="SYS.EXT //" title="Research" />
+        <SectionHeader path="SDS.WEB.RESEARCH //" title="Research" />
 
         <SectionCut label="RESEARCH DOCUMENTS" />
 

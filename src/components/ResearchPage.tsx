@@ -51,7 +51,7 @@ export function ResearchPage() {
                             RETURN TO INDEX
                         </Link>
                         <div className="research-nav-path">
-                            SYS.EXT // RESEARCH // {project.id.toUpperCase()}
+                            SDS.WEB.RESEARCH // {project.id.toUpperCase()}
                         </div>
                     </div>
                 </nav>

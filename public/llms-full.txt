@@ -38,6 +38,8 @@ ZTG defines the structural properties that must hold for an AI system to be gove
 - **ZTG-4 Evidence-Coupled Execution**: Every governed action produces a durable evidence record as a constitutive part of the action. The evidence record is not a separate log — it is part of the action itself. No externally observable effect exists without simultaneous durable evidence of authorization and execution.
 - **ZTG-5 Irreversibility of Harm**: Every action a governed system may take must be classified at decision time by the restorability of its harm — Restorable (affected parties can be returned to a materially equivalent state by an action available to the system), Mitigable (no return to equivalent state, but harm reducible through a defined forward action), or Irreversible (no available forward action reduces the harm to the Mitigable class). Classification is over the harm the action causes, not the action itself; the presence of a forward mechanism (refund, retraction, settlement) does not on its own lower the class. Actions in the Irreversible class must be subject to stricter controls; actions in the Mitigable class must record residual harm in decision provenance. The harm-class classification must appear as a required field in the ZTG-4 evidence record. ZTG-5 is orthogonal to ZTG-3's system-side `reversal_strategy`: a system with `reversal_strategy: rollback` can authorize decisions with Irreversible harm class; a system with `reversal_strategy: none` can authorize decisions with Restorable harm class. Both fields must be present in decision provenance for governed actions.
 
+**Numbering note**: prior ZTG-5 (Graduated Freeze) was retired and folded into ZTG-2 Stasis as graduated containment: surface freeze → subsystem freeze → system-wide stasis. Current ZTG-5 is Irreversibility of Harm with different semantics.
+
 ### Three-Layer Architecture
 
 | Layer | Character | What lives here |
@@ -161,6 +163,22 @@ Observability systems must escalate salience in proportion to persistence durati
 3. **DR-3: Failed Resolution Escalates the Condition** — When automated resolution fails, the condition escalates. Resistance to remediation increases risk, which increases salience.
 4. **DR-4: Explicit Comfort-Fidelity Tradeoff** — Every suppression operation that reduces salience must declare what signal was reduced, why, what recovery verification is pending, and whether the suppression was operator-requested or system-automated.
 
+### SDS.RX.003 — Response to NIST RFI: Security of AI Agent Systems
+
+Formal response to NIST-2025-0035 identifying structural requirements for governing AI agent execution authority. Presents Zero Trust Governance as an architectural framework addressing implicit authority delegation, trust transitivity in multi-agent systems, governed effect surfaces, proposal-bound authorization leases, and evidence-coupled execution.
+
+The response argues that the security of AI agent systems cannot be addressed through model-level improvements alone. The novel risk is structural: AI agent systems delegate execution authority to stochastic processes without a mechanistic governance boundary between model output and irreversible effect.
+
+---
+
+## Case Studies
+
+### SDS.CS.001 — Temporal Governance Failure in Autonomous AI Systems
+
+Demonstrative incident log documenting three structural governance failure modes: temporal collapse, assumed reversibility, and non-actionable observability. Establishes that documented conformance and safety are not equivalent.
+
+The incident log shows a system whose monitoring pipelines, control interfaces, and governance mechanisms are present and operational, while autonomous actions still produce external effects before governance can assert control. The outcome is forward prevention, not correction of already-realized effects.
+
 ---
 
 ## Field Notes — Structural Observations
@@ -257,7 +275,7 @@ Architectural response to NIST Request for Information on "Security of AI Agent 
 
 Artifacts are typed by epistemic function and domain applicability:
 
-**Publication types** (epistemic function): DX = Diagnosis (structural failure mode analysis); CS = Case Study (documented incident or engagement); FN = Field Note (observation with structural implication); RX = Prescription (design requirement or counter-pattern); RP = Research Paper (extended analysis, not for site publication).
+**Publication types** (epistemic function): DX = Diagnosis (structural failure mode analysis); CS = Case Study (documented incident or engagement); FN = Field Note (observation with structural implication); RX = Prescription (design requirement or counter-pattern); RP = Research Paper (template support only; no research paper is currently published on the site).
 
 **Category descriptors** (domain applicability): STRUCTURAL (core architectural analysis); INSURANCE (underwriting, risk evaluation, insurability); SECURITY (execution-layer security, adversarial governance evasion); COMPLIANCE (regulatory frameworks, standards mappings); OPERATIONS (production deployment, operational reliability).
 

@@ -32,7 +32,7 @@ export function Publications() {
   return (
     <section id="publications" className="page-section">
       <div className="container">
-        <SectionHeader path="SYS.LOG //" title="Publications" />
+        <SectionHeader path="SDS.WEB.PUBLICATIONS //" title="Publications" />
 
         <div className="meta-statement">
           <p>

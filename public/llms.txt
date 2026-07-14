@@ -29,7 +29,9 @@ ZTG defines the structural properties that must hold for an AI system to be gove
 - **ZTG-2 Stasis**: When governance state is uncertain, the system halts; graduated containment proportional to failure scope
 - **ZTG-3 Governed Effect Surface**: All external effects must occur through registered, governance-addressable interfaces
 - **ZTG-4 Evidence-Coupled Execution**: Every governed action produces a durable evidence record as a constitutive part of the action
-- **ZTG-5 Irreversibility of Harm**: Every governed action is classified at decision time by the restorability of its harm (Restorable, Mitigable, Irreversible); Irreversible-class actions are subject to stricter controls; orthogonal to ZTG-3 system-side reversal strategy
+- **ZTG-5 Irreversibility of Harm**: Every governed action is classified at decision time by the restorability of its harm (Restorable, Mitigable, Irreversible); Irreversible-class actions are subject to stricter controls; Mitigable-class actions record residual harm in provenance
+
+Numbering note: prior ZTG-5 (Graduated Freeze) was retired and folded into ZTG-2 Stasis as graduated containment. Current ZTG-5 is Irreversibility of Harm.
 
 ## Five Evaluation Primitives
 
@@ -55,6 +57,7 @@ Any AI system can be evaluated against these five structural properties:
 
 - [SDS.RX.001 — Toward a Common Language](/artifacts/SDS.RX.001): Shared terminology grounded in ZTG invariants, mapped to domain-native equivalents across insurance, security, compliance, and operations
 - [SDS.RX.002 — Salience-Proportional Observability](/artifacts/SDS.RX.002): Observability systems must escalate salience in proportion to persistence duration, not suppress it
+- [SDS.RX.003 — Response to NIST RFI: Security of AI Agent Systems](/artifacts/SDS.RX.003): Formal response to NIST-2025-0035 identifying structural requirements for governing AI agent execution authority
 
 ## Field Notes — Structural Observations
 
@@ -65,6 +68,10 @@ Any AI system can be evaluated against these five structural properties:
 - [SDS.FN.005 — Governance Independence from Inference Provider](/artifacts/SDS.FN.005): Governance architecture must not depend on inference provider identity
 - [SDS.FN.006 — Model Improvement Does Not Improve Governance](/artifacts/SDS.FN.006): Model quality operates in the statistical layer; governance operates in the deterministic layer
 - [SDS.FN.007 — A Silent Scream: The Hidden Cost of Quiet Systems](/artifacts/SDS.FN.007): The operational consequences of observability systems that manufacture calm
+
+## Case Studies
+
+- [SDS.CS.001 — Temporal Governance Failure in Autonomous AI Systems](/artifacts/SDS.CS.001): Demonstrative incident log documenting temporal collapse, assumed reversibility, and non-actionable observability
 
 ## Industry Guidance
 

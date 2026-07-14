@@ -5,7 +5,7 @@ export function Hero() {
     <section id="hero" className="page-section visible">
       <div className="container">
         <h1>
-          Governed Execution<span className="highlight">.</span>
+          AI Execution<span className="highlight">.</span> Governed<span className="highlight">.</span>
         </h1>
         <p>
           We build the control plane for autonomous systems — deterministic

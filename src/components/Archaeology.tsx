@@ -20,7 +20,7 @@ interface DiagnosisData {
 export function Archaeology() {
   const diagnoses: DiagnosisData[] = [
     {
-      id: 'SDS.SYS.FAIL-001',
+      id: 'AI.SYS.FAIL-001',
       number: '001',
       title: 'Model-Adjacent Covert Channel',
       layer: 'Model-adjacent (generation / prompt substrate)',
@@ -174,7 +174,7 @@ export function Archaeology() {
       version: 'v1.0'
     },
     {
-      id: 'SDS.SYS.FAIL-TEMPLATE',
+      id: 'AI.SYS.FAIL-TEMPLATE',
       number: 'TEMPLATE',
       title: 'Diagnosis Template Structure',
       layer: 'Template Placeholder',
@@ -182,7 +182,7 @@ export function Archaeology() {
       sections: [
         {
           content: [
-            '<strong>This is a template showing the required structure for all SDS.SYS.FAIL diagnoses.</strong>',
+            '<strong>This is a template showing the required structure for all AI.SYS.FAIL diagnoses.</strong>',
             'Each diagnosis must follow the section headings and format shown here.',
             'Diagnoses are structural analyses, not actor assessments.'
           ]
@@ -196,7 +196,7 @@ export function Archaeology() {
   return (
     <section id="archaeology" className="page-section">
       <div className="container archaeology-container">
-        <SectionHeader path="SYS.FAIL //" title="Modern Systems Archaeology" />
+        <SectionHeader path="AI.SYS.FAIL //" title="Modern Systems Archaeology" />
 
         {diagnoses.map((diagnosis) => (
           <div key={diagnosis.number} className="diagnosis-document">

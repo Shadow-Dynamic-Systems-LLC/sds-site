@@ -1,7 +1,11 @@
 .contact-form-container {
   max-width: 700px;
   margin: 0 auto;
-  padding: 6rem 2rem 4rem;
+  padding: 3rem 2.5rem;
+  background: rgba(251, 250, 247, 0.72);
+  backdrop-filter: blur(18px) saturate(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  box-shadow: 0 12px 32px rgba(20, 20, 20, 0.05);
 }
 
 .contact-form-header {
@@ -222,7 +226,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .contact-form-container {
-    padding: 4rem 1.5rem 3rem;
+    padding: 2rem 1.5rem;
   }
 
   .contact-btn-primary {

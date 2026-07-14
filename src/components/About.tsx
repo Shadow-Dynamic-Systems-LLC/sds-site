@@ -7,7 +7,7 @@ export function About() {
   return (
     <section id="about" className="page-section">
       <div className="container">
-        <SectionHeader path="SYS.SPEC //" title="Doctrine" />
+        <SectionHeader path="SDS.WEB.CORE //" title="Doctrine" />
 
         <div className="doctrine-frame">
           {/* Corner marks */}

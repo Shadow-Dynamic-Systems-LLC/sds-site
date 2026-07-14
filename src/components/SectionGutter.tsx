@@ -8,10 +8,10 @@ interface Section {
 
 const sections: Section[] = [
   { id: 'hero', index: '00', label: 'INIT' },
-  { id: 'services', index: '01', label: 'CORE' },
-  { id: 'projects', index: '02', label: 'EXT' },
-  { id: 'about', index: '03', label: 'SPEC' },
-  { id: 'publications', index: '04', label: 'LOG' },
+  { id: 'services', index: '01', label: 'ZTG' },
+  { id: 'about', index: '02', label: 'CORE' },
+  { id: 'projects', index: '03', label: 'R&D' },
+  { id: 'publications', index: '04', label: 'PUB' },
 ];
 
 export function SectionGutter() {
@@ -19,47 +19,32 @@ export function SectionGutter() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: [0.1, 0.15, 0.3, 0.5] }
-    );
-
-    sections.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? scrollTop / docHeight : 0;
       setScrollProgress(progress);
 
-      // Near bottom of page - activate last visible section
-      if (progress > 0.95) {
-        const lastSection = sections[sections.length - 1];
-        const el = document.getElementById(lastSection.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top < window.innerHeight) {
-            setActiveSection(lastSection.id);
-          }
+      const activationLine = scrollTop + window.innerHeight * 0.35;
+      let currentSection = sections[0].id;
+
+      for (const section of sections) {
+        const el = document.getElementById(section.id);
+        if (el && el.offsetTop <= activationLine) {
+          currentSection = section.id;
         }
       }
+
+      setActiveSection(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
     handleScroll();
 
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 

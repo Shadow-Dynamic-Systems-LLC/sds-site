@@ -57,7 +57,8 @@ export const ARTIFACT_DEPTH: Record<ArtifactTypeCode, { layer: ArchitecturalLaye
 };
 
 // ZTG Invariants for reference chips
-// Updated structure: ZTG-5 eliminated, graduated containment folded into ZTG-2 (Stasis)
+// Current structure: prior ZTG-5 Graduated Freeze was folded into ZTG-2
+// Stasis; ZTG-5 is now Irreversibility of Harm.
 export const ZTG_INVARIANTS: Record<string, { label: string; definition: string; layer: ArchitecturalLayer }> = {
   // Structural Prerequisites (ZTG-0x)
   'ZTG-0a': {
@@ -85,7 +86,7 @@ export const ZTG_INVARIANTS: Record<string, { label: string; definition: string;
     definition: 'All components participating in governance evaluation must operate against a consistent view of governance state. During inconsistency, the system must deny authorization.',
     layer: 'INVARIANT'
   },
-  // System Invariants (ZTG-1 through ZTG-4)
+  // System Invariants (ZTG-1 through ZTG-5)
   'ZTG-1': {
     label: 'Mechanistic Boundary',
     definition: 'Governance boundaries are enforced mechanically, not discretionarily. No component may bypass, reinterpret, defer, or negotiate a boundary at runtime. Authorization must occur before irreversible action.',

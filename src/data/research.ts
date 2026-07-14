@@ -110,11 +110,11 @@ A system that satisfies all five primitives has bounded governance integrity ris
     },
     {
         id: 'sys-fail',
-        title: 'SDS.SYS.FAIL — Structural Failure Modes',
+        title: 'AI.SYS.FAIL — Structural Failure Modes',
         description: 'Formal taxonomy of execution-layer governance failures mapped to missing ZTG primitives and documented diagnoses.',
         image: '/assets/ai-sys-fail.webp',
         summary: 'Five structural failure modes arising from implicit authority delegation in AI agent systems. Each failure is mapped to specific diagnoses and missing governance invariants. These failures are structural, not adversarial — they arise from architectural decisions about how authority flows from model output to external effect.',
-        content: `SDS.SYS.FAIL — STRUCTURAL FAILURE MODES
+        content: `AI.SYS.FAIL — STRUCTURAL FAILURE MODES
 
 These failure modes are structural, not adversarial. They arise from architectural decisions about how authority flows from model output to external effect. An AI agent system can be authenticated, authorized, monitored, and logged — satisfying the standard security posture — and still exhibit all five failure modes.
 
