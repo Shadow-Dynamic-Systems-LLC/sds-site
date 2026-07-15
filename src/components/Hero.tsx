@@ -9,7 +9,7 @@ export function Hero() {
         </h1>
         <p>
           We build the control plane for autonomous systems — deterministic
-          governance that makes AI execution auditable, bounded, and insurable.
+          governance that makes AI execution auditable, bounded, and accountable.
         </p>
         <div className="hero-metadata">
           <span>ENV: PUBLIC-NODE</span>
