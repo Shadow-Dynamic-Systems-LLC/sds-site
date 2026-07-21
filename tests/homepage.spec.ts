@@ -82,52 +82,38 @@ test.describe('SDS Homepage', () => {
     await page.locator('#blog').screenshot({ path: 'screenshots/06-blog-section.png' });
   });
 
-  test('should open and close Privacy Policy modal', async ({ page }) => {
+  test('should navigate to Privacy Policy page from footer', async ({ page }) => {
     // Scroll to footer
     await page.locator('footer').scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
 
-    // Click Privacy Policy link
+    // Click Privacy Policy link (now a real route, not a modal)
     await page.locator('.footer-links a', { hasText: 'Privacy Policy' }).click();
     await page.waitForTimeout(500);
 
-    // Check modal is visible
-    await expect(page.locator('.modal.active')).toBeVisible();
-    await expect(page.locator('.modal-content h3')).toContainText('Privacy Policy');
+    // Verify navigation to the policy page
+    await expect(page).toHaveURL(/\/privacy$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Privacy Policy' })).toBeVisible();
 
     // Take screenshot
-    await page.screenshot({ path: 'screenshots/07-privacy-modal.png' });
-
-    // Close modal
-    await page.locator('.close-modal').click();
-    await page.waitForTimeout(500);
-
-    // Check modal is hidden
-    await expect(page.locator('.modal.active')).not.toBeVisible();
+    await page.screenshot({ path: 'screenshots/07-privacy-page.png' });
   });
 
-  test('should open and close Terms of Service modal', async ({ page }) => {
+  test('should navigate to Terms of Service page from footer', async ({ page }) => {
     // Scroll to footer
     await page.locator('footer').scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
 
-    // Click Terms of Service link
+    // Click Terms of Service link (now a real route, not a modal)
     await page.locator('.footer-links a', { hasText: 'Terms of Service' }).click();
     await page.waitForTimeout(500);
 
-    // Check modal is visible
-    await expect(page.locator('.modal.active')).toBeVisible();
-    await expect(page.locator('.modal-content h3')).toContainText('Terms of Service');
+    // Verify navigation to the policy page
+    await expect(page).toHaveURL(/\/terms$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Terms of Service' })).toBeVisible();
 
     // Take screenshot
-    await page.screenshot({ path: 'screenshots/08-terms-modal.png' });
-
-    // Close modal by clicking backdrop
-    await page.locator('.modal.active').click({ position: { x: 10, y: 10 } });
-    await page.waitForTimeout(500);
-
-    // Check modal is hidden
-    await expect(page.locator('.modal.active')).not.toBeVisible();
+    await page.screenshot({ path: 'screenshots/08-terms-page.png' });
   });
 
   test('should display shader background', async ({ page }) => {

@@ -19,6 +19,9 @@
 
     --brass:      #b8860b;
     --brass-soft: rgba(184,134,11,0.45);
+    /* Darkened brass for small/accent text on paper backgrounds — meets WCAG
+       AA contrast (4.5:1) where --brass alone falls to ~2.9:1. */
+    --brass-ink:  #8a6608;
 
     /* Naturalist glyph hand (SDS Forge Glyph Specimens): graphite is the
      * pencil convention for hand-drawn icon linework — distinct from --ink
@@ -2795,3 +2798,207 @@ body.minimal-mode .research-related,
 body.minimal-mode .research-page__schematic {
     display: none !important;
 }
+
+/* --- 16. Legal Document Page (Privacy / Terms) --- */
+/* Replaces the former in-page modal: long policy text belongs on a real,
+   bookmarkable route, not inside a 80vh dialog. Matches the research-page
+   surface so policies read as first-class SDS documents. */
+.legal-page {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    padding-top: 80px;
+    padding-bottom: 4rem;
+}
+
+.legal-page__nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--hair);
+    padding: 1rem 0;
+}
+
+.legal-page__nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.legal-nav-link {
+    font-family: var(--font-secondary);
+    font-size: 0.75rem;
+    color: var(--brass-ink);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: opacity 0.2s ease;
+}
+
+.legal-nav-link:hover {
+    opacity: 0.8;
+}
+
+.legal-nav-path {
+    font-family: var(--font-secondary);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--color-text-secondary);
+}
+
+.legal-page__header {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--hair);
+}
+
+.legal-header__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-secondary);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--color-text-secondary);
+}
+
+.legal-header__type {
+    color: var(--brass-ink);
+    font-weight: 700;
+}
+
+.legal-header__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+/* Prose container — constrained measure for readability; padding keeps long
+   content from clipping at 200% zoom or on 320px viewports. */
+.legal-page__body {
+    max-width: 720px;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.legal-page__body p {
+    margin: 0 0 1.2rem;
+}
+
+.legal-page__body h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--color-text-primary);
+    margin: 2.5rem 0 1rem;
+    line-height: 1.2;
+}
+
+.legal-page__body ul {
+    margin: 0 0 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.legal-page__body li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.legal-page__body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--paper-2);
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--hair);
+}
+
+.legal-page__body strong {
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+.legal-page__body a {
+    color: var(--brass-ink);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.legal-page__body a:hover {
+    opacity: 0.8;
+}
+
+.legal-contact-block {
+    border-left: 2px solid var(--hair);
+    padding-left: 1rem;
+}
+
+.legal-page__main {
+    padding-bottom: 4rem;
+}
+
+/* Paper halo behind the content column — the page floats over the Living Graph
+   and drafting grid; a translucent paper + blur keeps long-form text legible
+   without fully hiding the ambient background. Mirrors the footer's backing. */
+.legal-page__main > .container {
+    background: rgba(251, 250, 247, 0.82);
+    backdrop-filter: blur(14px) saturate(1.05);
+    -webkit-backdrop-filter: blur(14px) saturate(1.05);
+    box-shadow: 0 12px 32px rgba(20, 20, 20, 0.04);
+    padding: 2.5rem 2.5rem;
+    border: 1px solid var(--hair);
+}
+
+.legal-page__footer {
+    border-top: 1px dashed var(--hair);
+    padding: 1.5rem 0;
+}
+
+.legal-page__footer-row {
+    background: rgba(251, 250, 247, 0.82);
+    backdrop-filter: blur(14px) saturate(1.05);
+    -webkit-backdrop-filter: blur(14px) saturate(1.05);
+    box-shadow: 0 12px 32px rgba(20, 20, 20, 0.04);
+    padding: 1.5rem 2.5rem;
+    border: 1px solid var(--hair);
+}
+
+.legal-page__footer-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--font-secondary);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    /* Direct muted color (not opacity) — opacity 0.6 dropped this below WCAG AA. */
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+    .legal-page {
+        padding-top: 70px;
+    }
+
+    .legal-page__body {
+        font-size: 0.95rem;
+        /* Allow content to use the full viewport minus comfortable gutters so
+           nothing is clipped on narrow screens. */
+        max-width: 100%;
+    }
+
+    .legal-header__title {
+        font-size: 2rem;
+    }
+
+    /* Tighten the paper halo on narrow screens so it doesn't eat the gutter. */
+    .legal-page__main > .container,
+    .legal-page__footer-row {
+        padding: 1.5rem 1.25rem;
+    }
+}
+

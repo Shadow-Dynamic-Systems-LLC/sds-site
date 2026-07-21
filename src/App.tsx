@@ -11,6 +11,8 @@ import { Publications } from './components/Publications';
 import { ArtifactPage } from './components/ArtifactPage';
 import { ResearchPage } from './components/ResearchPage';
 import { ContactPage } from './pages/ContactPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
 import { Footer } from './components/Footer';
 import { useMinimalMode } from './hooks/useMinimalMode';
 import './index.css';
@@ -93,6 +95,8 @@ function App() {
         <Route path="/dx/:slug" element={<ArtifactPage />} />
         <Route path="/research/:slug" element={<ResearchPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
       </Routes>
     </>
   );
